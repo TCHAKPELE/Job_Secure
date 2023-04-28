@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OffreController;
 use App\Http\Controllers\EntrepriseController;
 use App\Http\Controllers\InterimaireController;
 
@@ -42,3 +43,20 @@ Route::put("entreprise/{id}", [EntrepriseController::class, "updateEntreprise"])
 //Suppression
 Route::delete("entreprise/{id}", [EntrepriseController::class, "deleteEntreprise"]);
 /*  --------- End Entreprise ----- */
+
+
+/* ---- Offre ---*/
+Route::get("offres", [OffreController::class, "getOffres"]);
+
+//Offre par entreprise
+Route::get("offres/{id}", [OffreController::class, "getOffresByEntreprise"]);
+Route::get("offre/{id}", [OffreController::class, "getOneOffre"])->whereNumber('id');
+
+Route::post("offre", [OffreController::class, "addOffre"]);
+
+//Mise à jour
+Route::put("offre/{id}", [OffreController::class, "updateOffre"]);
+//Suppression
+Route::delete("offre/{id}", [OffreController::class, "deleteOffre"]);
+
+/* ---- End  Offre ---*/

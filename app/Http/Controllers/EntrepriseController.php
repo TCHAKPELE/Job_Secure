@@ -20,7 +20,7 @@ class EntrepriseController extends Controller
     }
 
     //Ajouter un entreprise
-    public function addentreprise(Request $request){
+    public function addEntreprise(Request $request){
 
         // Rechercher l'entreprise par email
         $entreprise = Entreprise::where('email', $request->email)->first();
@@ -28,8 +28,9 @@ class EntrepriseController extends Controller
         // Vérifier si l'entreprise existe déjà avec cet email
         if ($entreprise) {
             return response()->json([
-                'error' => 'L\'email de l\'entreprise existe déjà.'
-            ], 400); // 400 est le code d'erreur Bad Request
+                'status' => 400 ,
+                'message' => 'L\'email de l\'entreprise existe déjà.'
+            ]); // 400 est le code d'erreur Bad Request
         }
 
         // Créer une nouvelle entreprise
@@ -62,14 +63,14 @@ class EntrepriseController extends Controller
     }    
 
     //Mise à jour d'une entreprise
-    public function updateentreprise(Request $request, $id)
+    public function updateEntreprise(Request $request, $id)
     {
         //Rechercher le compte correspondant
         
         $entreprise = Entreprise::find($id);
     
         if (!$entreprise) {
-            return response()->json(['message' => 'Entreprise introuvable'], 404);
+            return response()->json(['status' => 400 ,'message' => 'Entreprise introuvable']);
         }
     
         $entreprise->nom_entreprise = $request->nom_entreprise ?? $entreprise->nom_entreprise;
@@ -78,7 +79,12 @@ class EntrepriseController extends Controller
         $entreprise->adresse_entreprise = $request->adresse_entreprise ?? $entreprise->adresse_entreprise;
         $entreprise->save();
     
-        return response()->json(['message' => 'Entreprise mis à jour avec succès', 'data' => $entreprise], 200);
+        return response()->json(
+            [
+                'status' => 200 ,
+                'message' => 'Entreprise mis à jour avec succès', 
+                'data' => $entreprise
+            ]);
     }
 
     //Suppression d'une Entreprise
@@ -88,14 +94,16 @@ class EntrepriseController extends Controller
     
         if(!$entreprise) {
             return response()->json([
+                'status' => 400 ,
                 'message' => 'Entreprise introuvable.'
-            ], 404);
+            ]);
         }
     
         $entreprise->delete();
     
         return response()->json([
+            'status' => 200 ,
             'message' => 'Entreprise supprimé avec succès.'
-        ], 200);
+        ]);
     }    
 }

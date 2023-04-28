@@ -69,7 +69,7 @@ class InterimaireController extends Controller
         $interimaire = Interimaire::find($id);
     
         if (!$interimaire) {
-            return response()->json(['message' => 'Interimaire introuvable'], 404);
+            return response()->json([ 'status' => 400 ,'message' => 'Interimaire introuvable']);
         }
     
         $interimaire->nom = $request->nom ?? $interimaire->nom;
@@ -79,7 +79,11 @@ class InterimaireController extends Controller
         $interimaire->adresse_interimaire = $request->adresse_interimaire ?? $interimaire->adresse_interimaire;
         $interimaire->save();
     
-        return response()->json(['message' => 'Interimaire mis à jour avec succès', 'data' => $interimaire], 200);
+        return response()->json([
+            'status'=>200, 
+            'message' => 'Interimaire mis à jour avec succès', 
+            'data' => $interimaire
+        ]);
     }
 
     //Suppression d'un interimaire
@@ -87,17 +91,19 @@ class InterimaireController extends Controller
     {
         $interimaire = Interimaire::find($id);
     
-        if(!$interimaire) {
+        if (!$interimaire) {
             return response()->json([
+                'status' => 400,
                 'message' => 'Interimaire introuvable.'
-            ], 404);
+            ]);
         }
     
         $interimaire->delete();
     
         return response()->json([
+            'status' => 200,
             'message' => 'Interimaire supprimé avec succès.'
-        ], 200);
+        ]);
     }
         
         
