@@ -33,20 +33,16 @@ class OffreController extends Controller
     //Ajouter une offre
     public function addOffre(Request $request)
     {
-        // Validation des données entrées par l'utilisateur
+        // Validation et vérification de l'id entreprise envoyé
         $validator = Validator::make($request->all(), [
             'id_entreprise' => 'required|exists:entreprises,id',
-            'date_offre' => 'required',
-            'titre_offre' => 'required',
-            'description_offre' => 'required',
-            'duree_offre' => 'required',
-            'salaire_offre' => 'required'
+   
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'status' => '400',
-                'message' => $validator->errors()
+                'message' => "Cette entreprise n'existe pas"
             ]);
         }
 
