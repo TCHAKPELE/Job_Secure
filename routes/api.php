@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OffreController;
+use App\Http\Controllers\MissionController;
 use App\Http\Controllers\EntrepriseController;
 use App\Http\Controllers\InterimaireController;
 
@@ -46,12 +47,16 @@ Route::delete("entreprise/{id}", [EntrepriseController::class, "deleteEntreprise
 
 
 /* ---- Offre ---*/
+//Tous les offres
 Route::get("offres", [OffreController::class, "getOffres"]);
 
 //Offre par entreprise
 Route::get("offres/{id}", [OffreController::class, "getOffresByEntreprise"]);
+
+//Une seul offre
 Route::get("offre/{id}", [OffreController::class, "getOneOffre"])->whereNumber('id');
 
+//Ajouter une offe
 Route::post("offre", [OffreController::class, "addOffre"]);
 
 //Mise à jour
@@ -60,3 +65,28 @@ Route::put("offre/{id}", [OffreController::class, "updateOffre"]);
 Route::delete("offre/{id}", [OffreController::class, "deleteOffre"]);
 
 /* ---- End  Offre ---*/
+
+
+
+/* ---- mission ---*/
+//Tous les missions
+Route::get("missions", [MissionController::class, "getMissions"]);
+
+//mission par offre
+Route::get("missions/{id}/offre", [MissionController::class, "getMissionsByOffre"]);
+
+//mission par interimaire
+Route::get("missions/{id}/interimaire", [MissionController::class, "getMissionsByInterimaire"]);
+
+//Une seul mission
+Route::get("mission/{id}", [MissionController::class, "getOneMission"])->whereNumber('id');
+
+//Ajouter une offe
+Route::post("mission", [MissionController::class, "addMission"]);
+
+//Mise à jour
+Route::put("mission/{id}", [MissionController::class, "updateMission"]);
+//Suppression
+Route::delete("mission/{id}", [MissionController::class, "deleteMission"]);
+
+/* ---- End  mission ---*/

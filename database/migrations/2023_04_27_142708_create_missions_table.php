@@ -19,8 +19,7 @@ return new class extends Migration
             $table->foreign('id_offre')->references('id')->on('offres');
             $table->date('date_debut');
             $table->date('date_fin');
-            $table->integer('salaire_mission');
-            $table->string('statut_mission');
+            $table->integer('statut_mission')->default(1)->comment("1 Pour dire active, 0 pour cloturé, 2 pour suspendu");
             $table->timestamps();
         });
     }

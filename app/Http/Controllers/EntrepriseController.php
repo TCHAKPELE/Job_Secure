@@ -6,21 +6,22 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\Entreprise;
 use App\Models\Utilisateur;
+
 class EntrepriseController extends Controller
 {
     //Liste des Entreprises
-    public function getEntreprises(){
+    public function getEntreprises() {
 
         return Entreprise::all();
     }
 
     //Récupérer un seul Entreprise
-    public function getOneEntreprise($id){
+    public function getOneEntreprise($id) {
         return Entreprise::findOrFail($id);
     }
 
     //Ajouter un entreprise
-    public function addEntreprise(Request $request){
+    public function addEntreprise(Request $request) {
 
         // Rechercher l'entreprise par email
         $entreprise = Entreprise::where('email', $request->email)->first();
