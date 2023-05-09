@@ -5,11 +5,13 @@ import { EntrepriseRoutingModule } from './entreprise-routing.module';
 import { OffreComponent } from './components/offre/offre.component';
 import { EntrepriseService } from './services/entreprise.service';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { MissionComponent } from './components/offre/mission/mission.component';
 
 
 @NgModule({
   declarations: [
-    OffreComponent
+    OffreComponent,
+    MissionComponent
   ],
   imports: [
     CommonModule,
