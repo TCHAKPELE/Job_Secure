@@ -1,0 +1,1 @@
+- ameliorer la sécurity du back au niveau des accès entre profil different pour que un utilisateur une fois loggé ne puisse pas accéder à un autre profil.
