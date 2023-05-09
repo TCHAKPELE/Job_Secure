@@ -1,0 +1,55 @@
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-sm-12">
+            
+            <mat-accordion class=""  >
+                <mat-expansion-panel expanded>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                     <h6 class="text-primary">AJOUTER UNE OFFRE</h6>
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <form  class="col-md-12" [formGroup]="Formulaire">
+                    <div class="mb-3 row">
+
+                        <mat-form-field appearance="fill" class="col-md-6 ">
+                            <mat-label>Titre </mat-label>
+                            <input type="texte" placeholder="Ex: 2022-2023" matInput formControlName="titre">
+                            <mat-error>Ce champ est requis</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill" class="col-md-6 ">
+                            <mat-label>Durée (en mois) </mat-label>
+                            <input type="texte" placeholder="Ex: 8" matInput formControlName="duree">
+                            <mat-error>Ce champ est requis</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill" class="col-md-12 ">
+                            <mat-label>Description </mat-label>
+                            <textarea matInput matInput formControlName="description"></textarea>
+                            <mat-error>Ce champ est requis</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill" class="col-md-6 ">
+                            <mat-label>Salaire  </mat-label>
+                            <input type="int" placeholder="Ex: 2000" matInput formControlName="salaire">
+                            <mat-error>Ce champ est requis</mat-error>
+                        </mat-form-field>
+                 
+                    </div>
+                    <mat-card-actions  class="col-md-6" *ngIf="Formulaire.valid">
+                        <button class="btn btn-primary btn-enregistrement" (click)="onSubmitForm()">
+                           {{buttonText}}
+                        </button>
+                      </mat-card-actions>
+                  </form>
+
+              
+                </mat-expansion-panel>
+            
+
+              </mat-accordion>
+        </div>
+    </div>
+    
+</div>
