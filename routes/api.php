@@ -2,9 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OffreController;
 use App\Http\Controllers\MissionController;
 use App\Http\Controllers\EntrepriseController;
+use App\Http\Controllers\CandidatureController;
 use App\Http\Controllers\InterimaireController;
 
 /*
@@ -21,6 +23,12 @@ use App\Http\Controllers\InterimaireController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+/*------Login user ---------*/
+Route::post("login", [AuthController::class, "login"]);
+
+/*------ End login ---------*/
 
 /* ---- Interimaire ---*/
 Route::get("interimaires", [InterimaireController::class, "getInterimaires"]);
@@ -67,6 +75,10 @@ Route::delete("offre/{id}", [OffreController::class, "deleteOffre"]);
 /* ---- End  Offre ---*/
 
 
+/*------- Candidature -------*/
+//{filter} sera remplacé par entreprise, interimaire, ou offre
+Route::get("candidatures/{id}/{filter}", [CandidatureController::class, "getCandidaturesByFilters"]);
+/*-------- End candidature -------*/
 
 /* ---- mission ---*/
 //Tous les missions
@@ -90,3 +102,4 @@ Route::put("mission/{id}", [MissionController::class, "updateMission"]);
 Route::delete("mission/{id}", [MissionController::class, "deleteMission"]);
 
 /* ---- End  mission ---*/
+

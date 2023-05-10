@@ -20,9 +20,13 @@ class OffreController extends Controller
     //Récupérations des offres par entreprise
     public function getOffresByEntreprise($id_entreprise)
     {
-        return Offre::where('id_entreprise', $id_entreprise)->get();
-    
+        //Liste des offres avec nombre de candidature
+        return Offre::where('id_entreprise', $id_entreprise)
+            ->withCount('candidatures')
+            ->orderByDesc('id')
+            ->get();
     }
+    
 
     //Récupérer une seul offre
     public function getOneOffre($id){
@@ -49,7 +53,6 @@ class OffreController extends Controller
         // Création de l'offre dans la base de données
         $offre = Offre::create([
             'id_entreprise' => $request->id_entreprise,
-            'date_offre' => $request->date_offre,
             'titre_offre' => $request->titre_offre,
             'description_offre' => $request->description_offre,
             'duree_offre' => $request->duree_offre,
@@ -79,7 +82,6 @@ class OffreController extends Controller
         // Mise à jour de l'offre
         $offre->titre_offre = $request->titre_offre;
         $offre->description_offre = $request->description_offre;
-        $offre->date_offre = $request->date_offre;
         $offre->duree_offre = $request->duree_offre;
         $offre->salaire_offre = $request->salaire_offre;
     

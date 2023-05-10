@@ -4,7 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
-
 return new class extends Migration
 {
     /**
@@ -12,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('offres', function (Blueprint $table) {
+        Schema::create('candidatures', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_entreprise');
             $table->foreign('id_entreprise')->references('id')->on('entreprises');
-            $table->string('titre_offre');
-            $table->string('description_offre');
-            $table->integer('duree_offre');
-            $table->integer('salaire_offre');
+            $table->unsignedBigInteger('id_interimaire');
+            $table->foreign('id_interimaire')->references('id')->on('interimaires');
+            $table->unsignedBigInteger('id_offre');
+            $table->foreign('id_offre')->references('id')->on('offres');
             $table->date('date_creation')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamps();
         });
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('offres');
+        Schema::dropIfExists('candidatures');
     }
 };

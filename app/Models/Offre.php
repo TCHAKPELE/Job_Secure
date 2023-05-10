@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Entreprise;
+use App\Models\Candidature;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -11,7 +12,6 @@ class Offre extends Model
     use HasFactory;
     protected $fillable = [
         'id_entreprise',
-        'date_offre',
         'titre_offre',
         'description_offre',
         'duree_offre',
@@ -23,4 +23,9 @@ class Offre extends Model
     {
         return $this->belongsTo(Entreprise::class, 'id_entreprise');
     }    
+    public function candidatures()
+{
+    return $this->hasMany(Candidature::class, 'id_offre');
+}
+
 }
