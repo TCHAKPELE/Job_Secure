@@ -1,0 +1,7 @@
+<mat-spinner *ngIf="loading$ | async; else buttons" class="text-primary" ></mat-spinner>
+<ng-template #buttons>
+    <div class="container-fluid" >
+
+        <app-datatable [data]="candidatures" [columns]="columns" [displayedColumns]="displayedColumns" [labelDataTable]="labelDataTable" [pageSizeOptions]="[10, 25, 50]" [defaultPageSize]="10" [defaultSort]="sort"   #datatable></app-datatable>
+    </div>
+</ng-template>

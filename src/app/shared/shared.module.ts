@@ -30,13 +30,15 @@ import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 
 import { ModuleWithProviders } from '@angular/core';
 import { MaterialModule } from "./material.module";
+import { DatatableComponent } from "./components/datatable/datatable.component";
+import { AlertService } from "./services/alert.service";
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
 
 @NgModule({
-  declarations: [LoaderComponent, HeaderComponent, FooterComponent, SidebarComponent, BookmarkComponent, ContentLayoutComponent, FullLayoutComponent, FeatherIconsComponent, BreadcrumbComponent, CustomizerComponent],
+  declarations: [LoaderComponent, HeaderComponent, FooterComponent, SidebarComponent, BookmarkComponent, ContentLayoutComponent, FullLayoutComponent, FeatherIconsComponent, BreadcrumbComponent, CustomizerComponent, DatatableComponent],
   imports: [CommonModule, RouterModule, FormsModule, TranslateModule, DragulaModule.forRoot(), NgbModule, GalleryModule, MaterialModule],
   exports: [
     LoaderComponent, 
@@ -44,8 +46,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     TranslateModule,
     MaterialModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DatatableComponent
   ],
-  providers: [NavService, CustomizerService],
+  providers: [NavService, CustomizerService, AlertService],
 })
 export class SharedModule {}

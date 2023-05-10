@@ -77,6 +77,7 @@ export class NavService {
 			children: [
 			  { path: "dashboard/entreprise", title: "Offres", type: "link" },
 			  { path: "dashboard/entreprise/missions", title: "Missions", type: "link" },
+			  { path: "dashboard/entreprise/candidatures", title: "Candidatures", type: "link" },
 			],
 		}
 	]

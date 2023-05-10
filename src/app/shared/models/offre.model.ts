@@ -5,6 +5,6 @@ export class OffreModel{
     description_offre!: string;
     duree_offre!: number;
     salaire_offre!: number;
-    created_at? : string;
+    date_creation? : string;
 
 }
