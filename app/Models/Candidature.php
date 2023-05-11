@@ -32,4 +32,6 @@ class Candidature extends Model
         return $this->belongsTo(Offre::class, 'id_offre');
     } 
 
+
+
 }

@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
+use Illuminate\Support\Facades\DB;
 return new class extends Migration
 {
     /**
@@ -17,9 +17,14 @@ return new class extends Migration
             $table->foreign('id_interimaire')->references('id')->on('interimaires');
             $table->unsignedBigInteger('id_offre');
             $table->foreign('id_offre')->references('id')->on('offres');
+            $table->unsignedBigInteger('id_candidature');
+            $table->foreign('id_candidature')->references('id')->on('candidatures');
+            $table->unsignedBigInteger('id_entreprise');
+            $table->foreign('id_entreprise')->references('id')->on('entreprises');
             $table->date('date_debut');
             $table->date('date_fin');
-            $table->integer('statut_mission')->default(1)->comment("1 Pour dire active, 0 pour cloturé, 2 pour suspendu");
+            $table->integer('status_mission')->default(1)->comment("1 Pour dire active, 0 pour cloturé, 2 pour suspendu");
+            $table->date('date_creation')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamps();
         });
     }

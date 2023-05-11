@@ -78,6 +78,9 @@ Route::delete("offre/{id}", [OffreController::class, "deleteOffre"]);
 /*------- Candidature -------*/
 //{filter} sera remplacé par entreprise, interimaire, ou offre
 Route::get("candidatures/{id}/{filter}", [CandidatureController::class, "getCandidaturesByFilters"]);
+
+//Accepter candidature
+Route::get("candidature/{id}/acceptation",  [CandidatureController::class, "accepterCandidature"]);
 /*-------- End candidature -------*/
 
 /* ---- mission ---*/
@@ -87,13 +90,19 @@ Route::get("missions", [MissionController::class, "getMissions"]);
 //mission par offre
 Route::get("missions/{id}/offre", [MissionController::class, "getMissionsByOffre"]);
 
+//mission par entreprise
+Route::get("missions/{id}/entreprise", [MissionController::class, "getMissionsByEntreprise"]);
+
 //mission par interimaire
 Route::get("missions/{id}/interimaire", [MissionController::class, "getMissionsByInterimaire"]);
 
 //Une seul mission
 Route::get("mission/{id}", [MissionController::class, "getOneMission"])->whereNumber('id');
 
-//Ajouter une offe
+//Changer status mission
+Route::get("mission/{id}/{status}", [MissionController::class, "changerStatusMission"]);
+
+//Ajouter une mission
 Route::post("mission", [MissionController::class, "addMission"]);
 
 //Mise à jour
