@@ -1,3 +1,4 @@
+import { MissionResolver } from './resolvers/mission.resolver';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -27,7 +28,8 @@ import { CandidatureResolver } from './resolvers/candidature.resolver';
   providers:[
     EntrepriseService,
     OffreResolver,
-    CandidatureResolver
+    CandidatureResolver,
+    MissionResolver
   ]
 })
 export class EntrepriseModule { }

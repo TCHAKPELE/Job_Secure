@@ -8,7 +8,7 @@ import { Observable, map, of } from 'rxjs';
 import { EntrepriseService } from '../services/entreprise.service';
 
 @Injectable()
-export class CandidatureResolver implements Resolve<boolean> {
+export class MissionResolver implements Resolve<boolean> {
   var_bool: boolean=false;
   offreId! : number;
 
@@ -19,9 +19,9 @@ export class CandidatureResolver implements Resolve<boolean> {
     this.offreId = route.params['id_offre'];
     
     //Si id offre passé en paramètre de la route, alors on récupère les canditures par offre, si non, par entreprise
-   this.offreId ? this.entepriseService.getCandidaturesByOffre(this.offreId) : this.entepriseService.getCandidaturesByEntreprise();
+   this.offreId ? this.entepriseService.getMissionByOffre(this.offreId) : this.entepriseService.getMissionByEntreprise();
 
-     this.entepriseService.loadingCandidature$.pipe(
+     this.entepriseService.loadingMission$.pipe(
       map(sta => this.var_bool == sta
       ),
     ).subscribe();

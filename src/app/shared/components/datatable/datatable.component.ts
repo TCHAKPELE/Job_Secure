@@ -41,6 +41,23 @@ export class DatatableComponent implements OnInit, AfterViewInit {
   */
   @Input() actions: { label: string, action: (params: any) => void }[];
 
+  /*
+  * Liste des boutons à exécuter 
+  * On reçoit le label, la couleur du bouton et la méthode à exécuter
+  */
+  @Input() buttonsAction: { label: string, color: string, action: (params: any) => void }[];
+
+  /*
+  * Liste des bages ou status:
+  * On reçoit le code le label, et la couleur
+  * 
+  */
+  @Input() badges: { code: number, label: string, color: string }[] = [];
+  //On doit préciser le nom de la colonne que porte le champs status, dans notre cas, status_mission
+  //Car ce champs n'est pas renseigné dans la variable columns mais plutôt badges qui est renseigné
+  //C'est utilisé uniquement pour la gestion des status (badges)
+  @Input() columnStatusName: string;
+
   //Pagination
   @Input() pageSizeOptions: number[]; //La taille de la page à afficher
   @Input() defaultPageSize: number; // La taille de la page par défaut
@@ -70,19 +87,19 @@ export class DatatableComponent implements OnInit, AfterViewInit {
     this.dataSource._updateChangeSubscription();
   }
 
-    //Mise à jour d'un element de la datatable
-     updateElement(oldElement : any, newElement: any){
-      // On récupère l'index de l'élément à modifier
-      const index = this.dataSource.data.indexOf(oldElement);
-      //Si l'index existe
-      if(index > -1){
-        //On met à jour l'élement
-        for(let i in this.columns){
-        this.dataSource.data[index][this.columns[i]]= newElement[this.columns[i]]; 
+  //Mise à jour d'un element de la datatable
+  updateElement(oldElement: any, newElement: any) {
+    // On récupère l'index de l'élément à modifier
+    const index = this.dataSource.data.indexOf(oldElement);
+    //Si l'index existe
+    if (index > -1) {
+      //On met à jour l'élement
+      for (let i in this.columns) {
+        this.dataSource.data[index][this.columns[i]] = newElement[this.columns[i]];
 
-        } 
       }
     }
+  }
   //Suppression d'un élément de la datatable
   removeElement(element: any) {
     const index = this.dataSource.data.indexOf(element);
@@ -92,4 +109,22 @@ export class DatatableComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /*----Gestion des badges ( ou status) -----*/
+
+  getStatusLabel(status: number, mappings: { code: number, label: string, color: string }[]): string {
+    console.log(status);
+
+    const matchingStatus = mappings.find(mapping => mapping.code === status);
+    console.log(matchingStatus ? matchingStatus.label : 'ds');
+
+    return matchingStatus ? matchingStatus.label : '';
+  }
+
+  getBadgeColor(status: number, mappings: { code: number, label: string, color: string }[]): string {
+    const matchingStatus = mappings.find(mapping => mapping.code === status);
+    console.log(matchingStatus ? matchingStatus.color : '');
+    return matchingStatus ? matchingStatus.color : '';
+  }
+
+  /*------- End gestion des badges -------*/
 }

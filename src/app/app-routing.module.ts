@@ -5,6 +5,7 @@ import { FullLayoutComponent } from "./shared/components/layout/full-layout/full
 import { content } from "./shared/routes/content-routes";
 import { full } from "./shared/routes/full.routes";
 import { LoginComponent } from "./core/components/login/login.component";
+import { Error404Component } from "./pages/error-pages/error404/error404.component";
 
 const routes: Routes = [
   {
@@ -32,7 +33,7 @@ const routes: Routes = [
   },
   {
     path: "**",
-    redirectTo: "",
+    redirectTo: "error/404",
   },
 ];
 

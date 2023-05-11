@@ -5,6 +5,7 @@ import { OffreResolver } from './resolvers/offre.resolver';
 import { CandidatureComponent } from './components/candidature/candidature.component';
 import { CandidatureResolver } from './resolvers/candidature.resolver';
 import { MissionComponent } from './components/mission/mission.component';
+import { MissionResolver } from './resolvers/mission.resolver';
 
 const routes: Routes = [
   {
@@ -19,7 +20,16 @@ const routes: Routes = [
   {
     path:"missions",
     component: MissionComponent,
-    resolve : {offres: OffreResolver},
+    resolve : {missions: MissionResolver},
+    data: {
+      title: "Missions",
+      breadcrumb: "Missions"
+    }
+  },
+  {
+    path:"missions/:id_offre/offre",
+    component: MissionComponent,
+    resolve : {missions: MissionResolver},
     data: {
       title: "Missions",
       breadcrumb: "Missions"
@@ -27,6 +37,15 @@ const routes: Routes = [
   },
   {
     path:"candidatures",
+    component: CandidatureComponent,
+    resolve : {candidatures: CandidatureResolver},
+    data: {
+      title: "Candidatures",
+      breadcrumb: "Candidatures"
+    }
+  },
+  {
+    path:"candidatures/:id_offre/offre",
     component: CandidatureComponent,
     resolve : {candidatures: CandidatureResolver},
     data: {

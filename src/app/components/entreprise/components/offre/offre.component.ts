@@ -10,6 +10,7 @@ import { MatSort } from '@angular/material/sort';
 import {MatDialog} from '@angular/material/dialog'; //Boite de dialogue
 import { UpdateDialogueComponent } from './dialogue/update-dialogue/update-dialogue.component';
 import { AlertService } from 'src/app/shared/services/alert.service';
+import { MissionModel } from 'src/app/shared/models/mission.model';
 @Component({
   selector: 'app-offre',
   templateUrl: './offre.component.html',
@@ -36,10 +37,11 @@ export class OffreComponent implements OnInit, OnDestroy {
   actions: {label : string, action: (params: any) => void}[]=[
     {label: "Supprimer", action: (offre) =>  this.deleteOffre(offre)},
     {label: "Modifier", action: (offre) => this.openUpdateDialog(offre)},
+    {label: "Candidatures", action: (offre) => this.getCandidaturesByOffre(offre)},
+    {label: "Missions", action: (offre) => this.getMissionsByOffre(offre)},
   ];
 
   labelDataTable: string = "Vos offres";
-  isDataLoaded = false; //Vérifier si les données ont été chargées
   /*------------End Datatable----------*/
   constructor(
     private formBuilder: FormBuilder,
@@ -117,7 +119,6 @@ export class OffreComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$),
       tap((data) => {
         this.offres = data;
-        this.isDataLoaded = true;
         
       }
       )
@@ -126,8 +127,6 @@ export class OffreComponent implements OnInit, OnDestroy {
   }
 
   //Boîte de dialogue de mise à jour d'une offre
-
-  //Boite de dialog contenant le formulaire de choix du nouveau professeur à assigner
   openUpdateDialog(element: OffreModel) {
     const dialogRef = this.dialog.open(UpdateDialogueComponent, {
       width: '800px',
@@ -178,8 +177,17 @@ export class OffreComponent implements OnInit, OnDestroy {
     ).subscribe();
   }
 
+  //Liste des candidatures par offres
+  getCandidaturesByOffre(element: OffreModel){
+    //On met le chemin absolu car cette fonction est appelé depuis datatable qui se trouve dans un autre module
+    this.router.navigateByUrl(`dashboard/entreprise/candidatures/${element.id}/offre`); 
+  }
 
-
+    //Liste des missions par offres
+    getMissionsByOffre(element: MissionModel){
+      //On met le chemin absolu car cette fonction est appelé depuis datatable qui se trouve dans un autre module
+      this.router.navigateByUrl(`dashboard/entreprise/missions/${element.id}/offre`); 
+    }
 
 
   //Destruction des souscriptions

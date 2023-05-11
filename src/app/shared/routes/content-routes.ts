@@ -17,5 +17,9 @@ export const content: Routes = [
   {
     path: "dashboard/entreprise",
     loadChildren: () => import("../../components/entreprise/entreprise.module").then((m)=>m.EntrepriseModule)
+  },
+  {
+    path: "error",
+    loadChildren: () => import("../../pages/error-pages/error-pages.module").then((m)=>m.ErrorPagesModule)
   }
 ];
