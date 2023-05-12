@@ -89,9 +89,12 @@ export class LoginComponent implements OnInit, OnDestroy{
   //Redirection utilisateur
 
   private redirect_user_to_account(type_compte: string) {
+    
     switch (type_compte) {
+      
       case environment.interimaire:
-        this.router.navigateByUrl("dashboard/entreprise");
+        
+        this.router.navigateByUrl("interimaire/offres");
 
         break;
 
@@ -100,7 +103,7 @@ export class LoginComponent implements OnInit, OnDestroy{
         break;
 
       case environment.admin:
-
+        this.router.navigateByUrl("dashboard/admin");
         break;
 
       default:

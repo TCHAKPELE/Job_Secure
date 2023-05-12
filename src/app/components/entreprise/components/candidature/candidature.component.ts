@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
+import { FormBuilder } from '@angular/forms';
 import { EntrepriseService } from '../../services/entreprise.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject, takeUntil, tap } from 'rxjs';
@@ -60,7 +59,6 @@ export class CandidatureComponent implements OnInit, OnDestroy{
           if (data["status"] == 200) {
             this.alertService.succesToastr(data["message"]);
         
-            //this.datatable.addElement(data['data']);
           } else {
             this.alertService.dangerToastr(data["message"]);
           }

@@ -117,10 +117,9 @@ export class HeaderComponent implements OnInit {
 
 
   SignOut(){
-    sessionStorage.removeItem('users');
-    sessionStorage.removeItem('id_ecole');
+    sessionStorage.removeItem('user');
 
-    this.router.navigateByUrl(`login/1`);
+    this.router.navigateByUrl(`login`);
   }
 
   private initSessionSotorage(){
@@ -132,10 +131,7 @@ export class HeaderComponent implements OnInit {
         this.type_utilisateur=user.type_utilisateur;
         this.username=user.nom+" "+ user.prenom;
       }
-      /*
-      else{
-        this.router.navigateByUrl("login/1");
-      }*/
+
        
     }
   }

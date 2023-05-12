@@ -7,7 +7,8 @@ export class CandidatureModel{
     salaire_offre!: string;
     date_creation_offre?: string;
     id_interimaire!: string;
-    nom_interimaire!: string;
+    nom_interimaire?: string;
+    nom_entreprise?: string;
     status_acceptation ! : number;
     date_creation? : string;
 }

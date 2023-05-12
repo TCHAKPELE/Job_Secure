@@ -1,5 +1,5 @@
 import { Injectable, HostListener } from '@angular/core';
-import { BehaviorSubject, Observable, Subscriber } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 // Menu
@@ -56,13 +56,14 @@ export class NavService {
 
 	MENU_INTERIAMRE: Menu[] = [
 		{
-			title: "Dashboard",
+			title: "Tableau de bord",
 			icon: "home",
 			type: "sub",
 			active: true,
 			children: [
-			  { path: "interimaire/profile", title: "Profile", type: "link" },
-			  { path: "/sample-page/sample-page2", title: "sample-page-2", type: "link" },
+			  { path: "interimaire/offres", title: "Offres", type: "link" },
+			  { path: "interimaire/candidatures", title: "Candidatures", type: "link" },
+			  { path: "interimaire/missions", title: "Missions", type: "link" },
 			],
 		}
 	];
@@ -80,12 +81,40 @@ export class NavService {
 			  { path: "dashboard/entreprise/candidatures", title: "Candidatures", type: "link" },
 			],
 		}
+	];
+
+	//Admin
+	MENU_ADMIN: Menu[] = [
+		{
+			title: "Tableau de bord",
+			icon: "home",
+			type: "sub",
+			active: true,
+			children: [
+			  { path: "dashboard/admin", title: "Offres", type: "link" },
+			  { path: "dashboard/admin/missions", title: "Missions", type: "link" },
+			  { path: "dashboard/admin/candidatures", title: "Candidatures", type: "link" },
+			],
+		},
+		{
+			title: "Compte",
+			icon: "users",
+			type: "sub",
+			active: true,
+			children: [
+			  { path: "dashboard/admin/entreprises/valide", title: "Entreprise", type: "link" },
+			  { path: "dashboard/admin/interimaires/valide", title: "Intérimaire", type: "link" },
+			  { path: "dashboard/admin/entreprises/non_valide", title: "Nouvelles entreprises", type: "link" },
+			  { path: "dashboard/admin/interimaires/non_valide", title: "Nouveaux intérimaires", type: "link" },
+			],
+		}
 	]
 	// Array
 	//items = new BehaviorSubject<Menu[]>(this.MENUITEMS);
 
 	getItems(type_compte: string){
 		if(type_compte == environment.entreprise) return new BehaviorSubject<Menu[]>(this.MENU_ENTREPRISE);
+		if(type_compte == environment.interimaire) return new BehaviorSubject<Menu[]>(this.MENU_INTERIAMRE);
 		
 	
 		return;

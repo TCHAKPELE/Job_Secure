@@ -55,9 +55,7 @@ export class SidebarComponent {
         this.type_utilisateur=user.type_utilisateur;
         this.username= this.type_utilisateur == environment.interimaire ? user.nom+" "+ user.prenom : user.nom;
       }
-      else{
-        this.router.navigateByUrl("login");
-      }
+
        
     }
   }

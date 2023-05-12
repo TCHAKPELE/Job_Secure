@@ -16,15 +16,15 @@ export class BookmarkComponent implements OnInit {
   public searchResultEmpty  : boolean = false;
   public bookmarkItems : any[] = [];
 
-  public type_compte!: string;
+  public type_utilisateur!: string;
 
   public username!:string;
 
   constructor(public navServices: NavService) {  }
 
   ngOnInit() {
-    this.initSessionSotorage();
-  	this.navServices.getItems(this.type_compte)!.subscribe(menuItems => {
+    this.initSessionStorage();
+  	this.navServices.getItems(this.type_utilisateur)!.subscribe(menuItems => {
       this.items = menuItems 
       this.items.filter(items => {
         if(items.bookmark){
@@ -34,20 +34,15 @@ export class BookmarkComponent implements OnInit {
     });
   }
 
-  private initSessionSotorage(){
+  private initSessionStorage(){
     if(typeof(sessionStorage) !== "undefined"){
       const userSession =  sessionStorage.getItem('user');
       if(userSession != null)
       {        
         const user= JSON.parse(userSession);
-        this.type_compte=user.type_compte;
+        this.type_utilisateur=user.type_utilisateur;
         this.username=user.nom+" "+ user.prenom;
-      }
-      /*
-      else{
-        this.router.navigateByUrl("login/1");
-      }*/
-       
+      }     
     }
   }
   openBookmarkSearch() {
