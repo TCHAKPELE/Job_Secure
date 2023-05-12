@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('identifiant')->unique();
             $table->string('mot_de_passe');
             $table->string('type_utilisateur');
-            $table->integer('statut_compte')->default(1);
+            $table->integer('status_compte')->default(0)->comment('Un admin doit d abord valider le compte avant que le status passe à un');
             $table->timestamps();
         });
     }

@@ -10,6 +10,42 @@ use Carbon\Carbon;
 class CandidatureController extends Controller
 {
 
+    //Ajouter une candidature
+    public function postulerOffre(Request $request)
+    {
+        // Récupérer les paramètres de la requête
+        $id_entreprise = $request->input('id_entreprise');
+        $id_interimaire = $request->input('id_interimaire');
+        $id_offre = $request->input('id_offre');
+
+        // Vérifier si la candidature existe déjà
+        $existingCandidature = Candidature::where('id_entreprise', $id_entreprise)
+            ->where('id_interimaire', $id_interimaire)
+            ->where('id_offre', $id_offre)
+            ->first();
+
+        if ($existingCandidature) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Vous avez déjà postulé à cette offre'
+            ]);
+        }
+
+        // Créer la nouvelle candidature
+        $candidature = Candidature::create([
+            'id_entreprise' => $id_entreprise,
+            'id_interimaire' => $id_interimaire,
+            'id_offre' => $id_offre
+        ]);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Candidature créée avec succès',
+            'data' => $candidature
+        ]);
+    }
+
+
     public function getCandidaturesByFilters($id, $filtre)
     {
         $query = Candidature::query();

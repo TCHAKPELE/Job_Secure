@@ -19,7 +19,7 @@ class MissionController extends Controller
     {
         $query = Mission::query()->where('id_offre', $id_offre);
 
-        $missions = $query->with(['offre',  'interimaire'])->get();
+        $missions = $query->with(['offre',  'interimaire'])->orderByDesc('id')->get();
         // Traiter les détails des relations
         $missions->transform(function ($mission) {
             $mission->titre_offre = $mission->offre->titre_offre;
@@ -43,7 +43,7 @@ class MissionController extends Controller
     {
         $query = Mission::query()->where('id_entreprise', $id_entreprise);
 
-        $missions = $query->with(['offre',  'interimaire'])->get();
+        $missions = $query->with(['offre',  'interimaire'])->orderByDesc('id')->get();
         // Traiter les détails des relations
         $missions->transform(function ($mission) {
             $mission->titre_offre = $mission->offre->titre_offre;
@@ -65,7 +65,24 @@ class MissionController extends Controller
     //Récupérations des Missions par interimaire
     public function getMissionsByInterimaire($id_interimaire)
     {
-        return Mission::where('id_interimaire', $id_interimaire)->get();
+        $query = Mission::query()->where('id_interimaire', $id_interimaire);
+
+        $missions = $query->with(['offre',  'entreprise'])->orderByDesc('id')->get();
+        // Traiter les détails des relations
+        $missions->transform(function ($mission) {
+            $mission->titre_offre = $mission->offre->titre_offre;
+            $mission->description_offre = $mission->offre->description_offre;
+            $mission->salaire_offre = $mission->offre->salaire_offre;
+
+            $mission->nom_entreprise = $mission->entreprise->nom_entreprise;
+
+            // Supprimer les relations pour éviter la redondance des données
+            unset($mission->offre);
+            unset($mission->entreprise);
+
+            return $mission;
+        });
+        return response()->json($missions);
     }
 
     //Changer status mission

@@ -8,24 +8,21 @@ use App\Models\Entreprise;
 use App\Models\Interimaire;
 use App\Models\Offre;
 
-class Candidature extends Model
+class Admin extends Model
 {
     use HasFactory;
 
     protected $fillable=[
-        'id_entreprise',
-        'id_interimaire',
-        'id_offre',
-        'status_acceptation'
+        "status_compte"
 
     ];
     public function entreprise()
     {
-        return $this->belongsTo(Entreprise::class, 'id_entreprise');
+        return $this->belongsTo(Entreprise::class, 'id_compte');
     }
     public function interimaire()
     {
-        return $this->belongsTo(Interimaire::class, 'id_interimaire');
+        return $this->belongsTo(Interimaire::class, 'id_compte');
     }
     
     public function offre()

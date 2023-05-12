@@ -13,7 +13,18 @@ class OffreController extends Controller
     //Récupérations de tous les offres
     public function getOffres()
     {
-        return Offre::all();
+        $query = Offre::query();
+        //Récupération des informations dans les autres tables
+        $offres = $query->with([ 'entreprise'])->orderByDesc('id')->get();
+
+        // Traiter les détails des relations
+        $offres->transform(function ($offre) {
+            $offre->nom_entreprise = $offre->entreprise->nom_entreprise;
+            // Supprimer les relations pour éviter la redondance des données
+            unset($offre->entreprise);
+            return $offre;
+        });
+        return response()->json($offres);
     
     }
 

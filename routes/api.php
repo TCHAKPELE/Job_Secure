@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -29,6 +30,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post("login", [AuthController::class, "login"]);
 
 /*------ End login ---------*/
+
+/*------Admin ---------*/
+Route::post("admin", [AdminController::class, "validerCompte"]);
+
+Route::get("admin/interimaires_non_valides",  [AdminController::class, "interimairesNonValides"]);
+Route::get("admin/entreprises_non_valides",  [AdminController::class, "entreprisesNonValides"]);
+Route::get("admin/interimaires_valides",  [AdminController::class, "interimairesValides"]);
+Route::get("admin/entreprises_valides",  [AdminController::class, "entreprisesValides"]);
+/*------ Admin ---------*/
 
 /* ---- Interimaire ---*/
 Route::get("interimaires", [InterimaireController::class, "getInterimaires"]);
@@ -81,6 +91,9 @@ Route::get("candidatures/{id}/{filter}", [CandidatureController::class, "getCand
 
 //Accepter candidature
 Route::get("candidature/{id}/acceptation",  [CandidatureController::class, "accepterCandidature"]);
+
+//Postuler
+Route::post("candidature", [CandidatureController::class, "postulerOffre"]);
 /*-------- End candidature -------*/
 
 /* ---- mission ---*/
