@@ -37,7 +37,7 @@ export class NavService {
 	onResize(event?:any) {
 		this.screenWidth = window.innerWidth;
 	}
-
+	//Affiche ceci en cas d'erreur
 	MENUITEMS: Menu[] = [
 		{
 			title: "Sample Page",
@@ -91,7 +91,7 @@ export class NavService {
 			type: "sub",
 			active: true,
 			children: [
-			  { path: "dashboard/admin", title: "Offres", type: "link" },
+			  { path: "dashboard/admin/offres", title: "Offres", type: "link" },
 			  { path: "dashboard/admin/missions", title: "Missions", type: "link" },
 			  { path: "dashboard/admin/candidatures", title: "Candidatures", type: "link" },
 			],
@@ -102,8 +102,8 @@ export class NavService {
 			type: "sub",
 			active: true,
 			children: [
-			  { path: "dashboard/admin/entreprises/valide", title: "Entreprise", type: "link" },
-			  { path: "dashboard/admin/interimaires/valide", title: "Intérimaire", type: "link" },
+			  { path: "dashboard/admin/entreprises", title: "Entreprise", type: "link" },
+			  { path: "dashboard/admin/interimaires", title: "Intérimaire", type: "link" },
 			  { path: "dashboard/admin/entreprises/non_valide", title: "Nouvelles entreprises", type: "link" },
 			  { path: "dashboard/admin/interimaires/non_valide", title: "Nouveaux intérimaires", type: "link" },
 			],
@@ -115,9 +115,9 @@ export class NavService {
 	getItems(type_compte: string){
 		if(type_compte == environment.entreprise) return new BehaviorSubject<Menu[]>(this.MENU_ENTREPRISE);
 		if(type_compte == environment.interimaire) return new BehaviorSubject<Menu[]>(this.MENU_INTERIAMRE);
+		if(type_compte == environment.admin) return new BehaviorSubject<Menu[]>(this.MENU_ADMIN);
 		
-	
-		return;
+		return new BehaviorSubject<Menu[]>(this.MENUITEMS);
 		
 	}
 

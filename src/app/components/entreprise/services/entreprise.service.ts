@@ -164,7 +164,7 @@ export class EntrepriseService {
     return this._missions$.asObservable();
   }
 
-  // Liste des misisons par offre
+  // Liste des misisons par entreprise
   getMissionByEntreprise() {
     this.setLoadingMission(true);
     this.http.get<MissionModel[]>(`${this.pathUrl}/missions/${this.idCompte}/entreprise`).pipe(

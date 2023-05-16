@@ -4,6 +4,7 @@ import { NavService, Menu } from '../../services/nav.service';
 import { TranslateService } from '@ngx-translate/core';
 import { DOCUMENT } from '@angular/common';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 var body = document.getElementsByTagName("body")[0];
 
@@ -129,7 +130,7 @@ export class HeaderComponent implements OnInit {
       {        
         const user= JSON.parse(userSession);
         this.type_utilisateur=user.type_utilisateur;
-        this.username=user.nom+" "+ user.prenom;
+        this.username=this.type_utilisateur == environment.interimaire ? user.nom+" "+ user.prenom : user.nom;
       }
 
        

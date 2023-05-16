@@ -50,7 +50,7 @@ export class SidebarComponent {
     if(typeof(sessionStorage) !== "undefined"){
       const userSession =  sessionStorage.getItem('user');
       if(userSession != null)
-      {        
+      {                
         const user= JSON.parse(userSession);
         this.type_utilisateur=user.type_utilisateur;
         this.username= this.type_utilisateur == environment.interimaire ? user.nom+" "+ user.prenom : user.nom;

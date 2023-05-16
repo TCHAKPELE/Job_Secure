@@ -1,0 +1,11 @@
+<div class="d-flex align-items-center justify-content-center vh-100" *ngIf="loading$ | async; else buttons">
+  <mat-spinner class="text-primary"></mat-spinner>
+</div>
+<ng-template #buttons>
+  <div class="container-fluid">
+
+      <app-datatable [data]="candidatures" [columns]="columns" [displayedColumns]="displayedColumns"
+          [labelDataTable]="labelDataTable" [buttonsAction]="buttonsAction" [pageSizeOptions]="[10, 25, 50]"
+          [defaultPageSize]="10" [defaultSort]="sort" #datatable></app-datatable>
+  </div>
+</ng-template>
