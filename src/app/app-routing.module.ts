@@ -6,6 +6,8 @@ import { content } from "./shared/routes/content-routes";
 import { full } from "./shared/routes/full.routes";
 import { LoginComponent } from "./core/components/login/login.component";
 import { Error404Component } from "./pages/error-pages/error404/error404.component";
+import { RegisterComponent } from "./core/components/register/register.component";
+import { RegisterEntrepriseComponent } from "./core/components/register-entreprise/register-entreprise.component";
 
 const routes: Routes = [
   {
@@ -16,6 +18,15 @@ const routes: Routes = [
     path :"login",
     component: LoginComponent
   },
+  {
+    path :"register",
+    component: RegisterComponent
+  },
+  {
+    path :"register-entreprise",
+    component: RegisterEntrepriseComponent
+  },
+
   {
     path: "",
     redirectTo: "sample-page/sample-page1",

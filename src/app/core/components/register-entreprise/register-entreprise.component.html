@@ -1,0 +1,97 @@
+<div class="container-fluid">
+    <!-- sign up page start-->
+    <div class="authentication-main">
+      <div class="row">
+        <div class="col-sm-12 p-0">
+          <div class="auth-innerright">
+            <div class="authentication-box">
+              <div class="text-center">
+                <img src="assets/images/endless-logo.png" alt="" />
+              </div>
+              <div class="card mt-4 p-4">
+                <h4 class="text-center">Compte entreprise</h4>
+                <h6 class="text-center">
+                  Etes vous un interimaire?
+                  <a class="btn-link" [routerLink]="['/register']"
+                    >C'est par ici</a
+                  >
+                </h6>
+                <form class="theme-form" [formGroup]="Formulaire">
+                    <div class="form-group">
+                        <label class="col-form-label">Nom entreprise</label>
+                        <input
+                          class="form-control"
+                          type="text"
+                          formControlName="nom"
+                        />
+                      </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="col-form-label">Téléphone</label>
+                        <input
+                          class="form-control"
+                          type="text"
+                          formControlName="telephone"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="col-form-label">Adresse</label>
+                        <input
+                          class="form-control"
+                          type="text"
+                          formControlName="adresse"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-form-label">Email</label>
+                    <input
+                      class="form-control"
+                      type="email"
+                      formControlName="email"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="col-form-label">Password</label>
+                    <input
+                      class="form-control"
+                      type="password"
+                      formControlName="mot_de_passe"
+                    />
+                  </div>
+  
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <button
+                        class="btn btn-primary"
+                        [disabled]="!Formulaire.valid"
+                        (click)="onSubmitForm()"
+                      >
+                        <span *ngIf="!stateButton"> {{ defaultText }}</span>
+                        <span *ngIf="stateButton"> {{ patienter }}</span>
+                      </button>
+                    </div>
+                    <div class="col-sm-8">
+                      <div class="text-start mt-2 m-l-20">
+                        Avez déjà un compte?  <a
+                          class="btn-link"
+                          [routerLink]="['/login']"
+                          >Connectez vous</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- sign up page ends-->
+  </div>
+  

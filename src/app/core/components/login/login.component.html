@@ -25,9 +25,18 @@
                     <div class="form-group row mt-3 mb-0">
                       <button [disabled]="!loginForm.valid" (click)="onSubmitForm()" class="btn btn-primary btn-block" type="submit">{{buttonText}}</button>
                     </div>
-
+                    
+                   
                     
                   </form>
+                  <div class=" form-group row mt-3 ">
+                    <h6>  Pas de compte? <a
+                      class="btn-link"
+                      [routerLink]="['/register']"
+                      >Inscrivez vous</a
+                    ></h6>
+                   
+                  </div>
                 </div>
               </div>
             </div>
