@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Candidature;
-use App\Models\Mission;
+use App\Mail\AccepterCandidature;
 use Carbon\Carbon;
+use App\Models\Mission;
+use App\Models\Candidature;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class CandidatureController extends Controller
 {
@@ -130,6 +132,12 @@ class CandidatureController extends Controller
             'date_fin' => $dateFin
         ]);
 
+        //Envoie d'email
+        Mail::to($candidature->interimaire->email)->send(new AccepterCandidature([
+            "name"=>$candidature->interimaire->nom." " . $candidature->interimaire->prenom,
+            "nom_entreprise"=>$candidature->entreprise->nom_entreprise,
+            "titre_offre"=>$candidature->offre->titre_offre
+        ]));
         return response()->json([
             'status' => 200,
             'message' => 'Candidature acceptée et mission créée avec succès'

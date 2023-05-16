@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Http\Request;
 use App\Models\Interimaire;
 use App\Models\Utilisateur;
+use App\Mail\creationCompte;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+
 class InterimaireController extends Controller
 {
     //Liste des interimaires
@@ -54,10 +57,13 @@ class InterimaireController extends Controller
             "id_compte" => $interimaire->id,
             "type_utilisateur" => $type_utilisateur
         ]);
+                
+        //Envoie d'email
+        Mail::to($request->email)->send(new creationCompte(["name" => $request->nom." ".$request->prenom]));
 
        return response()->json([
             'status' => 200,
-            'message' => 'Compte bien créé',
+            'message' => 'Compte bien créé. Nous vous avons envoyé un email!',
             'data' => $interimaire
         ]);
     }
@@ -78,7 +84,8 @@ class InterimaireController extends Controller
         $interimaire->telephone_interimaire = $request->telephone_interimaire ?? $interimaire->telephone_interimaire;
         $interimaire->adresse_interimaire = $request->adresse_interimaire ?? $interimaire->adresse_interimaire;
         $interimaire->save();
-    
+
+        
         return response()->json([
             'status'=>200, 
             'message' => 'Interimaire mis à jour avec succès', 

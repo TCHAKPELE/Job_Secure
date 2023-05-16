@@ -7,6 +7,8 @@ use App\Models\Entreprise;
 use App\Models\Interimaire;
 use App\Models\Utilisateur;
 use Illuminate\Http\Request;
+use App\Mail\ValidationCompte;
+use Illuminate\Support\Facades\Mail;
 
 class AdminController extends Controller
 {
@@ -90,6 +92,9 @@ class AdminController extends Controller
 
         // Valider le compte en mettant à jour le champ status_compte à 1
         $utilisateur->update(['status_compte' => 1]);
+        
+        //Envoie d'email
+        Mail::to($utilisateur->identifiant)->send(new ValidationCompte());
 
         return response()->json([
             'status' => 200,

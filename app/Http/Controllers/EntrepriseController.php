@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Http\Request;
+use App\Mail\creationCompte;
+use App\Mail\ValidationCompte;
 use App\Models\Entreprise;
 use App\Models\Utilisateur;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class EntrepriseController extends Controller
 {
@@ -55,9 +58,12 @@ class EntrepriseController extends Controller
             "type_utilisateur" => $type_utilisateur
         ]);
 
+        //Envoie d'email
+        Mail::to($request->email)->send(new creationCompte(["name" => $request->nom_entreprise]));
+
         return response()->json([
             'status' => 200,
-            'message' => 'Compte bien créé',
+            'message' => 'Compte bien créé. Nous vous avons envoyé un email!',
             'data' =>$newEntreprise
         ]);
 
