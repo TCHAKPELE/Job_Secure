@@ -32,7 +32,7 @@ Route::post("login", [AuthController::class, "login"]);
 /*------ End login ---------*/
 
 /*------Admin ---------*/
-Route::post("admin", [AdminController::class, "validerCompte"]);
+Route::post("admin/valider_compte", [AdminController::class, "validerCompte"]);
 
 Route::get("admin/interimaires_non_valides",  [AdminController::class, "interimairesNonValides"]);
 Route::get("admin/entreprises_non_valides",  [AdminController::class, "entreprisesNonValides"]);
@@ -94,6 +94,7 @@ Route::get("candidature/{id}/acceptation",  [CandidatureController::class, "acce
 
 //Postuler
 Route::post("candidature", [CandidatureController::class, "postulerOffre"]);
+Route::delete("candidature/{id}", [CandidatureController::class, "deleteCandidature"]);
 /*-------- End candidature -------*/
 
 /* ---- mission ---*/

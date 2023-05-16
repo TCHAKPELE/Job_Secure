@@ -14,60 +14,60 @@ class AdminController extends Controller
     public function interimairesNonValides()
     {
         // Récupérer les comptes intérimaires non validés
-        $interimaires = Interimaire::join('utilisateurs', 'interimaires.id', '=', 'utilisateurs.id')
+        $interimaires = Interimaire::join('utilisateurs', 'interimaires.id', '=', 'utilisateurs.id_compte')
             ->where('utilisateurs.status_compte', 0)
-            ->orderByDesc('utilisateurs.id')
+            ->orderByDesc('utilisateurs.id_compte')
             ->get();
 
         // Retourner les comptes intérimaires non validés en tant que réponse JSON
-        return response()->json([
+        return response()->json(
             $interimaires
-        ]);
+        );
     }
 
     //Compte entreprise non validé
     public function entreprisesNonValides()
     {
         // Récupérer les comptes entreprises non validés
-        $entreprises = Entreprise::join('utilisateurs', 'entreprises.id', '=', 'utilisateurs.id')
+        $entreprises = Entreprise::join('utilisateurs', 'entreprises.id', '=', 'utilisateurs.id_compte')
             ->where('utilisateurs.status_compte', 0)
-            ->orderByDesc('utilisateurs.id')
+            ->orderByDesc('utilisateurs.id_compte')
             ->get();
 
         // Retourner les comptes entreprises non validés en tant que réponse JSON
-        return response()->json([
+        return response()->json(
              $entreprises
-        ]);
+        );
     }
 
     //Compte intérimaire  validé
     public function interimairesValides()
     {
         // Récupérer les comptes intérimaires validés
-        $interimaires = Interimaire::join('utilisateurs', 'interimaires.id', '=', 'utilisateurs.id')
+        $interimaires = Interimaire::join('utilisateurs', 'interimaires.id', '=', 'utilisateurs.id_compte')
             ->where('utilisateurs.status_compte', 1)
-            ->orderByDesc('utilisateurs.id')
+            ->orderByDesc('utilisateurs.id_compte')
             ->get();
 
         // Retourner les comptes intérimaires validés en tant que réponse JSON
-        return response()->json([
+        return response()->json(
              $interimaires
-        ]);
+        );
     }
 
     //Compte intérimaire non validé
     public function entreprisesValides()
     {
         // Récupérer les comptes entreprises validés
-        $entreprises = Entreprise::join('utilisateurs', 'entreprises.id', '=', 'utilisateurs.id')
+        $entreprises = Entreprise::join('utilisateurs', 'entreprises.id', '=', 'utilisateurs.id_compte')
             ->where('utilisateurs.status_compte', 1)
-            ->orderByDesc('utilisateurs.id')
+            ->orderByDesc('utilisateurs.id_compte')
             ->get();
 
         // Retourner les comptes entreprises validés en tant que réponse JSON
-        return response()->json([
+        return response()->json(
              $entreprises
-        ]);
+        );
     }
 
 

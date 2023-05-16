@@ -15,7 +15,8 @@ class OffreController extends Controller
     {
         $query = Offre::query();
         //Récupération des informations dans les autres tables
-        $offres = $query->with([ 'entreprise'])->orderByDesc('id')->get();
+        $offres = $query->with([ 'entreprise'])->withCount('candidatures')
+        ->orderByDesc('id')->orderByDesc('id')->get();
 
         // Traiter les détails des relations
         $offres->transform(function ($offre) {

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Utilisateur;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Interimaire;
 use App\Models\Entreprise;
@@ -21,7 +20,7 @@ class AuthController extends Controller
                 'status' => 400,
             ]);
         }
-        if($user->statut_compte == 0 ){
+        if($user->status_compte == 0 ){
             return response()->json([
                 'message' => 'Votre compte a été déscativé',
                 'status' => 400,
@@ -36,7 +35,7 @@ class AuthController extends Controller
                 'id_compte' => $user->id_compte,
                 'identifiant' => $user->identifiant,
                 'mot_de_passe' => $user->mot_de_passe,
-                'status_compte' => $user->statut_compte,
+                'status_compte' => $user->status_compte,
                 'type_utilisateur' => $user->type_utilisateur,
                 'nom' => $additional_info->nom,
                 'email' => $additional_info->email,
@@ -51,7 +50,7 @@ class AuthController extends Controller
                 'id_compte' => $user->id_compte,
                 'identifiant' => $user->identifiant,
                 'mot_de_passe' => $user->mot_de_passe,
-                'status_compte' => $user->statut_compte,
+                'status_compte' => $user->status_compte,
                 'type_utilisateur' => $user->type_utilisateur,
                 'nom' => $additional_info->nom_entreprise,
                 'email' => $additional_info->email,
@@ -60,7 +59,17 @@ class AuthController extends Controller
            
             ];
         } else {
-            $additional_info = null;
+            $additional_info = Interimaire::find($user->id_compte);
+            $user_data=[
+                'id_compte' => $user->id_compte,
+                'identifiant' => $user->identifiant,
+                'mot_de_passe' => $user->mot_de_passe,
+                'status_compte' => $user->status_compte,
+                'type_utilisateur' => $user->type_utilisateur,
+                'nom' => "ADMINISTRATEUR",
+                
+           
+            ];
         }
 
         $tokenResult = $user->createToken('authToken')->plainTextToken;

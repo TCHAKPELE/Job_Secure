@@ -135,4 +135,24 @@ class CandidatureController extends Controller
             'message' => 'Candidature acceptée et mission créée avec succès'
         ]);
     }
+
+        //Suppression d'une offre
+        public function deleteCandidature($id)
+        {
+            $candidature = Candidature::find($id);
+            
+            if (!$candidature) {
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Candidature non trouvée'
+                ]);
+            }
+        
+            $candidature->delete();
+        
+            return response()->json([
+                'status' => 200,
+                'message' => 'Candidature supprimée avec succès'
+            ]);
+        }
 }
