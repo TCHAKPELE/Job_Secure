@@ -71,6 +71,7 @@ export class CandidatureComponent implements OnInit, OnDestroy{
     ).subscribe();
     
   }
+  
   //Liste des candidatures 
   private getCandidatures(){
     this.loading$ = this.entrepriseService.loadingCandidature$

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { CandidatureModel } from 'src/app/shared/models/candidature.model';
+import { FicheDePayeModel } from 'src/app/shared/models/fiche_de_paye.model';
 import { MissionModel } from 'src/app/shared/models/mission.model';
 import { OffreModel } from 'src/app/shared/models/offre.model';
 import { environment } from 'src/environments/environment';
@@ -145,9 +146,38 @@ export class InterimaireService {
         })
       ).subscribe();
     }
-  
 
-  
-  
     /*-------- End mission ---------*/
+
+     /*---------- Fiche de Paye ------------*/
+
+  private _loadingFicheDePaye$ = new BehaviorSubject<boolean>(false);
+
+  get loadingFicheDePaye$(): Observable<boolean> {
+    return this._loadingFicheDePaye$.asObservable();
+  }
+
+  private setLoadingFicheDePaye(loading: boolean) {
+    this._loadingFicheDePaye$.next(loading);
+  }
+
+  //Contiendra la donnée reçu depuis le serveur
+  private _fiche_de_payes$ = new BehaviorSubject<FicheDePayeModel[]>([]);
+  //getters
+  get fiche_de_payes$(): Observable<FicheDePayeModel[]> {
+    return this._fiche_de_payes$.asObservable();
+  }
+  getFicheDePaye() {
+    this.setLoadingFicheDePaye(true);
+    this.http.get<FicheDePayeModel[]>(`${this.pathUrl}/fiches/${this.idCompte}/interimaire`).pipe(
+      tap(fiche_de_payes => {
+        this._fiche_de_payes$.next([]); //Vider d'abord la variable
+        this._fiche_de_payes$.next(fiche_de_payes);
+        this.setLoadingFicheDePaye(false);
+      })
+    ).subscribe();
+  }
+
+
+   /*---------- End Fiche de Paye ------------*/
 }

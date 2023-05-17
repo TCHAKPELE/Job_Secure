@@ -10,13 +10,16 @@ import { OffreInterimaireResolver } from './resolvers/offre-interimaire.resolver
 import { CandidatureInterimaireComponent } from './components/candidature-interimaire/candidature-interimaire.component';
 import { MissionInterimaireComponent } from './components/mission-interimaire/mission-interimaire.component';
 import { MissionInterimaireResolver } from './resolvers/mission-interimaire.resolver';
+import { InterimaireFichePayeResolver } from './resolvers/interimaire-fiche-paye.resolver';
+import { FicheDePayeInterimaireComponent } from './components/fiche-de-paye-interimaire/fiche-de-paye-interimaire.component';
 
 
 @NgModule({
   declarations: [
     OffreIntermaireComponent,
     CandidatureInterimaireComponent,
-    MissionInterimaireComponent
+    MissionInterimaireComponent,
+    FicheDePayeInterimaireComponent
   ],
   imports: [
     CommonModule,
@@ -27,7 +30,8 @@ import { MissionInterimaireResolver } from './resolvers/mission-interimaire.reso
     InterimaireService,
     OffreInterimaireResolver,
     CandidatureInterimaireResolver,
-    MissionInterimaireResolver
+    MissionInterimaireResolver,
+    InterimaireFichePayeResolver
   ]
 })
 export class InterimaireModule { }

@@ -8,7 +8,8 @@ import { AlertService } from 'src/app/shared/services/alert.service';
 import { MatSort } from '@angular/material/sort';
 import { DatatableComponent } from 'src/app/shared/components/datatable/datatable.component';
 import { MissionModel } from 'src/app/shared/models/mission.model';
-
+import {MatDialog} from '@angular/material/dialog'; //Boite de dialogue
+import { FicheDialogueComponent } from './dialogues/fiche-dialogue/fiche-dialogue.component';
 @Component({
   selector: 'app-mission',
   templateUrl: './mission.component.html',
@@ -32,6 +33,7 @@ export class MissionComponent implements OnInit, OnDestroy {
   actions: {label : string, action: (params: any) => void}[]=[
     {label: "Cloturer", action: (mission) =>  this.cloturerMission(mission)},
     {label: "Suspendre", action: (mission) =>  this.suspendreMission(mission)},
+    {label: "Générer fiche de paye", action: (mission) =>  this.openFicheDialog(mission)},
 
   ];
 
@@ -55,6 +57,7 @@ export class MissionComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private entrepriseService: EntrepriseService,
+    public dialog: MatDialog
 
   ) { }
 
@@ -124,7 +127,45 @@ export class MissionComponent implements OnInit, OnDestroy {
       )
     ).subscribe();
   }
-  
+ 
+  //Boîte de dialogue de mise à jour d'une offre
+  openFicheDialog(element: MissionModel) {
+    const dialogRef = this.dialog.open(FicheDialogueComponent, {
+      width: '400px',
+    });
+    //Capture des données issues du formulaire de la boîte de dialog
+    dialogRef.afterClosed().subscribe(result => {
+      //Appel à la foncton de changement d'assignement
+      this.genererFicheDePaye(element, result);
+
+    });
+  } 
+  genererFicheDePaye(element: MissionModel, result: any){
+    console.log(element);
+    const formValue = {
+      "id_mission" : element.id,
+      "nbr_heures_effectuees": result['nbr_heures_effectuees'] 
+    };
+    
+ 
+    this.entrepriseService.genererFicheDePaye(formValue).pipe(
+      takeUntil(this.destroy$),
+      tap(
+        (data) =>{
+          if (data["status"] == 200) {
+            this.alertService.succesToastr(data["message"]);
+
+          } else {
+            this.alertService.dangerToastr(data["message"]);
+          }
+        },
+        (error) => {
+          this.alertService.dangerToastr("Impossible d'atteindre le serveur . Veuillez vérifier votre connexion internet, si celà persiste, veuillez contacter le support");
+          console.log(error);
+        }
+      )     
+    ).subscribe();
+  }
 
   //Destruction des souscriptions
   ngOnDestroy(): void {

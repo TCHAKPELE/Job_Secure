@@ -112,17 +112,14 @@ export class DatatableComponent implements OnInit, AfterViewInit {
   /*----Gestion des badges ( ou status) -----*/
 
   getStatusLabel(status: number, mappings: { code: number, label: string, color: string }[]): string {
-    console.log(status);
 
     const matchingStatus = mappings.find(mapping => mapping.code === status);
-    console.log(matchingStatus ? matchingStatus.label : 'ds');
 
     return matchingStatus ? matchingStatus.label : '';
   }
 
   getBadgeColor(status: number, mappings: { code: number, label: string, color: string }[]): string {
     const matchingStatus = mappings.find(mapping => mapping.code === status);
-    console.log(matchingStatus ? matchingStatus.color : '');
     return matchingStatus ? matchingStatus.color : '';
   }
 

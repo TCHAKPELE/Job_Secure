@@ -6,6 +6,8 @@ import { CandidatureComponent } from './components/candidature/candidature.compo
 import { CandidatureResolver } from './resolvers/candidature.resolver';
 import { MissionComponent } from './components/mission/mission.component';
 import { MissionResolver } from './resolvers/mission.resolver';
+import { FicheDePayeEntrepriseComponent } from './components/fiche-de-paye-entreprise/fiche-de-paye-entreprise.component';
+import { EntrepriseFichePayeResolver } from './resolvers/entreprise-fiche-paye.resolver';
 
 const routes: Routes = [
   {
@@ -52,7 +54,16 @@ const routes: Routes = [
       title: "Candidatures",
       breadcrumb: "Candidatures"
     }
-  }
+  },
+  {
+    path:"fiche_de_paye",
+    component: FicheDePayeEntrepriseComponent,
+    resolve : {fiche_de_payes: EntrepriseFichePayeResolver},
+    data: {
+      title: "Fiche de paye",
+      breadcrumb: "Fiche de paye"
+    }
+  },
 ];
 
 @NgModule({

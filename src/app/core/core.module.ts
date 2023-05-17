@@ -7,6 +7,7 @@ import { SharedModule } from '../shared/shared.module';
 import { RegisterComponent } from './components/register/register.component';
 import { RegisterEntrepriseComponent } from './components/register-entreprise/register-entreprise.component';
 import { RouterModule } from '@angular/router';
+import { ValidationEnCoursComponent } from './components/validation-en-cours/validation-en-cours.component';
 
 
 
@@ -14,7 +15,8 @@ import { RouterModule } from '@angular/router';
   declarations: [
     LoginComponent,
     RegisterComponent,
-    RegisterEntrepriseComponent
+    RegisterEntrepriseComponent,
+    ValidationEnCoursComponent
   ],
   imports: [
     CommonModule,

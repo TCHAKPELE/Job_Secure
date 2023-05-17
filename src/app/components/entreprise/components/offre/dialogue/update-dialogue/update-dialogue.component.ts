@@ -1,8 +1,7 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Subject, takeUntil, Observable, map, tap } from 'rxjs';
-import { EntrepriseService } from 'src/app/components/entreprise/services/entreprise.service';
+
 @Component({
   selector: 'app-update-dialogue',
   templateUrl: './update-dialogue.component.html',

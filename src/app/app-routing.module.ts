@@ -8,6 +8,8 @@ import { LoginComponent } from "./core/components/login/login.component";
 import { Error404Component } from "./pages/error-pages/error404/error404.component";
 import { RegisterComponent } from "./core/components/register/register.component";
 import { RegisterEntrepriseComponent } from "./core/components/register-entreprise/register-entreprise.component";
+import { SimpleComponent } from "./pages/coming-soon/simple/simple.component";
+import { ValidationEnCoursComponent } from "./core/components/validation-en-cours/validation-en-cours.component";
 
 const routes: Routes = [
   {
@@ -25,6 +27,10 @@ const routes: Routes = [
   {
     path :"register-entreprise",
     component: RegisterEntrepriseComponent
+  },
+  {
+    path :"validation-en-cours",
+    component: ValidationEnCoursComponent
   },
 
   {

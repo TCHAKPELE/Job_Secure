@@ -6,6 +6,8 @@ import { CandidatureInterimaireComponent } from './components/candidature-interi
 import { CandidatureInterimaireResolver } from './resolvers/candidature-interimaire.resolver';
 import { MissionInterimaireComponent } from './components/mission-interimaire/mission-interimaire.component';
 import { MissionInterimaireResolver } from './resolvers/mission-interimaire.resolver';
+import { FicheDePayeInterimaireComponent } from './components/fiche-de-paye-interimaire/fiche-de-paye-interimaire.component';
+import { InterimaireFichePayeResolver } from './resolvers/interimaire-fiche-paye.resolver';
 
 const routes: Routes = [
   {
@@ -42,6 +44,15 @@ const routes: Routes = [
     data: {
       title: "Missions",
       breadcrumb: "Missions"
+    }
+  },
+  {
+    path:"fiche_de_paye",
+    component: FicheDePayeInterimaireComponent,
+    resolve : {fiche_de_payes: InterimaireFichePayeResolver},
+    data: {
+      title: "Fiche de paye",
+      breadcrumb: "Fiche de paye"
     }
   },
 ];

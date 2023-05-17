@@ -66,10 +66,10 @@ export class LoginComponent implements OnInit, OnDestroy{
             sessionStorage.setItem('user', JSON.stringify(this.user));
           }
 
-          this.loginService.addUserAuth(this.user); //Mettre l'utilisateur dans une variable globle
+          this.loginService.addUserAuth(this.user); //Mettre l'utilisateur dans une variable globale
         
           
-          this.redirect_user_to_account(this.user.type_utilisateur); //Redirection
+          this.redirect_user_to_account(this.user.type_utilisateur, this.user.activation_compte); //Redirection
 
         }
         else {
@@ -88,18 +88,19 @@ export class LoginComponent implements OnInit, OnDestroy{
 
   //Redirection utilisateur
 
-  private redirect_user_to_account(type_compte: string) {
+  private redirect_user_to_account(type_compte: string, activation_compte: number) {
     
     switch (type_compte) {
       
       case environment.interimaire:
-        
-        this.router.navigateByUrl("interimaire/offres");
+        if(activation_compte == 1) this.router.navigateByUrl("interimaire/offres");
+        else    this.router.navigateByUrl("validation-en-cours");
 
         break;
 
       case environment.entreprise:
-        this.router.navigateByUrl("dashboard/entreprise");
+        if(activation_compte == 1) this.router.navigateByUrl("dashboard/entreprise");
+        else  this.router.navigateByUrl("validation-en-cours");
         break;
 
       case environment.admin:

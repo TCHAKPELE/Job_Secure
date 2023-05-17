@@ -1,0 +1,63 @@
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+    <div class="user-profile">
+      <div class="row">
+        <!-- user profile first-style start-->
+        <div class="col-sm-12">
+          <div class="card hovercard text-center">
+            <div class="cardheader"></div>
+            <div class="user-image">
+              <div class="avatar"><img alt="" src='assets/images/user/1.jpg'></div>
+       
+            </div>
+            <div class="info">
+              <div class="row">
+                <div class="col-sm-6 col-lg-4 order-sm-1 order-xl-0">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="ttl-info text-start">
+                        <h6><i class="fa fa-envelope"></i>   Email</h6><span>{{user.email}}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="ttl-info text-start text-capitalize">
+                        <h6><i class="fa fa-user"></i>Type compte</h6><span>{{user.type_utilisateur}}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-lg-4 order-sm-0 order-xl-1">
+                  <div class="user-designation">
+                    <div class="title" *ngIf="user.type_utilisateur == entreprise"><a target="_blank" href="">{{user.nom!}}</a></div>
+                    <div class="title"  *ngIf="user.type_utilisateur == interimaire"><a target="_blank" href="">{{user.nom! + " "+ user.prenom!}}</a></div>
+                    <!-- <div class="desc mt-2">designer</div> -->
+                    
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-4 order-sm-2 order-xl-2">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="ttl-info text-start">
+                        <h6><i class="fa fa-phone"></i>   Téléphone</h6><span>{{user.telephone}}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="ttl-info text-start">
+                        <h6><i class="fa fa-location-arrow"></i>Adresse</h6><span>{{user.adresse}}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr>
+              <div class="text-center">
+                <h3>Votre compte est en cours de validation. Vous recevrez bientôt un email de validation</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
