@@ -18,6 +18,7 @@ class Utilisateur extends  Authenticatable
         'mot_de_passe',
         'type_utilisateur',
         'status_compte',
+        'activation_compte',
     ];
     
 }

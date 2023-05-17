@@ -17,7 +17,7 @@ class AdminController extends Controller
     {
         // Récupérer les comptes intérimaires non validés
         $interimaires = Interimaire::join('utilisateurs', 'interimaires.id', '=', 'utilisateurs.id_compte')
-            ->where('utilisateurs.status_compte', 0)
+            ->where('utilisateurs.activation_compte', 0)
             ->orderByDesc('utilisateurs.id_compte')
             ->get();
 
@@ -32,7 +32,7 @@ class AdminController extends Controller
     {
         // Récupérer les comptes entreprises non validés
         $entreprises = Entreprise::join('utilisateurs', 'entreprises.id', '=', 'utilisateurs.id_compte')
-            ->where('utilisateurs.status_compte', 0)
+            ->where('utilisateurs.activation_compte', 0)
             ->orderByDesc('utilisateurs.id_compte')
             ->get();
 
@@ -47,7 +47,7 @@ class AdminController extends Controller
     {
         // Récupérer les comptes intérimaires validés
         $interimaires = Interimaire::join('utilisateurs', 'interimaires.id', '=', 'utilisateurs.id_compte')
-            ->where('utilisateurs.status_compte', 1)
+            ->where('utilisateurs.activation_compte', 1)
             ->orderByDesc('utilisateurs.id_compte')
             ->get();
 
@@ -62,7 +62,7 @@ class AdminController extends Controller
     {
         // Récupérer les comptes entreprises validés
         $entreprises = Entreprise::join('utilisateurs', 'entreprises.id', '=', 'utilisateurs.id_compte')
-            ->where('utilisateurs.status_compte', 1)
+            ->where('utilisateurs.activation_compte', 1)
             ->orderByDesc('utilisateurs.id_compte')
             ->get();
 
@@ -90,8 +90,8 @@ class AdminController extends Controller
             ]);
         }
 
-        // Valider le compte en mettant à jour le champ status_compte à 1
-        $utilisateur->update(['status_compte' => 1]);
+        // Valider le compte en mettant à jour le champ activation_compte à 1
+        $utilisateur->update(['activation_compte' => 1]);
         
         //Envoie d'email
         Mail::to($utilisateur->identifiant)->send(new ValidationCompte());

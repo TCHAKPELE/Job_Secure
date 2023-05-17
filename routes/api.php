@@ -8,6 +8,7 @@ use App\Http\Controllers\OffreController;
 use App\Http\Controllers\MissionController;
 use App\Http\Controllers\EntrepriseController;
 use App\Http\Controllers\CandidatureController;
+use App\Http\Controllers\FicheDePaiementController;
 use App\Http\Controllers\InterimaireController;
 
 /*
@@ -125,4 +126,10 @@ Route::put("mission/{id}", [MissionController::class, "updateMission"]);
 Route::delete("mission/{id}", [MissionController::class, "deleteMission"]);
 
 /* ---- End  mission ---*/
+
+/*------ Fiche de paiement -----*/
+Route::post("fiche", [FicheDePaiementController::class, "generateFicheDePaiement"]);
+//{filter} sera remplacé par entreprise, interimaire
+Route::get("fiches/{id}/{filter}", [FicheDePaiementController::class, "getFicheDePaiement"]);
+/*------ End fiche de paiement -----*/
 

@@ -69,7 +69,7 @@ class CandidatureController extends Controller
 
         //Récupération des informations dans les autres tables
         $candidatures = $query->with(['offre', 'entreprise', 'interimaire'])->get();
-
+        
         // Traiter les détails des relations
         $candidatures->transform(function ($candidature) {
             $candidature->titre_offre = $candidature->offre->titre_offre;

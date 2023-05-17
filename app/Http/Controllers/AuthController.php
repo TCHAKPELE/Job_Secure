@@ -36,6 +36,7 @@ class AuthController extends Controller
                 'identifiant' => $user->identifiant,
                 'mot_de_passe' => $user->mot_de_passe,
                 'status_compte' => $user->status_compte,
+                'activation_compte' => $user->activation_compte,
                 'type_utilisateur' => $user->type_utilisateur,
                 'nom' => $additional_info->nom,
                 'email' => $additional_info->email,
@@ -51,6 +52,7 @@ class AuthController extends Controller
                 'identifiant' => $user->identifiant,
                 'mot_de_passe' => $user->mot_de_passe,
                 'status_compte' => $user->status_compte,
+                'activation_compte' => $user->activation_compte,
                 'type_utilisateur' => $user->type_utilisateur,
                 'nom' => $additional_info->nom_entreprise,
                 'email' => $additional_info->email,
@@ -59,12 +61,12 @@ class AuthController extends Controller
            
             ];
         } else {
-            $additional_info = Interimaire::find($user->id_compte);
             $user_data=[
                 'id_compte' => $user->id_compte,
                 'identifiant' => $user->identifiant,
                 'mot_de_passe' => $user->mot_de_passe,
                 'status_compte' => $user->status_compte,
+                'activation_compte' => $user->activation_compte,
                 'type_utilisateur' => $user->type_utilisateur,
                 'nom' => "ADMINISTRATEUR",
                 

@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -15,7 +16,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_mission');
             $table->foreign('id_mission')->references('id')->on('missions');
-            $table->date('date_paiement');
+            $table->integer('nbr_heure_effectuees');
+            $table->date('date_paiement')->default(DB::raw('CURRENT_TIMESTAMP'));;
             $table->integer('montant_paiement');
             $table->timestamps();
         });
