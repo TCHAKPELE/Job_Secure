@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 use App\Models\Offre;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -15,8 +16,8 @@ class OffreController extends Controller
     {
         $query = Offre::query();
         //Récupération des informations dans les autres tables
-        $offres = $query->with([ 'entreprise'])->withCount('candidatures')
-        ->orderByDesc('id')->orderByDesc('id')->get();
+        $offres = $query->with(['entreprise'])->withCount('candidatures')
+            ->orderByDesc('id')->orderByDesc('id')->get();
 
         // Traiter les détails des relations
         $offres->transform(function ($offre) {
@@ -26,7 +27,6 @@ class OffreController extends Controller
             return $offre;
         });
         return response()->json($offres);
-    
     }
 
     //Récupérations des offres par entreprise
@@ -38,21 +38,22 @@ class OffreController extends Controller
             ->orderByDesc('id')
             ->get();
     }
-    
+
 
     //Récupérer une seul offre
-    public function getOneOffre($id){
+    public function getOneOffre($id)
+    {
         return Offre::findOrFail($id);
     }
 
-    
+
     //Ajouter une offre
     public function addOffre(Request $request)
     {
         // Validation et vérification de l'id entreprise envoyé
         $validator = Validator::make($request->all(), [
             'id_entreprise' => 'required|exists:entreprises,id',
-   
+
         ]);
 
         if ($validator->fails()) {
@@ -71,35 +72,44 @@ class OffreController extends Controller
             'salaire_offre' => $request->salaire_offre
         ]);
 
+        $offre['candidatures_count'] = 0;
+
+        $dateDuJour = Carbon::now()->toDateString();
+
+        // Format personnalisé
+        $dateDuJour = Carbon::now()->format('Y-m-d');
+        $offre['date_creation'] = $dateDuJour;
+
         return response()->json([
             'status' => '200',
             'message' => 'Offre ajoutée avec succès.',
             'data' => $offre
         ]);
-    }    
+    }
 
     //Update offre
-    public function updateOffre(Request $request, $id){
+    public function updateOffre(Request $request, $id)
+    {
         // Rechercher l'offre par ID
         $offre = Offre::find($id);
-        
+
         // Vérifier si l'offre existe
-        if(!$offre){
+        if (!$offre) {
             return response()->json([
                 "status" => 400,
                 "message" => "Offre introuvable"
             ]);
         }
-        
+
         // Mise à jour de l'offre
         $offre->titre_offre = $request->titre_offre;
         $offre->description_offre = $request->description_offre;
         $offre->duree_offre = $request->duree_offre;
         $offre->salaire_offre = $request->salaire_offre;
-    
+
         // Enregistrer les modifications dans la base de données
         $offre->save();
-    
+
         return response()->json([
             "status" => 200,
             "message" => "Offre mise à jour avec succès",
@@ -111,21 +121,42 @@ class OffreController extends Controller
     public function deleteOffre($id)
     {
         $offre = Offre::find($id);
-        
+
         if (!$offre) {
             return response()->json([
                 'status' => 200,
                 'message' => 'Offre non trouvée'
             ]);
         }
-    
+
+        
+
+        // Récupérer les missions liées à l'offre
+        $missions = $offre->missions;
+
+        if ($missions !== null) {
+            // Supprimer les enregistrements dans la table fiche_de_paiements pour chaque mission
+            foreach ($missions as $mission) {
+                $fichePaiements = $mission->fichesDePaiements;
+                if ($fichePaiements !=null){
+                    foreach ($fichePaiements as $fichePaiement) {
+                        $fichePaiement->delete();
+                    }
+                }
+                $mission->fichesDePaiements()->delete();
+                $mission->delete();
+            }
+        }
+
+        // Supprimer les candidatures liées à l'offre
+        $offre->candidatures()->delete();
+
+        // Supprimer l'offre
         $offre->delete();
-    
+
         return response()->json([
             'status' => 200,
             'message' => 'Offre supprimée avec succès'
         ]);
     }
-    
-    
 }

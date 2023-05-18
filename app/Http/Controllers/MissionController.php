@@ -11,7 +11,26 @@ class MissionController extends Controller
     //Récupérations de tous les offres
     public function getMissions()
     {
-        return Mission::all();
+        $query = Mission::query();
+
+        $missions = $query->with(['offre',  'interimaire','entreprise'])->orderByDesc('id')->get();
+        // Traiter les détails des relations
+        $missions->transform(function ($mission) {
+            $mission->titre_offre = $mission->offre->titre_offre;
+            $mission->description_offre = $mission->offre->description_offre;
+            $mission->salaire_offre = $mission->offre->salaire_offre;
+
+            $mission->nom_interimaire = $mission->interimaire->nom . ' ' . $mission->interimaire->prenom;
+            $mission->nom_entreprise = $mission->entreprise->nom_entreprise;
+
+            // Supprimer les relations pour éviter la redondance des données
+            unset($mission->offre);
+            unset($mission->entreprise);
+            unset($mission->interimaire);
+
+            return $mission;
+        });
+        return response()->json($missions);
     }
 
     //Récupérations des Missions par offre
@@ -27,7 +46,6 @@ class MissionController extends Controller
             $mission->salaire_offre = $mission->offre->salaire_offre;
 
             $mission->nom_interimaire = $mission->interimaire->nom . ' ' . $mission->interimaire->prenom;
-
             // Supprimer les relations pour éviter la redondance des données
             unset($mission->offre);
             unset($mission->entreprise);
@@ -176,19 +194,28 @@ class MissionController extends Controller
     public function deleteMission($id)
     {
         $mission = Mission::find($id);
-
+    
         if (!$mission) {
             return response()->json([
                 'status' => 200,
                 'message' => 'Mission non trouvée'
             ]);
         }
-
+    
+        $candidature = $mission->candidature;
+    
+        if ($candidature) {
+            $candidature->update([
+                'status_candidature' => 0
+            ]);
+        }
+    
         $mission->delete();
-
+    
         return response()->json([
             'status' => 200,
             'message' => 'Mission supprimée avec succès'
         ]);
     }
+    
 }

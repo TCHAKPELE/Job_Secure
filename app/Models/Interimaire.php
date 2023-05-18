@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Utilisateur;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Interimaire extends Model
 {
@@ -16,5 +17,9 @@ class Interimaire extends Model
         'telephone_interimaire',
         'adresse_interimaire'
     ];
+    public function utilisateur()
+    {
+        return $this->hasOne(Utilisateur::class, 'id_compte');
+    }
 
 }

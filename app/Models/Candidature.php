@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Offre;
+use App\Models\Mission;
 use App\Models\Entreprise;
 use App\Models\Interimaire;
-use App\Models\Offre;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Candidature extends Model
 {
@@ -33,6 +34,9 @@ class Candidature extends Model
         return $this->belongsTo(Offre::class, 'id_offre');
     } 
 
-
+    public function missions()
+{
+    return $this->hasMany(Mission::class, 'id_candidature');
+}
 
 }

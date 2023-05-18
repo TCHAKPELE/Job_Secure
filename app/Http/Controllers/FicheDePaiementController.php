@@ -73,7 +73,8 @@ class FicheDePaiementController extends Controller
         $fiche_generate = FicheDePaiement::create([
             'id_mission' => $mission->id,
             'montant_paiement' => $montant_total,
-        ]);
+            'nbr_heure_effectuees' => $montant_total,
+        ]);  
 
         // Générer le contenu du PDF de la fiche de paye
         $pdf = Pdf::loadView('pdf.fiche_de_paiement', [

@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use App\Models\Interimaire;
 use App\Models\Offre;
-use App\Models\Candidature;
 use App\Models\Entreprise;
+use App\Models\Candidature;
+use App\Models\Interimaire;
+use App\Models\FicheDePaiement;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Mission extends Model
 {
@@ -40,5 +41,10 @@ class Mission extends Model
     {
         return $this->belongsTo(Entreprise::class, 'id_entreprise');
     }
+    public function fichesDePaiements()
+{
+    return $this->hasMany(FicheDePaiement::class, 'id_mission');
+}
+
 
 }

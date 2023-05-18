@@ -21,4 +21,5 @@ class Utilisateur extends  Authenticatable
         'activation_compte',
     ];
     
+    
 }

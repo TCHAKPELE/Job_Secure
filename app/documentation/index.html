@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation</title>
+</head>
+<body>
+  <div style="padding:20px;">
+
+    <h1>Guide d'installation du projet</h1>
+    
+    <h2>Clonage du projet</h2>
+    <p>Lorsque vous clonez le projet, veuillez effectuer les étapes suivantes :</p>
+    <ol>
+      <li>Remplacez le fichier <code>.env.example</code> par <code>.env</code>.</li>
+    </ol>
+    
+    <h2>Configuration de la base de données</h2>
+    <p>Dans le fichier <code>.env</code>, localisez la ligne 11 et configurez les paramètres de votre base de données :</p>
+    <pre style="background-color: rgb(221, 219, 219); padding: 10px;">
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=interim_world
+    DB_USERNAME=root
+    DB_PASSWORD=
+    </pre>
+    
+    <h2>Configuration des e-mails</h2>
+    <p>Pour configurer les paramètres d'envoi d'e-mails, suivez les étapes suivantes :</p>
+    <ol>
+      <li>Modifiez la ligne 31 du fichier <code>.env</code> en fonction de votre configuration :</li>
+    </ol>
+    <pre style="background-color: rgb(221, 219, 219); padding: 10px;">
+    MAIL_MAILER=smtp
+    MAIL_HOST=smtp.gmail.com
+    MAIL_PORT=587
+    MAIL_USERNAME=votre_email@gmail.com
+    MAIL_PASSWORD=votre_mot_de_passe
+    MAIL_ENCRYPTION=tls
+    MAIL_FROM_ADDRESS=votre_email@gmail.com
+    MAIL_FROM_NAME="Interim World"
+    </pre>
+    
+    <h3>Utilisation d'un compte Gmail</h3>
+    <p>Si vous souhaitez utiliser un compte Gmail pour envoyer des e-mails, il vous suffit de renseigner votre adresse e-mail et votre mot de passe.</p>
+    <p>Remarque : Pour les comptes Gmail, vous devez utiliser un mot de passe d'application spécifique plutôt que votre mot de passe habituel.</p>
+    <p>Voici les étapes pour générer un mot de passe d'application :</p>
+    <ol>
+      <li>Accédez aux paramètres de votre compte Gmail en cliquant sur l'icône de votre compte dans le coin supérieur droit de la page, puis en sélectionnant "Gérer votre compte Google".</li>
+      <li>Dans le panneau de gauche, cliquez sur l'option "Sécurité".</li>
+      <li>Activez la vérification à deux facteurs, si ce n'est pas déjà fait.</li>
+      <li>Faites défiler vers le bas et vous verrez l'option "Mot de passe d'application".</li>
+      <li>Cliquez sur le bouton "Générer" pour créer un nouveau mot de passe d'application.</li>
+      <li>Gmail générera un mot de passe d'application unique pour votre application sélectionnée. Copiez ce mot de passe ou notez-le quelque part en lieu sûr.</li>
+    </ol>
+    
+    <h2>Exécution du projet</h2>
+    <p>Une fois les étapes de configuration terminées, exécutez la commande suivante pour installer les dépendances :</p>
+    <pre style="background-color: rgb(221, 219, 219); padding: 10px;">
+      composer install
+    </pre>
+    <p>Les identifiants du compte  admin doit être défini dans le fichier database/migrations/2023_04_27_142030_create_utilisateurs_table.php à la ligne 29 et 30 (identifiant et mot de passe) </p>
+
+    <p> Exécutez les commandes suivantes depuis votre terminal ou votre invite de commande :</p>
+    <pre style="background-color: rgb(221, 219, 219); padding: 10px;">
+    php artisan migrate
+    php artisan serve
+    </pre>
+    
+    
+    
+    </div>
+    
+</body>
+</html>

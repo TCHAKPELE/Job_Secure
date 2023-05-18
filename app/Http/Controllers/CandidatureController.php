@@ -69,7 +69,7 @@ class CandidatureController extends Controller
 
         //Récupération des informations dans les autres tables
         $candidatures = $query->with(['offre', 'entreprise', 'interimaire'])->get();
-        
+
         // Traiter les détails des relations
         $candidatures->transform(function ($candidature) {
             $candidature->titre_offre = $candidature->offre->titre_offre;
@@ -134,9 +134,9 @@ class CandidatureController extends Controller
 
         //Envoie d'email
         Mail::to($candidature->interimaire->email)->send(new AccepterCandidature([
-            "name"=>$candidature->interimaire->nom." " . $candidature->interimaire->prenom,
-            "nom_entreprise"=>$candidature->entreprise->nom_entreprise,
-            "titre_offre"=>$candidature->offre->titre_offre
+            "name" => $candidature->interimaire->nom . " " . $candidature->interimaire->prenom,
+            "nom_entreprise" => $candidature->entreprise->nom_entreprise,
+            "titre_offre" => $candidature->offre->titre_offre
         ]));
         return response()->json([
             'status' => 200,
@@ -144,23 +144,39 @@ class CandidatureController extends Controller
         ]);
     }
 
-        //Suppression d'une offre
-        public function deleteCandidature($id)
-        {
-            $candidature = Candidature::find($id);
-            
-            if (!$candidature) {
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'Candidature non trouvée'
-                ]);
-            }
-        
-            $candidature->delete();
-        
+    //Suppression d'une offre
+    public function deleteCandidature($id)
+    {
+        $candidature = Candidature::find($id);
+
+        if (!$candidature) {
             return response()->json([
                 'status' => 200,
-                'message' => 'Candidature supprimée avec succès'
+                'message' => 'Candidature non trouvée'
             ]);
         }
+        // Récupérer les missions liées à l'offre
+        $missions = $candidature->missions;
+
+        if ($missions !== null) {
+            // Supprimer les enregistrements dans la table fiche_de_paiements pour chaque mission
+            foreach ($missions as $mission) {
+                $fichePaiements = $mission->fichesDePaiements;
+                if ($fichePaiements != null) {
+                    foreach ($fichePaiements as $fichePaiement) {
+                        $fichePaiement->delete();
+                    }
+                }
+                $mission->fichesDePaiements()->delete();
+                $mission->delete();
+            }
+        }
+
+        $candidature->delete();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Candidature supprimée avec succès'
+        ]);
+    }
 }
