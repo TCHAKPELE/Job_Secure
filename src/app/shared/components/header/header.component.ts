@@ -26,6 +26,7 @@ export class HeaderComponent implements OnInit {
   public isOpenMobile: boolean = false
   public type_utilisateur!: string;
 
+  quelType: boolean= false; //Passes à true si type user est admin
   public username!:string;
   @Output() rightSidebarEvent = new EventEmitter<boolean>();
 
@@ -110,13 +111,18 @@ export class HeaderComponent implements OnInit {
   }
   ngOnInit() {
     this.initSessionSotorage();
+    if(this.type_utilisateur == environment.admin) this.quelType= true;
+    
     this.elem = document.documentElement;
     this.navServices.getItems(this.type_utilisateur)!.subscribe(menuItems => {
       this.items = menuItems
     });
   }
 
-
+  profile(){
+    if(this.type_utilisateur == environment.interimaire) this.router.navigateByUrl("interimaire/profile");
+    if(this.type_utilisateur == environment.entreprise) this.router.navigateByUrl("dashboard/entreprise/profile");
+  }
   SignOut(){
     sessionStorage.removeItem('user');
 

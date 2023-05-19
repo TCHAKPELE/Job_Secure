@@ -18,6 +18,7 @@ export class SidebarComponent {
 
   public username!:string;
 
+  public appname: string= environment.app_name;
   constructor(private router: Router, public navServices: NavService) {
     this.initSessionSotorage();
     this.navServices.getItems(this.type_utilisateur)!.subscribe(menuItems => {
