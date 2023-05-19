@@ -13,18 +13,21 @@ use Illuminate\Support\Facades\Mail;
 class EntrepriseController extends Controller
 {
     //Liste des Entreprises
-    public function getEntreprises() {
+    public function getEntreprises()
+    {
 
         return Entreprise::all();
     }
 
     //Récupérer un seul Entreprise
-    public function getOneEntreprise($id) {
+    public function getOneEntreprise($id)
+    {
         return Entreprise::findOrFail($id);
     }
 
     //Ajouter un entreprise
-    public function addEntreprise(Request $request) {
+    public function addEntreprise(Request $request)
+    {
 
         // Rechercher l'entreprise par email
         $entreprise = Entreprise::where('email', $request->email)->first();
@@ -32,7 +35,7 @@ class EntrepriseController extends Controller
         // Vérifier si l'entreprise existe déjà avec cet email
         if ($entreprise) {
             return response()->json([
-                'status' => 400 ,
+                'status' => 400,
                 'message' => 'L\'email de l\'entreprise existe déjà.'
             ]); // 400 est le code d'erreur Bad Request
         }
@@ -49,7 +52,7 @@ class EntrepriseController extends Controller
         $hashed_password = Hash::make($request->mot_de_passe);
 
         // Création de l'utilisateur associé à l'interimaire créé
-        $type_utilisateur="entreprise";
+        $type_utilisateur = "entreprise";
 
         $utilisateur = Utilisateur::create([
             "identifiant" => $request->email,
@@ -64,53 +67,58 @@ class EntrepriseController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Compte bien créé. Nous vous avons envoyé un email!',
-            'data' =>$newEntreprise
+            'data' => $newEntreprise
         ]);
-
-    }    
+    }
 
     //Mise à jour d'une entreprise
     public function updateEntreprise(Request $request, $id)
     {
         //Rechercher le compte correspondant
-        
+
         $entreprise = Entreprise::find($id);
-    
+
         if (!$entreprise) {
-            return response()->json(['status' => 400 ,'message' => 'Entreprise introuvable']);
+            return response()->json(['status' => 400, 'message' => 'Entreprise introuvable']);
         }
-    
+
+        $new_email = $entreprise->email; // L'ancienne valeur de l'email
         $entreprise->nom_entreprise = $request->nom_entreprise ?? $entreprise->nom_entreprise;
         $entreprise->email = $request->email ?? $entreprise->email;
         $entreprise->telephone_entreprise = $request->telephone_entreprise ?? $entreprise->telephone_entreprise;
         $entreprise->adresse_entreprise = $request->adresse_entreprise ?? $entreprise->adresse_entreprise;
         $entreprise->save();
-    
+
+        // Mettre à jour le champ "identifiant" de l'utilisateur
+        Utilisateur::where('identifiant', $new_email)
+            ->update(['identifiant' => $request->email]);
+
         return response()->json(
             [
-                'status' => 200 ,
-                'message' => 'Entreprise mis à jour avec succès', 
+                'status' => 200,
+                'message' => 'Entreprise mis à jour avec succès',
                 'data' => $entreprise
-            ]);
+            ]
+        );
     }
 
     //Suppression d'une Entreprise
     public function deleteEntreprise($id)
     {
         $entreprise = Entreprise::find($id);
-    
-        if(!$entreprise) {
+
+        if (!$entreprise) {
             return response()->json([
-                'status' => 400 ,
+                'status' => 400,
                 'message' => 'Entreprise introuvable.'
             ]);
         }
-    
+
         $entreprise->delete();
-    
+
         return response()->json([
-            'status' => 200 ,
+            'status' => 200,
             'message' => 'Entreprise supprimé avec succès.'
         ]);
-    }    
+    }
 }

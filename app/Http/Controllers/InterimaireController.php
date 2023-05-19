@@ -77,7 +77,9 @@ class InterimaireController extends Controller
         if (!$interimaire) {
             return response()->json([ 'status' => 400 ,'message' => 'Interimaire introuvable']);
         }
-    
+        
+        $new_email = $interimaire->email; // L'ancienne valeur de l'email
+
         $interimaire->nom = $request->nom ?? $interimaire->nom;
         $interimaire->prenom = $request->prenom ?? $interimaire->prenom;
         $interimaire->email = $request->email ?? $interimaire->email;
@@ -85,6 +87,9 @@ class InterimaireController extends Controller
         $interimaire->adresse_interimaire = $request->adresse_interimaire ?? $interimaire->adresse_interimaire;
         $interimaire->save();
 
+         // Mettre à jour le champ "identifiant" de l'utilisateur
+         Utilisateur::where('identifiant', $new_email)
+         ->update(['identifiant' => $request->email]);
         
         return response()->json([
             'status'=>200, 
