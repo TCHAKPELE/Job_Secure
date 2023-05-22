@@ -120,6 +120,11 @@
                     <td style="padding-right: 200px;">{{ $mission->entreprise->email }}</td>
                     <td>{{ $mission->interimaire->email }}</td>
                 </tr>
+                <tr>
+                    <td style="padding-right: 200px;"></td>
+                    <td>{{ $mission->interimaire->iban }}</td>
+                </tr>
+                
 
             </table>
 

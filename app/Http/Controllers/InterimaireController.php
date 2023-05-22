@@ -36,6 +36,17 @@ class InterimaireController extends Controller
                 "message" => "Adresse e-mail déjà utilisée"
             ]);
         }
+
+         //Vérifier si l'email existe en tant qu'identifiant
+         $user_verify = Utilisateur::where('identifiant', $request->email)->first();
+
+         if ($user_verify) {
+             return response()->json([
+                 'status' => 400,
+                 'message' => "Cet identifiant a été déjà attribué à un compte"
+             ]); // 400 est le code d'erreur Bad Request
+         }
+
         //Ajout des données dans la base de données
         $interimaire =Interimaire::create([
             "nom" => $request->nom,
@@ -50,6 +61,8 @@ class InterimaireController extends Controller
 
         // Création de l'utilisateur associé à l'interimaire créé
         $type_utilisateur="interimaire";
+
+
 
         $utilisateur = Utilisateur::create([
             "identifiant" => $request->email,
@@ -83,6 +96,7 @@ class InterimaireController extends Controller
         $interimaire->nom = $request->nom ?? $interimaire->nom;
         $interimaire->prenom = $request->prenom ?? $interimaire->prenom;
         $interimaire->email = $request->email ?? $interimaire->email;
+        $interimaire->iban = $request->iban ?? $interimaire->iban;
         $interimaire->telephone_interimaire = $request->telephone_interimaire ?? $interimaire->telephone_interimaire;
         $interimaire->adresse_interimaire = $request->adresse_interimaire ?? $interimaire->adresse_interimaire;
         $interimaire->save();

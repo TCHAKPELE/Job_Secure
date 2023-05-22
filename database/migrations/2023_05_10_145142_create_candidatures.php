@@ -20,7 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_offre');
             $table->foreign('id_offre')->references('id')->on('offres');
             $table->integer('status_acceptation')->default(0)->comment("1 Pour candidature accepté");
-            $table->date('date_creation')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('date_creation')->default(now());
             $table->timestamps();
         });
     }

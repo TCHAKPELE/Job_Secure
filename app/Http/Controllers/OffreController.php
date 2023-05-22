@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-
 use App\Models\Offre;
+
+use App\Models\Entreprise;
+use App\Models\Interimaire;
 use Illuminate\Http\Request;
+use App\Mail\SuppressionOffre;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -17,7 +21,7 @@ class OffreController extends Controller
         $query = Offre::query();
         //Récupération des informations dans les autres tables
         $offres = $query->with(['entreprise'])->withCount('candidatures')
-            ->orderByDesc('id')->orderByDesc('id')->get();
+            ->orderByDesc('id')->get();
 
         // Traiter les détails des relations
         $offres->transform(function ($offre) {
@@ -143,10 +147,25 @@ class OffreController extends Controller
                         $fichePaiement->delete();
                     }
                 }
+                //Notifier l'intérimaire
+                $interimaire= Interimaire::where('id', $mission->id_interimaire)->first();
+                Mail::to($interimaire->email)->send(new SuppressionOffre([
+                    "name" => $interimaire->nom." ".$interimaire->prenom,
+                    "titre_offre" => $offre->titre_offre,
+                ]));
+
                 $mission->fichesDePaiements()->delete();
                 $mission->delete();
             }
         }
+
+        //Notifier l'entreprise
+        $entreprise= Entreprise::where('id', $offre->id_entreprise)->first();
+        
+        Mail::to($entreprise->email)->send(new SuppressionOffre([
+            "name" => $entreprise->nom_entreprise,
+            "titre_offre" => $offre->titre_offre,
+        ]));
 
         // Supprimer les candidatures liées à l'offre
         $offre->candidatures()->delete();

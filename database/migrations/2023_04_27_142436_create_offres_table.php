@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('description_offre');
             $table->integer('duree_offre');
             $table->integer('salaire_offre');
-            $table->date('date_creation')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('date_creation')->default(now());
             $table->timestamps();
         });
     }

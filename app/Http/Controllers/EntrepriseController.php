@@ -40,6 +40,16 @@ class EntrepriseController extends Controller
             ]); // 400 est le code d'erreur Bad Request
         }
 
+        //Vérifier si l'email existe en tant qu'identifiant
+        $user_verify = Utilisateur::where('identifiant', $request->email)->first();
+
+        if ($user_verify) {
+            return response()->json([
+                'status' => 400,
+                'message' => "Cet identifiant a été déjà attribué à un compte"
+            ]); // 400 est le code d'erreur Bad Request
+        }
+
         // Créer une nouvelle entreprise
         $newEntreprise = Entreprise::create([
             'nom_entreprise' => $request->nom_entreprise,
@@ -53,6 +63,8 @@ class EntrepriseController extends Controller
 
         // Création de l'utilisateur associé à l'interimaire créé
         $type_utilisateur = "entreprise";
+
+
 
         $utilisateur = Utilisateur::create([
             "identifiant" => $request->email,

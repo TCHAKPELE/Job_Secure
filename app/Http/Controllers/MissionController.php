@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Offre;
 use App\Models\Mission;
+use App\Models\Entreprise;
+use App\Mail\StatusMission;
+use App\Models\Interimaire;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class MissionController extends Controller
@@ -109,11 +114,28 @@ class MissionController extends Controller
         // Vérifier si la mission existe
         $mission = Mission::findOrFail($idMission);
 
+        
         // Mettre à jour le champ status_mission avec la valeur spécifiée
         $mission->update(['status_mission' => $status]);
         
         $message = ($status == 0) ? 'Mission clôturée avec succès' : 'Mission suspendue avec succès';
 
+        //Envoi d'mail
+        $status_mission = ($status == 0) ? 'clôturée ' : 'suspendue';
+
+        $entreprise= Entreprise::where('id', $mission->id_entreprise)->first();
+        $interimaire= Interimaire::where('id', $mission->id_interimaire)->first();
+        $offre= Offre::where('id', $mission->id_offre)->first();
+
+        Mail::to($interimaire->email)->send(new StatusMission([
+            "name" => $interimaire->nom." ".$interimaire->prenom,
+            "nom_entreprise" => $entreprise->nom_entreprise,
+            "titre_offre" => $offre->titre_offre,
+            "status_mission" => $status_mission
+
+        ]));
+        
+        
         return response()->json([
             'status' => 200,
             'message' => $message

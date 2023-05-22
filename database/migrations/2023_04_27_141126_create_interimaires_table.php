@@ -17,10 +17,10 @@ return new class extends Migration
             $table->string('nom');
             $table->string('prenom');
             $table->string('email')->unique();
+            $table->string('iban')->default("");
             $table->string('adresse_interimaire');
             $table->string('telephone_interimaire');
-            $table->double('note_interimaire')->default(0);
-            $table->date('date_creation')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('date_creation')->default(now());
             $table->timestamps();
         });
     }

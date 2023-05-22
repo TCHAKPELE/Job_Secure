@@ -25,7 +25,7 @@ return new class extends Migration
             $table->date('date_debut');
             $table->date('date_fin');
             $table->integer('status_mission')->default(1)->comment("1 Pour dire active, 0 pour cloturé, 2 pour suspendu");
-            $table->date('date_creation')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('date_creation')->default(now());
             $table->timestamps();
         });
     }

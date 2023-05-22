@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_mission');
             $table->foreign('id_mission')->references('id')->on('missions');
             $table->integer('nbr_heure_effectuees');
-            $table->date('date_paiement')->default(DB::raw('CURRENT_TIMESTAMP'));;
+            $table->timestamp('date_paiement')->default(now());
             $table->integer('montant_paiement');
             $table->timestamps();
         });

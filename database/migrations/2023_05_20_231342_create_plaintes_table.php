@@ -10,24 +10,26 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('entreprises', function (Blueprint $table) {
+        Schema::create('plaintes', function (Blueprint $table) {
             $table->id();
-            $table->string('nom_entreprise');
-            $table->string('email')->unique();
-            $table->string('telephone_entreprise');
-            $table->string('adresse_entreprise');
-            $table->timestamp('date_creation')->default(now());
+            $table->integer('id_compte');
+            $table->string('type_utilisateur');
+            $table->string('motif');
+            $table->text('description');
+            $table->date('date_creation')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamps();
+    
         });
     }
+    
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('entreprises');
+        Schema::dropIfExists('plaintes');
     }
 };

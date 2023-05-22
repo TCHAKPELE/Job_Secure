@@ -10,6 +10,7 @@ use App\Http\Controllers\EntrepriseController;
 use App\Http\Controllers\CandidatureController;
 use App\Http\Controllers\FicheDePaiementController;
 use App\Http\Controllers\InterimaireController;
+use App\Http\Controllers\PlainteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -132,4 +133,13 @@ Route::post("fiche", [FicheDePaiementController::class, "generateFicheDePaiement
 //{filter} sera remplacé par entreprise, interimaire
 Route::get("fiches/{id}/{filter}", [FicheDePaiementController::class, "getFicheDePaiement"]);
 /*------ End fiche de paiement -----*/
+
+/*------ plaite -----*/
+Route::post("plainte", [PlainteController::class, "porterPlainte"]);
+Route::post("reponse_plainte/{id}", [PlainteController::class, "repondrePlainte"]);
+//Liste des plaintes
+Route::get("plaintes", [PlainteController::class, "afficherPlaintes"]);
+/*------ End plaite -----*/
+
+
 
