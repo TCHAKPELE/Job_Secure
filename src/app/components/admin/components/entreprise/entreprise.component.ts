@@ -20,7 +20,7 @@ export class EntrepriseComponent implements OnInit, OnDestroy {
 
   loading$: Observable<boolean>; //Vérifier que les données ont bien été chargé
   entreprises!: EntrepriseModel[]; //Liste des entreprises
-
+  loadingPost: boolean= false; // S'active quand on envoie une requete poste nécéssitant l'envoi d'email
   afficherBoutonValiderCompte: boolean = false; //Détermine si on doit afficher le bouton valider compte ou pas
 
   /*---- Datatable -------*/
@@ -77,20 +77,24 @@ export class EntrepriseComponent implements OnInit, OnDestroy {
     this.getComptes();
   }
   confirmEntreprise(element: EntrepriseModel): void {
-    this.adminService.validerCompte({"id_utilisateur": element.id}).pipe(
+    this.loadingPost = true;
+    this.adminService.validerCompte({"id_utilisateur": element.id_user}).pipe(
       takeUntil(this.destroy$),
       tap(
         (data) =>{
           if (data["status"] == 200) {
+            this.loadingPost = false;
             this.alertService.succesToastr(data["message"]);
             
             this.datatable.removeElement(element); //Suppresion de l'élément du datatable
 
           } else {
+            this.loadingPost = false;
             this.alertService.dangerToastr(data["message"]);
           }
         },
         (error) => {
+          this.loadingPost = false;
           this.alertService.dangerToastr("Impossible d'atteindre le serveur . Veuillez vérifier votre connexion internet, si celà persiste, veuillez contacter le support");
           console.log(error);
         }

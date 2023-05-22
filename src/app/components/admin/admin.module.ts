@@ -14,6 +14,9 @@ import { AdminCandidatureComponent } from './components/admin-candidature/admin-
 import { AdminCandidatureResolver } from './resolvers/admin-candidature.resolver';
 import { AdminMissionComponent } from './components/admin-mission/admin-mission.component';
 import { AdminMissionResolver } from './resolvers/admin-mission.resolver';
+import { AdminPlainteComponent } from './components/admin-plainte/admin-plainte.component';
+import { AdminPlainteResolver } from './resolvers/admin-plainte.resolver';
+import { PlainteDialogComponent } from './components/admin-plainte/dialogues/plainte-dialog/plainte-dialog.component';
 
 
 @NgModule({
@@ -22,7 +25,9 @@ import { AdminMissionResolver } from './resolvers/admin-mission.resolver';
     InterimaireComponent,
     AdminOffreComponent, 
     AdminCandidatureComponent,
-    AdminMissionComponent
+    AdminMissionComponent,
+    AdminPlainteComponent,
+    PlainteDialogComponent
   ],
   imports: [
     CommonModule,
@@ -35,7 +40,8 @@ import { AdminMissionResolver } from './resolvers/admin-mission.resolver';
     CompteInterimaireResolver,
     AdminOffreResolver,
     AdminCandidatureResolver,
-    AdminMissionResolver
+    AdminMissionResolver,
+    AdminPlainteResolver
   ]
 })
 export class AdminModule { }

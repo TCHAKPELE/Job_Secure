@@ -141,6 +141,8 @@ export class OffreComponent implements OnInit, OnDestroy {
   }
   //Mise à jour de l'offre
   updateOffre(oldElement : OffreModel, newElement: OffreModel){
+    
+  
     this.entrepriseService.updateOffre(oldElement.id!, newElement)
     .pipe(
       takeUntil(this.destroy$),
@@ -149,6 +151,8 @@ export class OffreComponent implements OnInit, OnDestroy {
           if (data["status"] == 200) {
           
             this.alertService.succesToastr(data["message"]);
+            newElement['date_creation']= oldElement['date_creation'];
+            newElement['candidatures_count']= oldElement['candidatures_count'];
             this.datatable.updateElement(oldElement, newElement)
           } else {
          

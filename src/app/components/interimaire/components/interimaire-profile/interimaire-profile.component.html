@@ -1,0 +1,102 @@
+<div
+  class="d-flex align-items-center justify-content-center vh-100"
+  *ngIf="loading$ | async; else buttons"
+>
+  <mat-spinner class="text-primary"></mat-spinner>
+</div>
+<ng-template #buttons>
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="edit-profile">
+      <div class="row">
+        <div class="col-lg-12">
+          <form class="card" [formGroup]="Formulaire">
+            <div class="card-header">
+              <h4 class="card-title mb-0">Votre profile</h4>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="col-form-label">Nom </label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      formControlName="nom"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="col-form-label">Prénom </label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      formControlName="prenom"
+                    />
+                  </div>
+                </div>
+                
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="col-form-label">Téléphone</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      formControlName="telephone"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="col-form-label">Adresse</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      formControlName="adresse"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="col-form-label">Email</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      formControlName="email"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="col-form-label">IBAN</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      formControlName="iban"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer text-end">
+              <button
+                class="btn btn-primary"
+                [disabled]="!Formulaire.valid"
+                (click)="onSubmitForm()"
+              >
+                <span *ngIf="!stateButton"> {{ defaultText }}</span>
+                <span *ngIf="stateButton"> {{ patienter }}</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</ng-template>

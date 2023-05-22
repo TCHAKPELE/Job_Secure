@@ -4,17 +4,17 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { UserModel } from 'src/app/core/models/user.model';
 import { CandidatureModel } from 'src/app/shared/models/candidature.model';
+import { EntrepriseModel } from 'src/app/shared/models/entreprise.model';
 import { FicheDePayeModel } from 'src/app/shared/models/fiche_de_paye.model';
 import { MissionModel } from 'src/app/shared/models/mission.model';
 import { OffreModel } from 'src/app/shared/models/offre.model';
 import { environment } from 'src/environments/environment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class EntrepriseService {
   pathUrl: string = environment.apiUrl;
   idCompte!: number;
+  type_utilisateur!: string;
 
   constructor(private http: HttpClient,
     private router: Router,) {
@@ -29,6 +29,7 @@ export class EntrepriseService {
         const user = JSON.parse(userSession);
         if (user.type_utilisateur == environment.entreprise) {
           this.idCompte = user.id_compte;
+          this.type_utilisateur = user.type_utilisateur;
         } else {
           this.accesInterdit();
         }
@@ -232,4 +233,44 @@ export class EntrepriseService {
   }
 
    /*---------- End Fiche de Paye ------------*/
+
+   /*------- Profile --------------*/
+
+   private _loadingProfile$ = new BehaviorSubject<boolean>(false);
+
+   get loadingProfile$(): Observable<boolean> {
+     return this._loadingProfile$.asObservable();
+   }
+ 
+   private setLoadingProfile(loading: boolean) {
+     this._loadingProfile$.next(loading);
+   }
+ 
+   //Contiendra la donnée reçu depuis le serveur
+   private _profile$ = new BehaviorSubject<EntrepriseModel[]>([]);
+   //getters
+   get profile$(): Observable<EntrepriseModel[]> {
+     return this._profile$.asObservable();
+   }
+   getProfileInfo(){
+    this.setLoadingProfile(true);
+    return this.http.get<EntrepriseModel[]>(`${this.pathUrl}/entreprise/${this.idCompte}`).pipe(
+      tap(profile => {
+        
+        this._profile$.next(profile);
+        this.setLoadingProfile(false);
+      })
+    ).subscribe();
+   }
+
+   updateProfileInfo(formValue: any): Observable<EntrepriseModel>{
+    return this.http.put<any>(`${this.pathUrl}/entreprise/${this.idCompte}`, formValue)
+   }
+   
+      /*---------- End profile ---------*/
+
+         //Plainte
+         porterPlaine(formValue: any) : Observable<any>{
+          return this.http.post<any>(`${this.pathUrl}/plainte`, formValue)
+        }
 }

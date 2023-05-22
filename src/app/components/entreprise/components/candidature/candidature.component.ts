@@ -22,7 +22,7 @@ export class CandidatureComponent implements OnInit, OnDestroy{
 
   loading$: Observable<boolean>; //Vérifier que les données ont bien été chargé
   candidatures! : CandidatureModel[]; //Liste des candidatures
-  
+  loadingPost: boolean= false; // S'active quand on envoie une requete poste nécéssitant l'envoi d'email
   /*---- Datatable -------*/
   columns: string[] = ['titre_offre','description_offre', 'salaire_offre','duree_offre','nom_interimaire','date_creation', 'buttons']; //Clé d'api
   displayedColumns: string[]= ['Titre','Description', 'Salaire (€)','Durée (en mois)','Nom candidat', 'Date de création','']; // Colonne à afficher dans la datatable
@@ -52,14 +52,17 @@ export class CandidatureComponent implements OnInit, OnDestroy{
 
   //Accepter une candidature
   confirmCandidature(candidature: CandidatureModel){
+    this.loadingPost = true;
     this.entrepriseService.accepterCandidature(candidature.id).pipe(
       takeUntil(this.destroy$),
       tap(
         (data) => {
           if (data["status"] == 200) {
+            this.loadingPost = false;
             this.alertService.succesToastr(data["message"]);
         
           } else {
+            this.loadingPost = false;
             this.alertService.dangerToastr(data["message"]);
           }
         },

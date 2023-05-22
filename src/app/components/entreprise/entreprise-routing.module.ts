@@ -8,6 +8,9 @@ import { MissionComponent } from './components/mission/mission.component';
 import { MissionResolver } from './resolvers/mission.resolver';
 import { FicheDePayeEntrepriseComponent } from './components/fiche-de-paye-entreprise/fiche-de-paye-entreprise.component';
 import { EntrepriseFichePayeResolver } from './resolvers/entreprise-fiche-paye.resolver';
+import { EntrepriseProfileComponent } from './components/entreprise-profile/entreprise-profile.component';
+import { EntrepriseProfileResolver } from './resolvers/entreprise-profile.resolver';
+import { EntreprisePlainteComponent } from './components/entreprise-plainte/entreprise-plainte.component';
 
 const routes: Routes = [
   {
@@ -64,6 +67,24 @@ const routes: Routes = [
       breadcrumb: "Fiche de paye"
     }
   },
+  {
+    path:"profile",
+    component: EntrepriseProfileComponent,
+    resolve: {profile: EntrepriseProfileResolver},
+    data: {
+      title: "Profile",
+      breadcrumb: "Profile"
+    }
+  },
+  
+  {
+    path:"plainte",
+    component: EntreprisePlainteComponent,
+    data: {
+      title: "Plainte",
+      breadcrumb: "Plainte"
+    }
+  }
 ];
 
 @NgModule({

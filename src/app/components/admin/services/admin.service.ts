@@ -279,4 +279,42 @@ export class AdminService {
   
   
     /*-------- End mission ---------*/
+
+    /*---------- Plainte -------------*/
+
+    private _loadingPlainte$ = new BehaviorSubject<boolean>(false);
+
+    get loadingPlainte$(): Observable<boolean> {
+      return this._loadingPlainte$.asObservable();
+    }
+  
+    private setLoadingPlainte(loading: boolean) {
+      this._loadingPlainte$.next(loading);
+    }
+  
+    //Contiendra la donnée reçu depuis le serveur
+    private _plaintes$ = new BehaviorSubject<any[]>([]);
+    //getters
+    get plaintes$(): Observable<any[]> {
+      return this._plaintes$.asObservable();
+    }
+
+    //Liste des plaintes
+    getPlaintes() {
+      this.setLoadingPlainte(true);
+      this.http.get<any[]>(`${this.pathUrl}/plaintes`).pipe(
+        tap(plaintes => {
+          this._plaintes$.next(plaintes);
+          this.setLoadingPlainte(false);
+        })
+      ).subscribe();
+    }
+
+    reponsePlainte(message: any, id: number){
+      return this.http.post<any>(`${this.pathUrl}/reponse_plainte/${id}`, message);
+    }
+    /*---------- End Plainte -------------*/
+
+
+
 }

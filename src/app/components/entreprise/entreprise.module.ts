@@ -14,6 +14,9 @@ import { CandidatureResolver } from './resolvers/candidature.resolver';
 import { FicheDialogueComponent } from './components/mission/dialogues/fiche-dialogue/fiche-dialogue.component';
 import { FicheDePayeEntrepriseComponent } from './components/fiche-de-paye-entreprise/fiche-de-paye-entreprise.component';
 import { EntrepriseFichePayeResolver } from './resolvers/entreprise-fiche-paye.resolver';
+import { EntrepriseProfileComponent } from './components/entreprise-profile/entreprise-profile.component';
+import { EntrepriseProfileResolver } from './resolvers/entreprise-profile.resolver';
+import { EntreprisePlainteComponent } from './components/entreprise-plainte/entreprise-plainte.component';
 
 
 @NgModule({
@@ -23,19 +26,22 @@ import { EntrepriseFichePayeResolver } from './resolvers/entreprise-fiche-paye.r
     UpdateDialogueComponent,
     CandidatureComponent,
     FicheDialogueComponent,
-    FicheDePayeEntrepriseComponent
+    FicheDePayeEntrepriseComponent,
+    EntrepriseProfileComponent,
+    EntreprisePlainteComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
-    EntrepriseRoutingModule
+    EntrepriseRoutingModule,
   ],
   providers:[
     EntrepriseService,
     OffreResolver,
     CandidatureResolver,
     MissionResolver,
-    EntrepriseFichePayeResolver
+    EntrepriseFichePayeResolver,
+    EntrepriseProfileResolver
   ]
 })
 export class EntrepriseModule { }

@@ -22,7 +22,7 @@ export class FicheDePayeEntrepriseComponent implements OnInit {
 
   loading$: Observable<boolean>; //Vérifier que les données ont bien été chargé
   fiche_de_payes! : FicheDePayeModel[]; //Liste des fiches
-
+  
   columns: string[] = ['titre_offre','nom_interimaire','date_debut_mission', 'date_fin_mission','salaire_offre','nbr_heure_effectuees','montant_paiement','date_paiement']; //Clé d'api
   displayedColumns: string[]= ['Titre','Nom intérimaire','Début mission','Fin mission', 'Salaire (€)','Nbr heure','Montant total (€)', 'Date paiement']; // Colonne à afficher dans la datatable
 

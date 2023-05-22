@@ -7,7 +7,8 @@ export const environment = {
   apiUrl: 'http://localhost:8000/api',
   interimaire : "interimaire", 
   entreprise : "entreprise", 
-  admin : "admin"
+  admin : "admin",
+  app_name:"Interim World"
 };
 
 /*

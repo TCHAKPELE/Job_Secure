@@ -12,6 +12,9 @@ import { MissionInterimaireComponent } from './components/mission-interimaire/mi
 import { MissionInterimaireResolver } from './resolvers/mission-interimaire.resolver';
 import { InterimaireFichePayeResolver } from './resolvers/interimaire-fiche-paye.resolver';
 import { FicheDePayeInterimaireComponent } from './components/fiche-de-paye-interimaire/fiche-de-paye-interimaire.component';
+import { InterimaireProfileComponent } from './components/interimaire-profile/interimaire-profile.component';
+import { InterimaireProfileResolver } from './resolvers/interimaire-profile.resolver';
+import { PlainteComponent } from './components/plainte/plainte.component';
 
 
 @NgModule({
@@ -19,7 +22,9 @@ import { FicheDePayeInterimaireComponent } from './components/fiche-de-paye-inte
     OffreIntermaireComponent,
     CandidatureInterimaireComponent,
     MissionInterimaireComponent,
-    FicheDePayeInterimaireComponent
+    FicheDePayeInterimaireComponent,
+    InterimaireProfileComponent,
+    PlainteComponent
   ],
   imports: [
     CommonModule,
@@ -31,7 +36,8 @@ import { FicheDePayeInterimaireComponent } from './components/fiche-de-paye-inte
     OffreInterimaireResolver,
     CandidatureInterimaireResolver,
     MissionInterimaireResolver,
-    InterimaireFichePayeResolver
+    InterimaireFichePayeResolver,
+    InterimaireProfileResolver
   ]
 })
 export class InterimaireModule { }

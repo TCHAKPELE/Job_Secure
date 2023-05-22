@@ -21,6 +21,7 @@ export class AdminOffreComponent implements OnInit, OnDestroy {
   destroy$!: Subject<boolean>;
 
   loading$: Observable<boolean>; //Vérifier que les données ont bien été chargé
+  loadingPost: boolean= false; // S'active quand on envoie une requete poste nécéssitant l'envoi d'email
   offres! : OffreModel[]; //Liste des offres
 
   /*---- Datatable -------*/
@@ -66,16 +67,19 @@ export class AdminOffreComponent implements OnInit, OnDestroy {
   
   //Suppresion d'une offre
   deleteOffre(element: OffreModel){
+    this.loadingPost = true;
     this.adminService.deleteOffre(element.id!)
     .pipe(
       takeUntil(this.destroy$),
       tap( (data)=>{   
         if(data['status'] == 200){
+          this.loadingPost = false;
           this.datatable.removeElement(element); //Suppresion de l'élément du datatable
           this.alertService.succesToastr(data['message']);
           
         }
         else{
+          this.loadingPost = false;
          this.alertService.dangerToastr(data['message']);    
         }
       })

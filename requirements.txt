@@ -8,3 +8,5 @@ Alternatif: Si vous rencontrez un problème avec npm install, faites ceci
 
 npm install -g yarn
 yarn insatll
+
+NB: Modifier les fichiers environnement si possible

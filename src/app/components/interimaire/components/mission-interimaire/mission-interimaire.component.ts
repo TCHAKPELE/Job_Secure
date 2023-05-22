@@ -3,13 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject, map, takeUntil, tap } from 'rxjs';
-import { OffreModel } from 'src/app/shared/models/offre.model';
 import { DatatableComponent } from 'src/app/shared/components/datatable/datatable.component';
 import { MatSort } from '@angular/material/sort';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { MissionModel } from 'src/app/shared/models/mission.model';
 import { InterimaireService } from '../../services/interimaire.service';
-import { CandidatureModel } from 'src/app/shared/models/candidature.model';
 @Component({
   selector: 'app-mission-interimaire',
   templateUrl: './mission-interimaire.component.html',

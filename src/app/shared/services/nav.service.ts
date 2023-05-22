@@ -65,6 +65,7 @@ export class NavService {
 			  { path: "interimaire/candidatures", title: "Candidatures", type: "link" },
 			  { path: "interimaire/missions", title: "Missions", type: "link" },
 			  { path: "interimaire/fiche_de_paye", title: "Fiches de paye", type: "link" },
+			  { path: "interimaire/plainte", title: "Porter plainte", type: "link" },
 			],
 		}
 	];
@@ -81,6 +82,7 @@ export class NavService {
 			  { path: "dashboard/entreprise/missions", title: "Missions", type: "link" },
 			  { path: "dashboard/entreprise/candidatures", title: "Candidatures", type: "link" },
 			  { path: "dashboard/entreprise/fiche_de_paye", title: "Fiches de paye", type: "link" },
+			  { path: "dashboard/entreprise/plainte", title: "Porter plainte", type: "link" },
 			],
 		}
 	];
@@ -109,7 +111,8 @@ export class NavService {
 			  { path: "dashboard/admin/entreprises/non_valide", title: "Nouvelles entreprises", type: "link" },
 			  { path: "dashboard/admin/interimaires/non_valide", title: "Nouveaux intérimaires", type: "link" },
 			],
-		}
+		},
+		{ path: "dashboard/admin/plaintes", icon: "mail", title: "Plaintes", type: "link" },
 	]
 	// Array
 	//items = new BehaviorSubject<Menu[]>(this.MENUITEMS);

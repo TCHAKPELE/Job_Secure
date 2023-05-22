@@ -8,6 +8,9 @@ import { MissionInterimaireComponent } from './components/mission-interimaire/mi
 import { MissionInterimaireResolver } from './resolvers/mission-interimaire.resolver';
 import { FicheDePayeInterimaireComponent } from './components/fiche-de-paye-interimaire/fiche-de-paye-interimaire.component';
 import { InterimaireFichePayeResolver } from './resolvers/interimaire-fiche-paye.resolver';
+import { InterimaireProfileComponent } from './components/interimaire-profile/interimaire-profile.component';
+import { InterimaireProfileResolver } from './resolvers/interimaire-profile.resolver';
+import { PlainteComponent } from './components/plainte/plainte.component';
 
 const routes: Routes = [
   {
@@ -55,6 +58,23 @@ const routes: Routes = [
       breadcrumb: "Fiche de paye"
     }
   },
+  {
+    path:"profile",
+    component: InterimaireProfileComponent,
+    resolve: {profile: InterimaireProfileResolver},
+    data: {
+      title: "Profile",
+      breadcrumb: "Profile"
+    }
+  },
+  {
+    path:"plainte",
+    component: PlainteComponent,
+    data: {
+      title: "Plainte",
+      breadcrumb: "Plainte"
+    }
+  }
 ];
 
 @NgModule({

@@ -22,6 +22,8 @@ export class LoginComponent implements OnInit, OnDestroy{
 
 
   user!: UserModel;
+
+  public appname: string= environment.app_name;
   constructor(private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private router: Router,

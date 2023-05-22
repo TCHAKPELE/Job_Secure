@@ -24,7 +24,7 @@ export class MissionComponent implements OnInit, OnDestroy {
 
   loading$: Observable<boolean>; //Vérifier que les données ont bien été chargé
   missions!: MissionModel[]; //Liste des missions
-
+  loadingPost: boolean= false; // S'active quand on envoie une requete poste nécéssitant l'envoi d'email
   /*---- Datatable -------*/
   columns: string[] = ['titre_offre', 'description_offre', 'salaire_offre', 'nom_interimaire', 'date_debut', 'date_fin', 'badges','actions']; //Clé d'api
   displayedColumns: string[] = ['Titre', 'Description', 'Salaire (€)', 'Nom intérimaire', 'Début', 'Fin', 'Status','']; // Colonne à afficher dans la datatable
@@ -82,21 +82,25 @@ export class MissionComponent implements OnInit, OnDestroy {
   }
 
   cloturerMission(element : MissionModel){
+    this.loadingPost = true;
     const status=0;
     this.entrepriseService.changerStatusMission(element.id, status).pipe(
       takeUntil(this.destroy$),
       tap(
         (data) =>{
           if (data["status"] == 200) {
+            this.loadingPost = false;
             this.alertService.succesToastr(data["message"]);
             let newElement= element;
             newElement['status_mission']=0;
             this.datatable.updateElement(element,newElement);//Mise à jour du datatable
           } else {
+            this.loadingPost = false;
             this.alertService.dangerToastr(data["message"]);
           }
         },
         (error) => {
+          this.loadingPost = false;
           this.alertService.dangerToastr("Impossible d'atteindre le serveur . Veuillez vérifier votre connexion internet, si celà persiste, veuillez contacter le support");
           console.log(error);
         }
@@ -105,22 +109,26 @@ export class MissionComponent implements OnInit, OnDestroy {
   }
 
   suspendreMission(element: MissionModel){
+    this.loadingPost = true;
     const status=2;
     this.entrepriseService.changerStatusMission(element.id, status).pipe(
       takeUntil(this.destroy$),
       tap(
         (data) =>{
           if (data["status"] == 200) {
+            this.loadingPost = false;
             this.alertService.succesToastr(data["message"]);
             let newElement= element;
             newElement['status_mission']=2;
             this.datatable.updateElement(element,newElement);//Mise à jour du datatable
             
           } else {
+            this.loadingPost = false;
             this.alertService.dangerToastr(data["message"]);
           }
         },
         (error) => {
+          this.loadingPost = false;
           this.alertService.dangerToastr("Impossible d'atteindre le serveur . Veuillez vérifier votre connexion internet, si celà persiste, veuillez contacter le support");
           console.log(error);
         }
@@ -141,7 +149,7 @@ export class MissionComponent implements OnInit, OnDestroy {
     });
   } 
   genererFicheDePaye(element: MissionModel, result: any){
-    console.log(element);
+    this.loadingPost = true;
     const formValue = {
       "id_mission" : element.id,
       "nbr_heures_effectuees": result['nbr_heures_effectuees'] 
@@ -153,13 +161,16 @@ export class MissionComponent implements OnInit, OnDestroy {
       tap(
         (data) =>{
           if (data["status"] == 200) {
+            this.loadingPost = false;
             this.alertService.succesToastr(data["message"]);
 
           } else {
+            this.loadingPost = false;
             this.alertService.dangerToastr(data["message"]);
           }
         },
         (error) => {
+          this.loadingPost = false;
           this.alertService.dangerToastr("Impossible d'atteindre le serveur . Veuillez vérifier votre connexion internet, si celà persiste, veuillez contacter le support");
           console.log(error);
         }

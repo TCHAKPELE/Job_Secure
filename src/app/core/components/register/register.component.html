@@ -5,11 +5,9 @@
       <div class="col-sm-12 p-0">
         <div class="auth-innerright">
           <div class="authentication-box">
-            <div class="text-center">
-              <img src="assets/images/endless-logo.png" alt="" />
-            </div>
+            <div class="text-center"><h2> {{appname}}</h2></div>
             <div class="card mt-4 p-4">
-              <h4 class="text-center">Compte intériamire</h4>
+              <h4 class="text-center">Compte intérimaire</h4>
               <h6 class="text-center">
                 Etes vous une entreprise?
                 <a class="btn-link" [routerLink]="['/register-entreprise']"
@@ -45,7 +43,7 @@
                       <label class="col-form-label">Téléphone</label>
                       <input
                         class="form-control"
-                        type="text"
+                        type="tel"
                         formControlName="telephone"
                       />
                     </div>

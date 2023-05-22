@@ -10,6 +10,8 @@ import { AdminCandidatureComponent } from './components/admin-candidature/admin-
 import { AdminCandidatureResolver } from './resolvers/admin-candidature.resolver';
 import { AdminMissionComponent } from './components/admin-mission/admin-mission.component';
 import { AdminMissionResolver } from './resolvers/admin-mission.resolver';
+import { AdminPlainteComponent } from './components/admin-plainte/admin-plainte.component';
+import { AdminPlainteResolver } from './resolvers/admin-plainte.resolver';
 
 const routes: Routes = [
   {
@@ -97,6 +99,15 @@ const routes: Routes = [
     path:"missions/:id_offre/offre",
     component: AdminMissionComponent,
     resolve : {missions: AdminMissionResolver},
+    data: {
+      title: "Missions",
+      breadcrumb: "Missions"
+    }
+  },
+  {
+    path:"plaintes",
+    component: AdminPlainteComponent,
+    resolve : {plaintes: AdminPlainteResolver},
     data: {
       title: "Missions",
       breadcrumb: "Missions"

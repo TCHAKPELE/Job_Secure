@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>Répondre à la plainte</h1>
+<div mat-dialog-content>
+  <form [formGroup]="Formulaire">
+    <div class="mb-3 row">
+      
+          <mat-form-field appearance="fill" class="col-md-12">
+            <mat-label>Votre réponse </mat-label>
+            <textarea  matInput formControlName="reponse"></textarea>
+            <mat-error>Ce champ est requis</mat-error>
+          </mat-form-field>
+      
+    </div>
+
+  </form>
+</div>
+<div mat-dialog-actions>
+  <mat-card-actions class="float-end col-md-6">
+    <button
+      class="btn btn-primary btn-enregistrement"
+      (click)="onSubmitForm()"
+      [disabled]="!Formulaire.valid"
+    >
+      Valider
+    </button>
+  </mat-card-actions>
+</div>

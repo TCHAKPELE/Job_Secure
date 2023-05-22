@@ -7,9 +7,7 @@ import {
 import { Observable, map, of } from 'rxjs';
 import { AdminService } from '../services/admin.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AdminMissionResolver implements Resolve<boolean> {
   var_bool: boolean=false;
   offreId! : number;
