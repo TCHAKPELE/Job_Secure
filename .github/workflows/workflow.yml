@@ -14,7 +14,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sed 's/DB_HOST=127.0.0.1/DB_HOST=localhost/' .env.example > .env
+          cp .env.example .env
           cat .env
           sudo apt-get update
           sudo apt-get upgrade
