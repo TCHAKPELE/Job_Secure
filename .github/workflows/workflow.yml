@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  deploy-frontend:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -36,7 +36,7 @@ jobs:
           source: dist/
           target: /tmp/dist/
 
-      - name: SSH into EC2 instance
+      - name: Deploy frontend and backend
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -46,25 +46,14 @@ jobs:
             cd /tmp/dist/dist/endless
             sudo service nginx stop
             sudo cp -r .* /var/www/html/
-            sudo service nginx start
-  deploy-backend:
-      needs: deploy-frontend
-      runs-on: ubuntu-latest
-      steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        
-      - name: SSH into EC2 instance
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
-          script: |
             cd /var/www/backend/Job_Secure
+            git pull
             sudo pkill -f "php artisan serve"
             sudo composer update --no-interaction
             sudo composer install --no-interaction --prefer-dist
             sudo php artisan migrate --force
             sudo php artisan serve > /dev/null 2>&1 &
+            sudo service nginx start
+
+
       
