@@ -6,7 +6,31 @@ on:
       - main
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get upgrade
+          sudo apt-get install php
+          sudo apt-get install php-xml
+          sudo apt-get install php-curl
+          sudo apt-get install php-mysql
+          sudo apt install mysql-server
+          sudo apt-install php-mbstring
+          sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+          sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+          sudo composer update --no-interaction
+          sudo composer install --no-interaction --prefer-dist
+          php artisan migrate --force
+      
+      - name: Run test
+        run: php artisan test
+      
   deploy:
     runs-on: ubuntu-latest
     steps:
@@ -49,10 +73,10 @@ jobs:
             cd /var/www/backend/Job_Secure
             git pull
             sudo killall -9 php
+            sudo kill $(sudo lsof -t -i:8000)
             sudo composer update --no-interaction
             sudo composer install --no-interaction --prefer-dist
             sudo php artisan migrate --force
-            php artisan test
             sudo php artisan serve > /dev/null 2>&1 &
             sudo service nginx start
             
