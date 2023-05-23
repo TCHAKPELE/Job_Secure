@@ -43,8 +43,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            cd /var/www/html/
+            cd /tmp/dist/dist/endless
             sudo service nginx stop
-            sudo mv index.html index.html.bak
-            sudo mv dist/endless/* .
+            sudo cp -r .* /var/www/html/
             sudo service nginx start
