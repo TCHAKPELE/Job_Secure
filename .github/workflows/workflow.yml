@@ -15,7 +15,6 @@ jobs:
       - name: Install dependencies
         run: |
           sed 's/DB_HOST=127.0.0.1/DB_HOST=localhost/' .env.example > .env
-          cat .env
           sudo apt-get install php
           sudo apt-get install php-xml
           sudo apt-get install php-curl
@@ -26,7 +25,8 @@ jobs:
           sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
           sudo composer update --no-interaction
           sudo composer install --no-interaction --prefer-dist
-          ls
+          ll
+          cat .env
           sudo systemctl start mysql
           systemctl status mysql
           sudo php artisan migrate --force
