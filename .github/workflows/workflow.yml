@@ -15,7 +15,7 @@ jobs:
       - name: Install dependencies
         run: |
           cp .env.example .env
-          php artisan key:generate
+
           sudo apt-get install php
           sudo apt-get install php-xml
           sudo apt-get install php-curl
@@ -30,6 +30,7 @@ jobs:
           cat .env
           sudo systemctl start mysql
           systemctl status mysql
+          php artisan key:generate
           php artisan cache:clear
           php artisan config:clear
           sudo php artisan migrate --force
