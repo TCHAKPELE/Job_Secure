@@ -7,7 +7,7 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Dépôt de planite</h1>
+    <h1>Dépôt de plainte</h1>
     <div>
     Bonjour cher administrateur. Un utilisateur a déposé une plainte 
 </div>

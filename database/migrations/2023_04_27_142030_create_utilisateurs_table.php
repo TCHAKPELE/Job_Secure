@@ -26,8 +26,8 @@ return new class extends Migration
         // Insérer l'utilisateur admin par défaut
         DB::table('utilisateurs')->insert([
             'id_compte' => 0,
-            'identifiant' => 'jupp.agon@yahoo.fr',
-            'mot_de_passe' => bcrypt('rasmuslerdorf'),
+            'identifiant' => 'k.tchakpele@gmail.com',
+            'mot_de_passe' => bcrypt('Demo123'),
             'type_utilisateur' => 'admin',
             'status_compte' => 1,
             'activation_compte' => 1,

@@ -14,7 +14,7 @@ class LoginTest extends TestCase
     {
         
         $response = $this->post('/api/login', [
-            'identifiant' => 'marcosfaiwaz@gmail.com',
+            'identifiant' => 'k.tchakpele@gmail.com',
             'mot_de_passe' => 'Demo123'
         ]);
 

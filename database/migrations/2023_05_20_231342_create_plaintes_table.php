@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('type_utilisateur');
             $table->string('motif');
             $table->text('description');
-            $table->date('date_creation')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->date('date_creation')->default(now());
             $table->timestamps();
     
         });
