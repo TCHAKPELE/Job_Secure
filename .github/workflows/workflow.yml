@@ -21,7 +21,7 @@ jobs:
           sudo apt-get install php-curl
           sudo apt-get install php-mysql
           sudo apt install mysql-server
-          sudo apt-install php-mbstring
+          sudo apt-get install php-mbstring
           sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
           sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
           sudo composer update --no-interaction
@@ -32,6 +32,7 @@ jobs:
         run: php artisan test
       
   deploy:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
