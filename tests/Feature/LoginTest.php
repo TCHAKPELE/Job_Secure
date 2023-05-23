@@ -19,6 +19,7 @@ class LoginTest extends TestCase
         ]);
 
           $response->assertStatus(200); // Vérifie que la requête a réussi
+          $response->assertJson(['status' => 200]); // Vérifie que la réponse est au format JSON avec un statut de 200
 
     }
 }
