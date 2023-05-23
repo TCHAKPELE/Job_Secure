@@ -12,14 +12,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          ref: job_front
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '14'
 
-      - name: Checkout to frontend branch
-        run: git checkout job_front
 
       - name: Install dependencies
         run: npm install
