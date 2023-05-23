@@ -14,6 +14,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          cp .env.example .env
           sudo apt-get update
           sudo apt-get upgrade
           sudo apt-get install php
