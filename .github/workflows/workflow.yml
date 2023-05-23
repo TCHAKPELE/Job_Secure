@@ -14,7 +14,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cp .env.example .env
+          sed 's/DB_HOST=127.0.0.1/DB_HOST=localhost/' .env.example > .env
+          cat .env
           sudo apt-get update
           sudo apt-get upgrade
           sudo apt-get install php
@@ -27,7 +28,8 @@ jobs:
           sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
           sudo composer update --no-interaction
           sudo composer install --no-interaction --prefer-dist
-          php artisan migrate --force
+          ls
+          sudo php artisan migrate --force
       
       - name: Run test
         run: php artisan test
