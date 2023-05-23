@@ -48,6 +48,7 @@ jobs:
             sudo cp -r .* /var/www/html/
             sudo service nginx start
   deploy-backend:
+      needs: deploy-frontend
       runs-on: ubuntu-latest
       steps:
       - name: SSH into EC2 instance
