@@ -6,9 +6,9 @@ on:
       - main
 
 jobs:
+
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -52,8 +52,8 @@ jobs:
             sudo composer update --no-interaction
             sudo composer install --no-interaction --prefer-dist
             sudo php artisan migrate --force
-            sudo php artisan serve > /dev/null 2>&1 &
             php artisan test
+            sudo php artisan serve > /dev/null 2>&1 &
             sudo service nginx start
             
 
