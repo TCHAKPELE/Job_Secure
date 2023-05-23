@@ -31,8 +31,9 @@ jobs:
           sudo systemctl start mysql
           systemctl status mysql
           php artisan key:generate
+          sudo mysql -u root -e "CREATE DATABASE laravel;"
           sudo mysql -u root -e "GRANT ALL PRIVILEGES ON laravel.* TO 'root'@'localhost'; FLUSH PRIVILEGES;"
-          php artisan cache:clear
+          sudo whoami
           php artisan config:clear
           sudo php artisan migrate --force
       
