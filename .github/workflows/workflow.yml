@@ -29,6 +29,7 @@ jobs:
           cat .env
           sudo systemctl start mysql
           systemctl status mysql
+          sudo su
           sudo php artisan migrate --force
       
       - name: Run test
