@@ -16,8 +16,6 @@ jobs:
         run: |
           sed 's/DB_HOST=127.0.0.1/DB_HOST=localhost/' .env.example > .env
           cat .env
-          sudo apt-get update
-          sudo apt-get upgrade
           sudo apt-get install php
           sudo apt-get install php-xml
           sudo apt-get install php-curl
@@ -29,6 +27,7 @@ jobs:
           sudo composer update --no-interaction
           sudo composer install --no-interaction --prefer-dist
           ls
+          systemctl status mysql
           sudo php artisan migrate --force
       
       - name: Run test
