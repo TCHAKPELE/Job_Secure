@@ -27,7 +27,7 @@ jobs:
           sudo composer update --no-interaction
           sudo composer install --no-interaction --prefer-dist
           ls
-          systemctl start mysql
+          sudo systemctl start mysql
           systemctl status mysql
           sudo php artisan migrate --force
       
