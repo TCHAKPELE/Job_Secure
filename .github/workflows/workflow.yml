@@ -48,9 +48,7 @@ jobs:
             sudo cp -r .* /var/www/html/
             cd /var/www/backend/Job_Secure
             git pull
-            set +e
-            sudo pkill -f "php artisan serve"
-            set -e
+            sudo kill $(sudo lsof -t -i:8000)
             sudo composer update --no-interaction
             sudo composer install --no-interaction --prefer-dist
             sudo php artisan migrate --force
