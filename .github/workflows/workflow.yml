@@ -28,6 +28,7 @@ jobs:
           sudo composer install --no-interaction --prefer-dist
           ls
           systemctl status mysql
+          systemctl start mysqld
           sudo php artisan migrate --force
       
       - name: Run test
