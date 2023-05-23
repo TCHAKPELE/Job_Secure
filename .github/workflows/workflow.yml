@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  deploy:
+  deploy-frontend:
     runs-on: ubuntu-latest
 
     steps:
@@ -47,3 +47,20 @@ jobs:
             sudo service nginx stop
             sudo cp -r .* /var/www/html/
             sudo service nginx start
+  deploy-backend:
+      runs-on: ubuntu-latest
+      steps:
+      - name: SSH into EC2 instance
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+            cd /var/www/backend/Job_Secure
+            sudo pkill -f "php artisan serve"
+            sudo composer update --no-interaction
+            sudo composer install --no-interaction --prefer-dist
+            sudo php artisan migrate --force
+            sudo php artisan serve > /dev/null 2>&1 &
+      
