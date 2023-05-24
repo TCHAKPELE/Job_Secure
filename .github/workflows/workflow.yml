@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-
+      
   deploy:
     runs-on: ubuntu-latest
     steps:
@@ -49,6 +49,7 @@ jobs:
             cd /var/www/backend/Job_Secure
             git pull
             sudo killall -9 php
+            sudo kill $(sudo lsof -t -i:8000)
             sudo composer update --no-interaction
             sudo composer install --no-interaction --prefer-dist
             sudo php artisan migrate --force
