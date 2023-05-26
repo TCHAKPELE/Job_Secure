@@ -20,12 +20,7 @@
           run: composer install --prefer-dist --no-interaction --no-dev
         - name: Require Vapor CLI
           run: composer global require laravel/vapor-cli
-        - name: select team
-          run: vapor login
-          env:
-            Email_Address: K.tchakpele@gmail.com
-            Password: Elsenior@1995
-        - name: Deploy Environment
+        - name: vapor deploy production --without-waiting
           run: vapor deploy
           env:
             VAPOR_API_TOKEN: ${{ secrets.VAPOR_API_TOKEN }}
