@@ -21,7 +21,10 @@
         - name: Require Vapor CLI
           run: composer global require laravel/vapor-cli
         - name: select team
-          run: vapor team:current
+          run: vapor login
+          env:
+            Email_Address: K.tchakpele@gmail.com
+            Password: Elsenior@1995
         - name: Deploy Environment
           run: vapor deploy
           env:
