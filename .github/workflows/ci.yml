@@ -4,23 +4,20 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
-  deploy:
+  deploy_backend:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
       - name: Configure SSH
         run: |
+
           mkdir -p ~/.ssh/
           echo "${{ secrets.AWS_EC2_SSH_KEYS }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan ${{ secrets.FRONTEND_HOST }} >> ~/.ssh/known_hosts
-
-      - name: Clone repository on remote server
-        run: |
-          ssh ${{ secrets.AWS_EC2_SSH_USER }}@${{ secrets.FRONTEND_HOST }} 'rm -rf Job_Secure; git clone git@github.com:${{ github.repository }}.git'
 
       - name: Setup BACKEND server
         uses: appleboy/ssh-action@master
@@ -33,11 +30,11 @@ jobs:
 
             # Install MySQL Server
             sudo apt update
-            sudo apt install -y mysql-server 
+            sudo apt install -y mysql-server
 
             # Create laravel database, grant privileges to the root user
             sudo mysql -u root -p${{ secrets.MYSQL_ROOT_PASSWORD }} -e "DROP DATABASE IF EXISTS laravel; CREATE DATABASE laravel;"
-            sudo mysql -u root -p${{ secrets.MYSQL_ROOT_PASSWORD }} -e "CREATE USER 'admin'@'%' IDENTIFIED BY '${{ secrets.MYSQL_PASSWORD }}'; GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
+            sudo mysql -u root -p${{ secrets.MYSQL_ROOT_PASSWORD }} -e "CREATE USER '${{ secrets.DB_APPUSER }}'@'%' IDENTIFIED BY '${{ secrets.MYSQL_PASSWORD }}'; GRANT ALL PRIVILEGES ON *.* TO '${{ secrets.DB_APPUSER }}'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
 
             # Configure MySQL to listen on all IP addresses
             sudo sed -i 's/^bind-address/#bind-address/' /etc/mysql/mysql.conf.d/mysqld.cnf
@@ -48,6 +45,24 @@ jobs:
             # Restart MySQL service
             sudo systemctl restart mysql
 
+  deploy_frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure SSH
+        run: |
+
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.AWS_EC2_SSH_KEYS }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan ${{ secrets.FRONTEND_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Clone repository on remote server
+        run: |
+          ssh ${{ secrets.AWS_EC2_SSH_USER }}@${{ secrets.FRONTEND_HOST }} 'rm -rf Job_Secure; git clone git@github.com:${{ github.repository }}.git'
+
       - name: Setup FRONTEND server
         uses: appleboy/ssh-action@master
         with:
@@ -56,6 +71,12 @@ jobs:
           port: ${{ secrets.AWS_EC2_SSH_PORT }}
           key: ${{ secrets.AWS_EC2_SSH_KEYS }}
           script: |
+
+            # Copy repository to remote server
+            mkdir /home/${{ secrets.AWS_EC2_SSH_USER }}/Job_Secure
+            cp -r ${{ github.workspace }} /home/${{ secrets.AWS_EC2_SSH_USER }}/Job_Secure
+
+            # Update and install and required packages
             sudo apt update
             sudo apt install -y nginx mysql-server 
             sudo apt-get --purge remove php8.1-common
@@ -69,11 +90,11 @@ jobs:
             sudo sed -i 's/^\(;extension=xml\)/extension=xml/' /etc/php/8.1/cli/php.ini
             sudo sed -i 's/^\(;extension=pdo_mysql\)/extension=pdo_mysql/' /etc/php/8.1/cli/php.ini
 
-            #Install Node
+            # Install Node
             curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
             sudo apt-get install -y nodejs
 
-            #Set the document root of nginx web server to /var/www/html/public
+            # Set the document root of nginx web server to /var/www/html/public
             sudo tee /etc/nginx/sites-available/default > /dev/null <<END_OF_FILE
             server {
                 listen 80 default_server;
@@ -101,33 +122,44 @@ jobs:
             sudo sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/' /etc/php/8.1/fpm/php.ini
 
             cd Job_Secure
+
+            # Update DB parameters in .env file
             sudo cp .env.example .env
             sudo sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.MYSQL_PASSWORD }}/" ./.env
-            sudo sed -i "s/DB_USERNAME=.*/DB_USERNAME=admin/" ./.env
+            sudo sed -i "s/DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_APPUSER }}/" ./.env
             sudo grep -q '^DB_STRICT_MODE=' ./.env && sudo ed -i 's/^DB_STRICT_MODE=.*/DB_STRICT_MODE=false/' ./.env || sudo sh -c 'echo "DB_STRICT_MODE=false" >> ./.env'
             sudo sed -i "s/DB_HOST=.*/DB_HOST=${{ secrets.DB_HOST }}/" ./.env
 
+            # Update and install PHP dependencies
             composer update
             composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
+            # Installs the dependencies and run build script defined in the package.json
             npm install
-            npm run build --prod
+            npm run build
 
+            # Move built files to web server directory, setup proper permissions
             sudo rsync -avz --exclude='node_modules' ./ /var/www/html/
             sudo chown -R www-data:www-data /var/www/html
             sudo chmod -R 755 /var/www/html/storage
             sudo chmod o+w ./storage/ -R
-
             sudo usermod -aG www-data ubuntu
             cd /var/www/html/
+
+            # Generate APP_KEY
             KEY=$(php artisan key:generate --show)
             sudo sed -i "s#^\(APP_KEY=\).*\$#\1$KEY#" ./.env
+
+            # Fix  "Invalid default value for 'date_creation'" error
             sudo sed -i "s/->date('date_creation')->default(DB::raw('CURRENT_TIMESTAMP'));/->date('date_creation')->nullable()->default(null);/" database/migrations/*.php
             sudo sed -i "s/->date('date_paiement')->default(DB::raw('CURRENT_TIMESTAMP'));/->date('date_creation')->nullable()->default(null);/" database/migrations/*.php
+
+            # Clear cache, cache configuration, and create a symbolic link for file serving.
             sudo php artisan cache:clear
             sudo php artisan config:cache
             sudo php artisan storage:link
 
+            # Enable PHP info page
             sudo sh -c "echo '<?php\nphpinfo();' > public/phpinfo.php"
 
             # Restart services 
@@ -145,3 +177,10 @@ jobs:
             sudo php artisan migrate --seed --force
             sudo php artisan optimize
             sudo php artisan up
+
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    needs: [deploy_backend, deploy_frontend]
+    steps:
+      - name: Build and Deploy
+        run: echo "Build and deploy steps go here"
