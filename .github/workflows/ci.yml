@@ -111,7 +111,7 @@ jobs:
             composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
             npm install
-            npm run build
+            npm run build --prod
 
             sudo rsync -avz --exclude='node_modules' ./ /var/www/html/
             sudo chown -R www-data:www-data /var/www/html
@@ -130,10 +130,17 @@ jobs:
 
             sudo sh -c "echo '<?php\nphpinfo();' > public/phpinfo.php"
 
-            # Restart services
-            sudo systemctl restart nginx.service   
+            # Restart services 
             sudo systemctl restart php8.1-fpm.service
 
+            # Stop and disable Apache2 service
+            sudo systemctl stop apache2
+            sudo systemctl disable apache2
+
+            # Start and enable Nginx service
+            sudo systemctl enable --now nginx
+
+            # Migrate database
             (sudo php artisan down) || true
             sudo php artisan migrate --seed --force
             sudo php artisan optimize
