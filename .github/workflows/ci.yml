@@ -59,10 +59,6 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan ${{ secrets.FRONTEND_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Clone repository on remote server
-        run: |
-          ssh ${{ secrets.AWS_EC2_SSH_USER }}@${{ secrets.FRONTEND_HOST }} 'rm -rf Job_Secure; git clone git@github.com:${{ github.repository }}.git'
-
       - name: Setup FRONTEND server
         uses: appleboy/ssh-action@master
         with:
@@ -74,7 +70,7 @@ jobs:
 
             # Copy repository to remote server
             mkdir /home/${{ secrets.AWS_EC2_SSH_USER }}/Job_Secure
-            cp -r ${{ github.workspace }} /home/${{ secrets.AWS_EC2_SSH_USER }}/Job_Secure
+            cp -r ${{ github.workspace }} ~/Job_Secure
 
             # Update and install and required packages
             sudo apt update
@@ -139,7 +135,7 @@ jobs:
             npm run build
 
             # Move built files to web server directory, setup proper permissions
-            sudo rsync -avz --exclude='node_modules' ./ /var/www/html/
+            sudo rsync -avz --exclude='node_modules' --exclude='Dockerfile' ./ /var/www/html/
             sudo chown -R www-data:www-data /var/www/html
             sudo chmod -R 755 /var/www/html/storage
             sudo chmod o+w ./storage/ -R
