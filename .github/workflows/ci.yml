@@ -21,7 +21,7 @@ jobs:
 
       - name: Clone repository on remote server
         run: |
-          ssh ${{ secrets.AWS_EC2_SSH_USER }}@${{ secrets.FRONTEND_HOST }} 'rm -rf Job_Secure; git clone git@github.com:${{ github.repository }}.git'
+          ssh ${{ secrets.AWS_EC2_SSH_USER }}@${{ secrets.FRONTEND_HOST }} 'rm -rf ${{ github.event.repository.name }}; git clone git@github.com:${{ github.repository }}.git'
 
       - name: Setup BACKEND server
         uses: appleboy/ssh-action@master
@@ -73,8 +73,8 @@ jobs:
           script: |
 
             # Copy repository to remote server
-            mkdir /home/${{ secrets.AWS_EC2_SSH_USER }}/Job_Secure
-            cp -r ${{ github.workspace }} ~/Job_Secure
+            mkdir /home/${{ secrets.AWS_EC2_SSH_USER }}/${{ github.event.repository.name }}
+            cp -r ${{ github.workspace }} ~/${{ github.event.repository.name }}
 
             # Update and install and required packages
             sudo apt update
