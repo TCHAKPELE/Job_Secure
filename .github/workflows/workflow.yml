@@ -57,6 +57,3 @@ jobs:
             sudo php artisan serve > /dev/null 2>&1 &
             sudo service nginx start
             
-
-
-      
