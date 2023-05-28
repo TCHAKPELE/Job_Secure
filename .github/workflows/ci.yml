@@ -105,19 +105,15 @@ jobs:
                 ssl_certificate ${{ secrets.SSL_CERT_DIR }}/server.crt;
                 ssl_certificate_key ${{ secrets.SSL_CERT_DIR }}/server.key;
 
-                root /var/www/html/public;
-                index index.php index.html index.htm;
+                root /var/www/html/dist/endless; 
+
+                index index.html;
 
                 location / {
-                    try_files $uri $uri/ /index.php?$query_string;
-                }
-                location ~ \.php$ {
-                    include snippets/fastcgi-php.conf;
-                    fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
-                    fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
-                    include fastcgi_params;
+                    try_files $uri $uri/ /index.html;
                 }
             }
+
             END_OF_FILE
 
             # Configure PHP
@@ -137,6 +133,10 @@ jobs:
             composer update
             composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
+            # Generate APP_KEY
+            KEY=$(php artisan key:generate --show)
+            sudo sed -i "s#^\(APP_KEY=\).*\$#\1$KEY#" ./.env
+
             # Install dependencies
             npm ci
 
@@ -144,16 +144,12 @@ jobs:
             ng build --prod
 
             # Move built files to web server directory, setup proper permissions
-            sudo rsync -avz ./dist/endless /var/www/html/
+            sudo cp -r ./dist/endless /var/www/html/
             sudo chown -R www-data:www-data /var/www/html
             sudo chmod -R 755 /var/www/html/storage
             sudo chmod o+w ./storage/ -R
             sudo usermod -aG www-data ubuntu
             cd /var/www/html/
-
-            # Generate APP_KEY
-            KEY=$(php artisan key:generate --show)
-            sudo sed -i "s#^\(APP_KEY=\).*\$#\1$KEY#" ./.env
 
             # Fix  "Invalid default value for 'date_creation'" error
             sudo sed -i "s/->date('date_creation')->default(DB::raw('CURRENT_TIMESTAMP'));/->date('date_creation')->nullable()->default(null);/" database/migrations/*.php
