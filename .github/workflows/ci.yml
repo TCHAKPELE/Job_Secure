@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  deploy_backend:
+  deploy_backend_and_make_test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -48,7 +48,9 @@ jobs:
 
             # Restart MySQL service
             sudo systemctl restart mysql
-
+      - name: make test 
+        run: php artisan test
+        
   deploy_frontend:
     runs-on: ubuntu-latest
     steps:
