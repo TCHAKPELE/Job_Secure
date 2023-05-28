@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Mail;
 
 class AdminController extends Controller
 {
+     //Liste des interimaires
+     public function getAdmins(){
+        
+        return Admin::all();
+    }
     //Compte intérimaire non validé
     public function interimairesNonValides()
     {

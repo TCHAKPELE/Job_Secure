@@ -36,6 +36,7 @@ Route::post("login", [AuthController::class, "login"]);
 /*------Admin ---------*/
 Route::post("admin/valider_compte", [AdminController::class, "validerCompte"]);
 
+Route::get("admin", [AdminController::class, "getAdmins"]);
 Route::get("admin/interimaires_non_valides",  [AdminController::class, "interimairesNonValides"]);
 Route::get("admin/entreprises_non_valides",  [AdminController::class, "entreprisesNonValides"]);
 Route::get("admin/interimaires_valides",  [AdminController::class, "interimairesValides"]);
