@@ -7,6 +7,6 @@ npm install (Permet d'installer les dépendances du projet)
 Alternatif: Si vous rencontrez un problème avec npm install, faites ceci
 
 npm install -g yarn
-yarn insatll
+yarn install
 
 NB: Modifier les fichiers environnement si possible
