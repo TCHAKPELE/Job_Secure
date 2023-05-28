@@ -195,4 +195,4 @@ jobs:
     needs: [deploy_backend, deploy_frontend]
     steps:
       - name: Build and Deploy
-        run: echo "Build and deploy steps go here"
+        run: echo "Build and deploy steps done"
