@@ -178,9 +178,9 @@ jobs:
             sudo php artisan migrate --seed --force
             sudo php artisan optimize
             sudo php artisan up
-
-            # Make test
             sudo php artisan test
+
+           
      
 
   build_and_deploy:
