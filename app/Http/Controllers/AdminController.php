@@ -16,7 +16,7 @@ class AdminController extends Controller
      //Liste des interimaires
      public function getAdmins(){
         
-        return Admin::all();
+        return Utilisateur::all();
     }
     //Compte intérimaire non validé
     public function interimairesNonValides()
