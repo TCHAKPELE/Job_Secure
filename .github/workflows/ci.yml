@@ -89,19 +89,12 @@ jobs:
             curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
             sudo apt-get install -y nodejs
 
-            # Generate a self-signed SSL certificate and private key 
-            echo "CREATE SSL CERT"
-            sudo mkdir -p /etc/nginx/ssl
-            sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ${{ secrets.SSL_CERT_DIR }}/server.key -out ${{ secrets.SSL_CERT_DIR }}/server.crt
-            sudo chmod 600 /etc/nginx/ssl/server.*
-
             # Set the document root of nginx web server to /var/www/html/public
             sudo tee /etc/nginx/sites-available/default > /dev/null <<END_OF_FILE
             server {
                 listen 80 default_server;
                 listen [::]:80 default_server;
                 server_name _;
-                return 301 https://\$host\$request_uri;
             }
 
             server {
@@ -144,12 +137,14 @@ jobs:
             composer update
             composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
-            # Installs the dependencies and run build script defined in the package.json
-            npm install
-            npm run build --prod
+            # Install dependencies
+            npm ci
+
+            # Build Angular app
+            ng build --prod
 
             # Move built files to web server directory, setup proper permissions
-            sudo rsync -avz --exclude='node_modules' --exclude='Dockerfile' ./ /var/www/html/
+            sudo rsync -avz ./dist/endless /var/www/html/
             sudo chown -R www-data:www-data /var/www/html
             sudo chmod -R 755 /var/www/html/storage
             sudo chmod o+w ./storage/ -R
