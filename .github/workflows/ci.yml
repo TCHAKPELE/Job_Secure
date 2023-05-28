@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  deploy_backend_and_make_test:
+  deploy_backend:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -48,8 +48,7 @@ jobs:
 
             # Restart MySQL service
             sudo systemctl restart mysql
-      
-        
+
   deploy_frontend:
     runs-on: ubuntu-latest
     steps:
@@ -79,8 +78,7 @@ jobs:
 
             # Update and install and required packages
             sudo apt update
-            sudo apt install -y nginx mysql-server 
-            sudo apt-get --purge remove php8.1-common
+            sudo apt install -y nginx 
             sudo apt install -y php8.1-fpm php8.1 php8.1-mysql php8.1-dom php8.1-curl php8.1-xml php8.1-mbstring composer php8.1-common php8.1-cli 
             sudo apt-get install -y nodejs npm
             sudo a2enmod rewrite
@@ -95,25 +93,37 @@ jobs:
             curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
             sudo apt-get install -y nodejs
 
+            # Generate a self-signed SSL certificate and private key 
+            sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ${{ secrets.SSL_CERT_DIR }}/server.key -out ${{ secrets.SSL_CERT_DIR }}/server.crt
+
             # Set the document root of nginx web server to /var/www/html/public
             sudo tee /etc/nginx/sites-available/default > /dev/null <<END_OF_FILE
             server {
                 listen 80 default_server;
                 listen [::]:80 default_server;
+                server_name _;
+                return 301 https://$host$request_uri;
+            }
+
+            server {
+                listen 443 ssl default_server;
+                listen [::]:443 ssl default_server;
+                server_name _;
+
+                ssl_certificate ${{ secrets.SSL_CERT_DIR }}/server.crt;
+                ssl_certificate_key ${{ secrets.SSL_CERT_DIR }}/server.key;
 
                 root /var/www/html/public;
                 index index.php index.html index.htm;
 
-                server_name _;
-
                 location / {
-                    try_files \$uri \$uri/ /index.php?\$query_string;
+                    try_files $uri $uri/ /index.php?$query_string;
                 }
 
                 location ~ \.php$ {
                     include snippets/fastcgi-php.conf;
                     fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
-                    fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
+                    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
                     include fastcgi_params;
                 }
             }
@@ -122,7 +132,7 @@ jobs:
             # Configure PHP
             sudo sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/' /etc/php/8.1/fpm/php.ini
 
-            cd Job_Secure
+            cd ~/${{ github.event.repository.name }}
 
             # Update DB parameters in .env file
             sudo cp .env.example .env
@@ -130,6 +140,7 @@ jobs:
             sudo sed -i "s/DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_APPUSER }}/" ./.env
             sudo grep -q '^DB_STRICT_MODE=' ./.env && sudo ed -i 's/^DB_STRICT_MODE=.*/DB_STRICT_MODE=false/' ./.env || sudo sh -c 'echo "DB_STRICT_MODE=false" >> ./.env'
             sudo sed -i "s/DB_HOST=.*/DB_HOST=${{ secrets.DB_HOST }}/" ./.env
+            sudo sed -i 's|APP_URL=http://example.com|APP_URL=https://${{ secrets.FRONTEND_HOST }}|' ./.env
 
             # Update and install PHP dependencies
             composer update
@@ -137,7 +148,7 @@ jobs:
 
             # Installs the dependencies and run build script defined in the package.json
             npm install
-            npm run build
+            npm run build --prod
 
             # Move built files to web server directory, setup proper permissions
             sudo rsync -avz --exclude='node_modules' --exclude='Dockerfile' ./ /var/www/html/
@@ -178,14 +189,10 @@ jobs:
             sudo php artisan migrate --seed --force
             sudo php artisan optimize
             sudo php artisan up
-            
-
-           
-     
 
   build_and_deploy:
     runs-on: ubuntu-latest
-    needs: [deploy_backend_and_make_test, deploy_frontend]
+    needs: [deploy_backend, deploy_frontend]
     steps:
       - name: Build and Deploy
         run: echo "Build and deploy steps go here"
