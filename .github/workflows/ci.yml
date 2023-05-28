@@ -72,10 +72,6 @@ jobs:
           key: ${{ secrets.AWS_EC2_SSH_KEYS }}
           script: |
 
-            # Copy repository to remote server
-            mkdir /home/${{ secrets.AWS_EC2_SSH_USER }}/${{ github.event.repository.name }}
-            cp -r ${{ github.workspace }} ~/${{ github.event.repository.name }}
-
             # Update and install and required packages
             sudo apt update
             sudo apt install -y nginx 
@@ -94,6 +90,7 @@ jobs:
             sudo apt-get install -y nodejs
 
             # Generate a self-signed SSL certificate and private key 
+            echo "CREATE SSL CERT"
             sudo mkdir -p /etc/nginx/ssl
             sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ${{ secrets.SSL_CERT_DIR }}/server.key -out ${{ secrets.SSL_CERT_DIR }}/server.crt
             sudo chmod 600 /etc/nginx/ssl/server.*
@@ -121,7 +118,6 @@ jobs:
                 location / {
                     try_files $uri $uri/ /index.php?$query_string;
                 }
-
                 location ~ \.php$ {
                     include snippets/fastcgi-php.conf;
                     fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
@@ -197,4 +193,4 @@ jobs:
     needs: [deploy_backend, deploy_frontend]
     steps:
       - name: Build and Deploy
-        run: echo "Build and deploy steps done"
+        run: echo "Build and deploy steps go here"
