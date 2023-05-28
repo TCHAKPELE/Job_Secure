@@ -138,9 +138,11 @@ jobs:
             sudo sed -i "s#^\(APP_KEY=\).*\$#\1$KEY#" ./.env
 
             # Install dependencies
+            echo "Install dependencies"
             npm ci
 
             # Build Angular app
+            echo "Build Angular app"
             ng build --prod
 
             # Move built files to web server directory, setup proper permissions
