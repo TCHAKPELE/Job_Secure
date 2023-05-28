@@ -142,5 +142,5 @@ Route::post("reponse_plainte/{id}", [PlainteController::class, "repondrePlainte"
 Route::get("plaintes", [PlainteController::class, "afficherPlaintes"]);
 /*------ End plaintes -----*/
 
-URL::forceScheme('https');
+
 
