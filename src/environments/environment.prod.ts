@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://13.53.116.167/api',
+  apiUrl: 'https://ec2-13-53-116-167.eu-north-1.compute.amazonaws.com/api',
   interimaire : "interimaire", 
   entreprise : "entreprise", 
   admin : "admin",
