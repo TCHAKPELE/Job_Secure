@@ -102,7 +102,7 @@ jobs:
                 listen 80 default_server;
                 listen [::]:80 default_server;
                 server_name _;
-                return 301 https://$host$request_uri;
+                return 301 https://\$host\$request_uri;
             }
 
             server {
@@ -178,7 +178,7 @@ jobs:
             sudo systemctl restart php8.1-fpm.service
 
             # Stop and disable Apache2 service
-            sudo systemctl stop apache2
+            sudo systemctl stop --now apache2
             sudo systemctl disable apache2
 
             # Start and enable Nginx service
@@ -195,4 +195,4 @@ jobs:
     needs: [deploy_backend, deploy_frontend]
     steps:
       - name: Build and Deploy
-        run: echo "Build and deploy steps go here"
+        run: echo "Build and deploy steps done"
