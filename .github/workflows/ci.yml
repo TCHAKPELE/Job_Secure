@@ -137,6 +137,9 @@ jobs:
             KEY=$(php artisan key:generate --show)
             sudo sed -i "s#^\(APP_KEY=\).*\$#\1$KEY#" ./.env
 
+            # Install Angular CLI
+            npm install -g @angular/cli
+
             # Install dependencies
             echo "Install dependencies"
             npm ci
