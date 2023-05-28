@@ -49,7 +49,7 @@ jobs:
             # Restart MySQL service
             sudo systemctl restart mysql
       - name: make test 
-        run: php artisan test
+        run: sudo php artisan test
         
   deploy_frontend:
     runs-on: ubuntu-latest
