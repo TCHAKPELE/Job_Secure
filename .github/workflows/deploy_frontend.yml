@@ -16,7 +16,11 @@ jobs:
         with:
           ref: job_front # Replace with your branch name
           token: ${{ secrets.GH_ACTIONS_TOKEN }}
-
+        
+      - name: Update environment file
+        run: |
+          sed -i "s|apiUrl: '.*'|apiUrl: 'https://${{ secrets.FRONTEND_HOST }}/api',|" src/environments/environment.prod.ts
+          
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
