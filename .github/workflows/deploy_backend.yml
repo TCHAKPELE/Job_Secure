@@ -42,8 +42,8 @@ jobs:
             sudo grep -q '^DB_STRICT_MODE=' ./.env && sudo ed -i 's/^DB_STRICT_MODE=.*/DB_STRICT_MODE=false/' ./.env || sudo sh -c 'echo "DB_STRICT_MODE=false" >> ./.env'
             sudo sed -i "s/DB_HOST=.*/DB_HOST=${{ secrets.DB_HOST }}/" ./.env
             sudo sed -i 's|APP_URL=http://example.com|APP_URL=https://${{ secrets.BACKEND_HOST }}|' ./.env
-            
-            # Configure email 
+       
+            # Configure email
             sudo sed -i "s/MAIL_MAILER=.*/MAIL_MAILER=${{ secrets.MAIL_MAILER }}/" ./.env
             sudo sed -i "s/MAIL_HOST=.*/MAIL_HOST=${{ secrets.MAIL_HOST }}/" ./.env
             sudo sed -i "s/MAIL_PORT=.*/MAIL_PORT=${{ secrets.MAIL_PORT }}/" ./.env
