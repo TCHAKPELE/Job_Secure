@@ -1,0 +1,63 @@
+name: Deploy Angular FRONTEND
+
+on:
+  push:
+    branches:
+      - job_front
+  workflow_dispatch:
+
+jobs:
+  deploy_frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: job_front # Replace with your branch name
+          token: ${{ secrets.GH_ACTIONS_TOKEN }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: |
+          npm install
+          npm ci
+
+      - name: Build Angular app
+        run: npm run build -- --configuration=production
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.AWS_EC2_SSH_KEYS }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan ${{ secrets.FRONTEND_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Commit built assets
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git checkout -B deploy
+          git add -f dist/
+          git commit -m "Build front-end assets"
+          git push -f origin deploy
+
+      - name: Clone repository on FRONTEND_HOST server
+        run: |
+          ssh ${{ secrets.AWS_EC2_SSH_USER }}@${{ secrets.FRONTEND_HOST }} 'rm -rf ${{ github.event.repository.name }}; git clone --branch deploy git@github.com:${{ github.repository }}.git'
+
+      - name: Deploy to FRONTEND_HOST server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.FRONTEND_HOST }}
+          username: ${{ secrets.AWS_EC2_SSH_USER }}
+          port: ${{ secrets.AWS_EC2_SSH_PORT }}
+          key: ${{ secrets.AWS_EC2_SSH_KEYS }}
+          script: |
+
+            # Copy built files to the document root
+            sudo cp -r ${{ github.event.repository.name }}/dist /var/www/

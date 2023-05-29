@@ -1,0 +1,82 @@
+name: Deploy Angular BACKEND
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy_backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure SSH
+        run: |
+
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.AWS_EC2_SSH_KEYS }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan ${{ secrets.BACKEND_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Clone repository on BACK_HOST server
+        run: |
+          ssh ${{ secrets.AWS_EC2_SSH_USER }}@${{ secrets.BACKEND_HOST }} 'rm -rf ${{ github.event.repository.name }}; git clone git@github.com:${{ github.repository }}.git'
+
+      - name: Setup BACKEND server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.BACKEND_HOST }}
+          username: ${{ secrets.AWS_EC2_SSH_USER }}
+          port: ${{ secrets.AWS_EC2_SSH_PORT }}
+          key: ${{ secrets.AWS_EC2_SSH_KEYS }}
+          script: |
+
+            cd ~/${{ github.event.repository.name }}
+
+            # Update DB parameters in .env file
+            sudo cp .env.example .env
+            sudo sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.MYSQL_PASSWORD }}/" ./.env
+            sudo sed -i "s/DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_APPUSER }}/" ./.env
+            sudo grep -q '^DB_STRICT_MODE=' ./.env && sudo ed -i 's/^DB_STRICT_MODE=.*/DB_STRICT_MODE=false/' ./.env || sudo sh -c 'echo "DB_STRICT_MODE=false" >> ./.env'
+            sudo sed -i "s/DB_HOST=.*/DB_HOST=${{ secrets.DB_HOST }}/" ./.env
+            sudo sed -i 's|APP_URL=http://example.com|APP_URL=https://${{ secrets.BACKEND_HOST }}|' ./.en
+
+            # Update and install PHP dependencies
+            composer update
+            composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
+            # Move files to web server directory, setup proper permissions
+            sudo rsync -avz --exclude='node_modules' ./ /var/www/html/
+            sudo chown -R www-data:www-data /var/www/html
+            sudo chmod -R 755 /var/www/html/storage
+            sudo chmod o+w ./storage/ -R
+            sudo chmod -R 777 storage bootstrap/cache
+            sudo usermod -aG www-data ubuntu
+            cd /var/www/html/
+
+            # Generate APP_KEY
+            KEY=$(php artisan key:generate --show)
+            sudo sed -i "s#^\(APP_KEY=\).*\$#\1$KEY#" ./.env
+
+            # Fix  "Invalid default value for 'date_creation'" error
+            sudo sed -i "s/->date('date_creation')->default(DB::raw('CURRENT_TIMESTAMP'));/->date('date_creation')->nullable()->default(null);/" database/migrations/*.php
+            sudo sed -i "s/->date('date_paiement')->default(DB::raw('CURRENT_TIMESTAMP'));/->date('date_creation')->nullable()->default(null);/" database/migrations/*.php
+
+            # Clear cache, cache configuration, and create a symbolic link for file serving.
+            sudo php artisan cache:clear
+            sudo php artisan config:cache
+            sudo php artisan storage:link
+
+            # Restart services 
+            sudo systemctl restart php8.1-fpm.service
+
+            # Restart Nginx service
+            sudo systemctl restart nginx
+
+            # Migrate database
+            (sudo php artisan down) || true
+            sudo php artisan migrate --seed --force
+            sudo php artisan optimize
+            sudo php artisan up
