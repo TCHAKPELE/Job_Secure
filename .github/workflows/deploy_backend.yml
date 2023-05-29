@@ -41,7 +41,16 @@ jobs:
             sudo sed -i "s/DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_APPUSER }}/" ./.env
             sudo grep -q '^DB_STRICT_MODE=' ./.env && sudo ed -i 's/^DB_STRICT_MODE=.*/DB_STRICT_MODE=false/' ./.env || sudo sh -c 'echo "DB_STRICT_MODE=false" >> ./.env'
             sudo sed -i "s/DB_HOST=.*/DB_HOST=${{ secrets.DB_HOST }}/" ./.env
-            sudo sed -i 's|APP_URL=http://example.com|APP_URL=https://${{ secrets.BACKEND_HOST }}|' ./.en
+            sudo sed -i 's|APP_URL=http://example.com|APP_URL=https://${{ secrets.BACKEND_HOST }}|' ./.env
+            
+            sudo sed -i "s/MAIL_MAILER=.*/MAIL_MAILER=${{ secrets.MAIL_MAILER }}/" ./.env
+            sudo sed -i "s/MAIL_HOST=.*/MAIL_HOST=${{ secrets.MAIL_HOST }}/" ./.env
+            sudo sed -i "s/MAIL_PORT=.*/MAIL_PORT=${{ secrets.MAIL_PORT }}/" ./.env
+            sudo sed -i "s/MAIL_USERNAME=.*/MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}/" ./.env
+            sudo sed -i "s/MAIL_PASSWORD=.*/MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}/" ./.env
+            sudo sed -i "s/MAIL_ENCRYPTION=.*/MAIL_ENCRYPTION=${{ secrets.MAIL_ENCRYPTION }}/" ./.env
+            sudo sed -i "s/MAIL_FROM_ADDRESS=.*/MAIL_FROM_ADDRESS=${{ secrets.MAIL_FROM_ADDRESS }}/" ./.env
+            sudo sed -i "s/MAIL_FROM_NAME=.*/MAIL_FROM_NAME=\"${{ secrets.MAIL_FROM_NAME }}\"/" ./.env
 
             # Update and install PHP dependencies
             composer update
