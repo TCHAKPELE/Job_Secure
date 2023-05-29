@@ -101,6 +101,7 @@ jobs:
           script: | 
             # PHP test
             set -e
+            cd /var/www/html/
             composer require --dev phpunit/phpunit
             sudo php artisan test --testsuite=Feature
 
