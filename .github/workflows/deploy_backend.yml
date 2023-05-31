@@ -1,4 +1,4 @@
-name: Deploy Angular BACKEND
+name: Deploy Laravel BACKEND
 
 on:
   push:
