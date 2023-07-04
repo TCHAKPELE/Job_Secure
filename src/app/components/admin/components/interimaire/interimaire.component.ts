@@ -19,9 +19,10 @@ export class InterimaireComponent implements OnInit, OnDestroy  {
   destroy$!: Subject<boolean>;
 
   loading$: Observable<boolean>; //Vérifier que les données ont bien été chargé
-  interimaires!: InterimaireModel[]; //Liste des entreprises
+  interimaires!: InterimaireModel[]; //Liste des intérimaires
   loadingPost: boolean= false; // S'active quand on envoie une requete poste nécéssitant l'envoi d'email
   afficherBoutonValiderCompte: boolean = false; //Détermine si on doit afficher le bouton valider compte ou pas
+  afficherBoutonSupprimerCompte: boolean = false; //Détermine si on doit afficher le bouton supprimer compte ou pas
 
     /*---- Datatable -------*/
     columns: string[] = [
@@ -41,7 +42,16 @@ export class InterimaireComponent implements OnInit, OnDestroy  {
       "Date de création",
     ]; // Colonne à afficher dans la datatable
 
-    buttonsAction: {
+    
+    buttonsAction0: {
+      label: string;
+      color: string;
+      action: (params: any) => void;
+    }[] = [
+      {label: "Supprimer", color: "secondary", action: (interimaire) => this.deleteInterimaire(interimaire) },
+    ];
+
+    buttonsAction1: {
       label: string;
       color: string;
       action: (params: any) => void;
@@ -69,10 +79,22 @@ export class InterimaireComponent implements OnInit, OnDestroy  {
       //Bouton qui permettra de valider le compte
       this.columns.push("buttons");
       this.displayedColumns.push("");
-    }
       this.adminService.initSessionSotorage();
       this.destroy$ = new Subject<boolean>();
       this.getComptes();
+    }
+    else
+    {
+      this.afficherBoutonSupprimerCompte = true;
+      this.columns.push("buttons");
+      this.displayedColumns.push("");
+      this.adminService.initSessionSotorage();
+      this.destroy$ = new Subject<boolean>();
+      this.getComptes();
+
+    }
+      
+      
     }
 
 
@@ -101,6 +123,27 @@ export class InterimaireComponent implements OnInit, OnDestroy  {
         )
       ).subscribe();
       
+
+    }
+
+    deleteInterimaire(element: InterimaireModel): void {
+      this.loadingPost = true;
+      this.adminService.deleteInterimaire(element.id!)
+      .pipe(
+        takeUntil(this.destroy$),
+        tap( (data)=>{   
+          if(data['status'] == 200){
+            this.loadingPost = false;
+            this.datatable.removeElement(element); //Suppresion de l'élément du datatable
+            this.alertService.succesToastr(data['message']);
+            
+          }
+          else{
+            this.loadingPost = false;
+           this.alertService.dangerToastr(data['message']);    
+          }
+        })
+      ).subscribe();
 
     }
     //Liste des comptes
