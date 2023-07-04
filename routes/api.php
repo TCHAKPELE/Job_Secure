@@ -129,13 +129,13 @@ Route::delete("mission/{id}", [MissionController::class, "deleteMission"]);
 
 /* ---- End  mission ---*/
 
-/*------ Fiche de paiement -----*/
+/*------ Fiche de paye -----*/
 Route::post("fiche", [FicheDePaiementController::class, "generateFicheDePaiement"]);
 //{filter} sera remplacé par entreprise, interimaire
 Route::get("fiches/{id}/{filter}", [FicheDePaiementController::class, "getFicheDePaiement"]);
-/*------ End fiche de paiement -----*/
+/*------ End fiche de paye -----*/
 
-/*------ plaite -----*/
+/*------ plaintes -----*/
 Route::post("plainte", [PlainteController::class, "porterPlainte"]);
 Route::post("reponse_plainte/{id}", [PlainteController::class, "repondrePlainte"]);
 //Liste des plaintes

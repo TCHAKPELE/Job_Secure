@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
+// test de la fonction qui récupère la liste des offres d'entreprises
 class GetOffreTest extends TestCase
 {
 
