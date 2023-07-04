@@ -22,6 +22,7 @@ export class EntrepriseComponent implements OnInit, OnDestroy {
   entreprises!: EntrepriseModel[]; //Liste des entreprises
   loadingPost: boolean= false; // S'active quand on envoie une requete poste nécéssitant l'envoi d'email
   afficherBoutonValiderCompte: boolean = false; //Détermine si on doit afficher le bouton valider compte ou pas
+  afficherBoutonSupprimerCompte: boolean = false; //Détermine si on doit afficher le bouton supprimer compte ou pas
 
   /*---- Datatable -------*/
   columns: string[] = [
@@ -40,15 +41,23 @@ export class EntrepriseComponent implements OnInit, OnDestroy {
     "Date de création",
 
   ]; // Colonne à afficher dans la datatable
-
-  buttonsAction: {
-    label: string;
-    color: string;
-    action: (params: any) => void;
-  }[] = [
-      { label: "Valider", color: "primary", action: (entreprise) => this.confirmEntreprise(entreprise) },
+  
+  // button de validation de compte et de suppression de compte
+    buttonsAction0: {
+      label: string;
+      color: string;
+      action: (params: any) => void;
+    }[] = [
+      {label: "Supprimer", color: "secondary", action: (entreprise) => this.deleteEntreprise(entreprise) },
     ];
 
+    buttonsAction1: {
+      label: string;
+      color: string;
+      action: (params: any) => void;
+    }[] = [
+      {label: "Valider", color: "primary", action: (entreprise) => this.confirmEntreprise(entreprise) },
+    ];
   labelDataTable: string = "Liste des entreprises";
   /*------------End Datatable----------*/
 
@@ -70,11 +79,21 @@ export class EntrepriseComponent implements OnInit, OnDestroy {
       //Bouton qui permettra de valider le compte
       this.columns.push("buttons");
       this.displayedColumns.push("");
+      this.adminService.initSessionSotorage();
+      this.destroy$ = new Subject<boolean>();
+      this.getComptes();
+    }
+    else
+    {
+      this.afficherBoutonSupprimerCompte = true;
+      this.columns.push("buttons");
+      this.displayedColumns.push("");
+      this.adminService.initSessionSotorage();
+      this.destroy$ = new Subject<boolean>();
+      this.getComptes();
     }
 
-    this.adminService.initSessionSotorage();
-    this.destroy$ = new Subject<boolean>();
-    this.getComptes();
+    
   }
   confirmEntreprise(element: EntrepriseModel): void {
     this.loadingPost = true;
@@ -103,6 +122,28 @@ export class EntrepriseComponent implements OnInit, OnDestroy {
     
 
   }
+  //fonction pour supprimer un compte entreprise
+  deleteEntreprise(element: EntrepriseModel): void {
+    this.loadingPost = true;
+    this.adminService.deleteEntreprise(element.id!)
+    .pipe(
+      takeUntil(this.destroy$),
+      tap( (data)=>{   
+        if(data['status'] == 200){
+          this.loadingPost = false;
+          this.datatable.removeElement(element); //Suppresion de l'élément du datatable
+          this.alertService.succesToastr(data['message']);
+          
+        }
+        else{
+          this.loadingPost = false;
+         this.alertService.dangerToastr(data['message']);    
+        }
+      })
+    ).subscribe();
+
+  }
+
   //Liste des comptes
   private getComptes() {
     this.loading$ = this.adminService.loadingEntreprise$;

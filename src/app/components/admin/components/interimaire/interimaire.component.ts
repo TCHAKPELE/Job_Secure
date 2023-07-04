@@ -125,7 +125,7 @@ export class InterimaireComponent implements OnInit, OnDestroy  {
       
 
     }
-
+    //fonction pour supprimer un compte intérimaire
     deleteInterimaire(element: InterimaireModel): void {
       this.loadingPost = true;
       this.adminService.deleteInterimaire(element.id!)

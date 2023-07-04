@@ -124,9 +124,13 @@ export class AdminService {
       })
     ).subscribe();
   }
-  //delete
+  //supprimer un compte intérimaire
   deleteInterimaire(idInterimaire: number): Observable<any> {
     return this.http.delete<any>(`${this.pathUrl}/interimaire/${idInterimaire}`);
+  }
+   //supprimer un compte entreprise
+   deleteEntreprise(idEntreprise: number): Observable<any> {
+    return this.http.delete<any>(`${this.pathUrl}/entreprise/${idEntreprise}`);
   }
   //Récupérer compte intérimaire  validé  
   getComptesInterimaireValider() {
