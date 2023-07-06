@@ -112,6 +112,35 @@ class InterimaireController extends Controller
         ]);
     }
 
+    //modification du mot de passe d'un interimaire
+    public function updateInterimaire1(Request $request, $identifiant)
+    {
+        //Rechercher le compte correspondant
+        
+        $interimaire = Utilisateur::find($identifiant);
+    
+        if (!$interimaire) {
+            return response()->json([ 'status' => 400 ,'message' => 'Interimaire introuvable']);
+        }
+        
+        $new_email = $interimaire->identifiant;
+
+        $interimaire->identifiant = $request->identifiant ?? $interimaire->identifiant;
+        $interimaire->mot_de_passe = $request->mot_de_passe ?? $interimaire->mot_de_passe;
+        $interimaire->save();
+
+         // Mettre à jour le champ "mot de passe" de l'utilisateur
+         Utilisateur::where('identifiant', $new_email)
+         ->update(['mot_de_passe' => $request->mot_de_passe]);
+        
+        return response()->json([
+            'status'=>200, 
+            'message' => 'Interimaire mis à jour avec succès', 
+            'data' => $interimaire
+        ]);
+    }
+
+
     //Suppression d'un interimaire
     public function deleteInterimaire($id)
     {

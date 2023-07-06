@@ -35,7 +35,7 @@ Route::post("login", [AuthController::class, "login"]);
 
 /*------Admin ---------*/
 Route::post("admin/valider_compte", [AdminController::class, "validerCompte"]);
-
+Route::delete("admin/{identifiant}", [AdminController::class, "deleteUser"]);
 Route::get("admin", [AdminController::class, "getAdmins"]);
 Route::get("admin/interimaires_non_valides",  [AdminController::class, "interimairesNonValides"]);
 Route::get("admin/entreprises_non_valides",  [AdminController::class, "entreprisesNonValides"]);
@@ -50,6 +50,7 @@ Route::get("interimaire/{id}", [InterimaireController::class, "getOneInterimaire
 Route::post("interimaire", [InterimaireController::class, "addInterimaire"]);
 //Mise à jour
 Route::put("interimaire/{id}", [InterimaireController::class, "updateInterimaire"]);
+Route::put("interimaire/{email}", [InterimaireController::class, "updateInterimaire1"]);
 //Suppression
 Route::delete("interimaire/{id}", [InterimaireController::class, "deleteInterimaire"]);
 /*  --------- End interimaire ----- */
@@ -62,6 +63,7 @@ Route::post("entreprise", [EntrepriseController::class, "addEntreprise"]);
 
 //Mise à jour
 Route::put("entreprise/{id}", [EntrepriseController::class, "updateEntreprise"]);
+Route::put("entreprise/{email}", [EntrepriseController::class, "updateEntreprise1"]);
 //Suppression
 Route::delete("entreprise/{id}", [EntrepriseController::class, "deleteEntreprise"]);
 /*  --------- End Entreprise ----- */

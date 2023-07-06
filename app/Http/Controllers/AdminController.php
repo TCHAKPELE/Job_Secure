@@ -130,4 +130,24 @@ class AdminController extends Controller
             ]);
         }
     }
+
+    //suppression d'un profil
+    public function deleteUser($identifiant)
+    {
+        $utilisateur = Utilisateur::find($identifiant);
+    
+        if (!$utilisateur) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'profil introuvable.'
+            ]);
+        }
+    
+        $utilisateur->delete();
+    
+        return response()->json([
+            'status' => 200,
+            'message' => 'profil supprimé avec succès.'
+        ]);
+    }
 }
