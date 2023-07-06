@@ -132,6 +132,10 @@ export class AdminService {
    deleteEntreprise(idEntreprise: number): Observable<any> {
     return this.http.delete<any>(`${this.pathUrl}/entreprise/${idEntreprise}`);
   }
+   //supprimer un compte user
+   deleteUser(identifiant: string): Observable<any> {
+    return this.http.delete<any>(`${this.pathUrl}/admin/${identifiant}`);
+  }
   //Récupérer compte intérimaire  validé  
   getComptesInterimaireValider() {
     this.setLoadingInterimaire(true);

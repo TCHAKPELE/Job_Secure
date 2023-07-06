@@ -10,7 +10,7 @@ import { RegisterComponent } from "./core/components/register/register.component
 import { RegisterEntrepriseComponent } from "./core/components/register-entreprise/register-entreprise.component";
 import { SimpleComponent } from "./pages/coming-soon/simple/simple.component";
 import { ValidationEnCoursComponent } from "./core/components/validation-en-cours/validation-en-cours.component";
-
+import { PasswordChangeComponent } from "./core/components/password-change/password-change.component";
 const routes: Routes = [
   {
     path :"",
@@ -31,6 +31,10 @@ const routes: Routes = [
   {
     path :"validation-en-cours",
     component: ValidationEnCoursComponent
+  },
+  {
+    path :"password-change",
+    component: PasswordChangeComponent
   },
 
   {

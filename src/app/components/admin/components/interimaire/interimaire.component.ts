@@ -144,6 +144,23 @@ export class InterimaireComponent implements OnInit, OnDestroy  {
           }
         })
       ).subscribe();
+        //suppression de la table utilisateur
+      this.adminService.deleteUser(element.email!)
+      .pipe(
+        takeUntil(this.destroy$),
+        tap( (data)=>{   
+          if(data['status'] == 200){
+            this.loadingPost = false;
+            this.datatable.removeElement(element); //Suppresion de l'élément du datatable
+            this.alertService.succesToastr(data['message']);
+            
+          }
+          else{
+            this.loadingPost = false;
+           this.alertService.dangerToastr(data['message']);    
+          }
+        })
+      ).subscribe();
 
     }
     //Liste des comptes

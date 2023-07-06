@@ -14,8 +14,9 @@ import { CookieService } from "ngx-cookie-service";
 import "hammerjs";
 import "mousetrap";
 import { CoreModule } from "./core/core.module";
+import { PasswordChangeComponent } from './core/components/password-change/password-change.component';
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, PasswordChangeComponent],
   imports: [
     BrowserModule,
     FormsModule,
