@@ -7,6 +7,7 @@ use App\Models\Mission;
 use App\Models\Entreprise;
 use App\Mail\StatusMission;
 use App\Models\Interimaire;
+use App\Models\Note;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -18,7 +19,7 @@ class MissionController extends Controller
     {
         $query = Mission::query();
 
-        $missions = $query->with(['offre',  'interimaire','entreprise'])->orderByDesc('id')->get();
+        $missions = $query->with(['offre',  'interimaire', 'entreprise'])->orderByDesc('id')->get();
         // Traiter les détails des relations
         $missions->transform(function ($mission) {
             $mission->titre_offre = $mission->offre->titre_offre;
@@ -114,28 +115,28 @@ class MissionController extends Controller
         // Vérifier si la mission existe
         $mission = Mission::findOrFail($idMission);
 
-        
+
         // Mettre à jour le champ status_mission avec la valeur spécifiée
         $mission->update(['status_mission' => $status]);
-        
+
         $message = ($status == 0) ? 'Mission clôturée avec succès' : 'Mission suspendue avec succès';
 
         //Envoi d'mail
         $status_mission = ($status == 0) ? 'clôturée ' : 'suspendue';
 
-        $entreprise= Entreprise::where('id', $mission->id_entreprise)->first();
-        $interimaire= Interimaire::where('id', $mission->id_interimaire)->first();
-        $offre= Offre::where('id', $mission->id_offre)->first();
+        $entreprise = Entreprise::where('id', $mission->id_entreprise)->first();
+        $interimaire = Interimaire::where('id', $mission->id_interimaire)->first();
+        $offre = Offre::where('id', $mission->id_offre)->first();
 
         Mail::to($interimaire->email)->send(new StatusMission([
-            "name" => $interimaire->nom." ".$interimaire->prenom,
+            "name" => $interimaire->nom . " " . $interimaire->prenom,
             "nom_entreprise" => $entreprise->nom_entreprise,
             "titre_offre" => $offre->titre_offre,
             "status_mission" => $status_mission
 
         ]));
-        
-        
+
+
         return response()->json([
             'status' => 200,
             'message' => $message
@@ -216,28 +217,78 @@ class MissionController extends Controller
     public function deleteMission($id)
     {
         $mission = Mission::find($id);
-    
+
         if (!$mission) {
             return response()->json([
                 'status' => 200,
                 'message' => 'Mission non trouvée'
             ]);
         }
-    
+
         $candidature = $mission->candidature;
-    
+
         if ($candidature) {
             $candidature->update([
                 'status_candidature' => 0
             ]);
         }
-    
+
         $mission->delete();
-    
+
         return response()->json([
             'status' => 200,
             'message' => 'Mission supprimée avec succès'
         ]);
     }
-    
+
+    //Noter intérimaire
+    public function noterInterimaire(Request $request)
+    {
+        $id_mission = $request->input('id_mission');
+        $note = $request->input('note');
+
+        $mission = Mission::findOrFail($id_mission);
+
+
+
+        // Vérifier si la mission est terminée et si l'employeur est autorisé à noter le candidat
+        if (!$mission || $mission->status_mission !== 0) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Vous pouvez pas encore noter cette mission. Elle est soit en cours ou suspendue'
+            ]);
+        }
+
+        // Vérifier si l'entreprise a déjà noté l'intérimaire pour cette mission
+        $noteExistante = Note::where('id_mission', $id_mission)
+            ->where('id_interimaire', $mission->id_interimaire)
+            ->exists();
+
+        if ($noteExistante) {
+            return response()->json([
+                'status' => 400,
+                'message' => "Vous avez déjà noté cet intérimaire pour cette mission"
+            ]);
+        }
+
+        // Enregistrer la note dans la table des notes
+        
+        $noteR = Note::create([
+            'id_interimaire' => $mission->id_interimaire,
+            'id_mission' => $mission->id,
+            'note' => $note,
+        ]);
+
+        // Calculer la nouvelle moyenne des notes de l'intérimaire
+        $nouvelleMoyenne = $mission->interimaire->note_interimaire != 0.00 ? ($mission->interimaire->note_interimaire + (float) $note) / 2 : $mission->interimaire->note_interimaire + (float) $note;
+
+        // Mettre à jour le champ note_interimaire dans la table interimaires
+        $mission->interimaire->note_interimaire = $nouvelleMoyenne;
+        $mission->interimaire->save();
+
+        return response()->json([
+            'message' => 'Intérimaire noté avec succès',
+            'status' => 200
+        ]);
+    }
 }

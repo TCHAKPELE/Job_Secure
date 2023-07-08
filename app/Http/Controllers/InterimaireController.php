@@ -83,34 +83,52 @@ class InterimaireController extends Controller
 
     public function updateInterimaire(Request $request, $id)
     {
-        //Rechercher le compte correspondant
-        
+        $request->validate([
+            'cv' => 'nullable|mimes:pdf|max:2048', // Validation pour les fichiers PDF de taille maximale de 2 Mo
+        ]);
+    
         $interimaire = Interimaire::find($id);
     
         if (!$interimaire) {
-            return response()->json([ 'status' => 400 ,'message' => 'Interimaire introuvable']);
+            return response()->json(['status' => 400, 'message' => 'Interimaire introuvable']);
         }
+    
+        $old_email = $interimaire->email;
         
-        $new_email = $interimaire->email; // L'ancienne valeur de l'email
-
         $interimaire->nom = $request->nom ?? $interimaire->nom;
         $interimaire->prenom = $request->prenom ?? $interimaire->prenom;
         $interimaire->email = $request->email ?? $interimaire->email;
         $interimaire->iban = $request->iban ?? $interimaire->iban;
         $interimaire->telephone_interimaire = $request->telephone_interimaire ?? $interimaire->telephone_interimaire;
         $interimaire->adresse_interimaire = $request->adresse_interimaire ?? $interimaire->adresse_interimaire;
-        $interimaire->save();
+    
+        // Sauvegarde du fichier CV
+        if ($request->hasFile('cv')) {
+           // Le fichier du CV a été envoyé
+            $file = $request->file('cv');
+            $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
+            $cvPath = $file->move(public_path('cv'), $fileName);
+            $interimaire->cv = $fileName;
 
-         // Mettre à jour le champ "identifiant" de l'utilisateur
-         Utilisateur::where('identifiant', $new_email)
-         ->update(['identifiant' => $request->email]);
+        } else {
+            // Aucun fichier du CV n'a été envoyé, vous pouvez gérer cette situation en conséquence
+            $interimaire->cv = ""; // Ou toute autre logique de gestion
+        }
         
+    
+        $interimaire->save();
+    
+    
+        // Mettre à jour le champ "identifiant" de l'utilisateur
+        Utilisateur::where('identifiant', $old_email)
+        ->update(['identifiant' => $request->email]);
         return response()->json([
-            'status'=>200, 
-            'message' => 'Interimaire mis à jour avec succès', 
+            'status' => 200,
+            'message' => 'Interimaire mis à jour avec succès',
             'data' => $interimaire
         ]);
     }
+    
 
     //modification du mot de passe d'un interimaire
     public function updateInterimaire1(Request $request, $identifiant)

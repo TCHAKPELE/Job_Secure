@@ -79,6 +79,8 @@ class CandidatureController extends Controller
             $candidature->date_creation_offre = $candidature->offre->date_creation;
             $candidature->nom_entreprise = $candidature->entreprise->nom_entreprise;
             $candidature->nom_interimaire = $candidature->interimaire->nom . ' ' . $candidature->interimaire->prenom;
+            $candidature->cv_interimaire = $candidature->interimaire->cv;
+            $candidature->note_interimaire = $candidature->interimaire->note_interimaire;
 
             // Supprimer les relations pour éviter la redondance des données
             unset($candidature->offre);

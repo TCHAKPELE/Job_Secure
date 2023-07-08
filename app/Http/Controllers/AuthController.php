@@ -83,6 +83,32 @@ class AuthController extends Controller
         ]);
     }
 
+    //Mettre à jour mot de passe
+    public function updatePassword(Request $request)
+    {
+        $email = $request->email;
+        $password = $request->password;
+        
+        // Vérifier si l'email existe dans la base de données
+        $user = Utilisateur::where('identifiant', $email)->first();
+    
+        if (!$user) {
+            return response()->json([
+                'message' => "L'email fourni n'existe pas",
+                'status' => 400,
+            ]);
+        }
+    
+        // Mettre à jour le mot de passe de l'utilisateur
+        $user->mot_de_passe = Hash::make($password);
+        $user->save();
+    
+        return response()->json([
+            'message' => "Mot de passe mis à jour avec succès",
+            'status' => 200,
+        ]);
+    }
+
 
 
 }

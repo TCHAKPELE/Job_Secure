@@ -33,6 +33,13 @@ Route::post("login", [AuthController::class, "login"]);
 
 /*------ End login ---------*/
 
+/*------Update password ---------*/
+Route::put("updatePassword", [AuthController::class, "updatePassword"]);
+
+/*------ End update password ---------*/
+
+
+
 /*------Admin ---------*/
 Route::post("admin/valider_compte", [AdminController::class, "validerCompte"]);
 Route::delete("admin/{identifiant}", [AdminController::class, "deleteUser"]);
@@ -49,8 +56,8 @@ Route::get("interimaire/{id}", [InterimaireController::class, "getOneInterimaire
 
 Route::post("interimaire", [InterimaireController::class, "addInterimaire"]);
 //Mise à jour
-Route::put("interimaire/{id}", [InterimaireController::class, "updateInterimaire"]);
-Route::put("interimaire/{email}", [InterimaireController::class, "updateInterimaire1"]);
+Route::post("interimaire/{id}", [InterimaireController::class, "updateInterimaire"]);
+
 //Suppression
 Route::delete("interimaire/{id}", [InterimaireController::class, "deleteInterimaire"]);
 /*  --------- End interimaire ----- */
@@ -63,7 +70,7 @@ Route::post("entreprise", [EntrepriseController::class, "addEntreprise"]);
 
 //Mise à jour
 Route::put("entreprise/{id}", [EntrepriseController::class, "updateEntreprise"]);
-Route::put("entreprise/{email}", [EntrepriseController::class, "updateEntreprise1"]);
+
 //Suppression
 Route::delete("entreprise/{id}", [EntrepriseController::class, "deleteEntreprise"]);
 /*  --------- End Entreprise ----- */
@@ -128,6 +135,10 @@ Route::post("mission", [MissionController::class, "addMission"]);
 Route::put("mission/{id}", [MissionController::class, "updateMission"]);
 //Suppression
 Route::delete("mission/{id}", [MissionController::class, "deleteMission"]);
+
+//Notez intérimaire
+Route::post("mission_note", [MissionController::class, "noterInterimaire"]);
+
 
 /* ---- End  mission ---*/
 

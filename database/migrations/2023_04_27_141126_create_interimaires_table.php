@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('prenom');
             $table->string('email')->unique();
             $table->string('iban')->default("");
+            $table->string('cv')->default("");
+            $table->decimal('note_interimaire')->default(0);
             $table->string('adresse_interimaire');
             $table->string('telephone_interimaire');
             $table->timestamp('date_creation')->default(now());
