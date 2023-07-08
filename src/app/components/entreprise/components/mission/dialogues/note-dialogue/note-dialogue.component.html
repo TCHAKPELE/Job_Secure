@@ -1,13 +1,14 @@
-<h1 mat-dialog-title>Renseigner nombre d'heure</h1>
+<h1 mat-dialog-title>Attribuer une note</h1>
 <div mat-dialog-content>
   <form [formGroup]="Formulaire">
     <div class="mb-3 row">
         <mat-form-field>
-            <mat-label>Nombre d'heure effectuées </mat-label>
+            <mat-label>Notez l'intérimaire sur 5 </mat-label>
             <input
               type="number" 
+              min="0" max="5"
               matInput
-              formControlName="nbr_heures_effectuees"
+              formControlName="note_interimaire"
             
             />
             <mat-error>Ce champ est requis</mat-error>
