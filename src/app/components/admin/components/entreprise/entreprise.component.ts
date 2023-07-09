@@ -49,6 +49,7 @@ export class EntrepriseComponent implements OnInit, OnDestroy {
       action: (params: any) => void;
     }[] = [
       {label: " Désactiver", color: "secondary", action: (entreprise) => this.desactiverEntreprise(entreprise) },
+      {label: " Avertissement", color: "primary", action: (entreprise) => this.avertissement(entreprise) },
     ];
 
     buttonsAction1: {
@@ -122,7 +123,7 @@ export class EntrepriseComponent implements OnInit, OnDestroy {
     
 
   }
-  //fonction pour supprimer un compte entreprise
+  //fonction pour désactiver un compte entreprise
   desactiverEntreprise(element: EntrepriseModel): void {
     this.loadingPost = true;
     this.adminService.desactiverCompte(element.email)

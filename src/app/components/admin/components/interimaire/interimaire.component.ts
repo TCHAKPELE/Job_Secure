@@ -49,6 +49,7 @@ export class InterimaireComponent implements OnInit, OnDestroy  {
       action: (params: any) => void;
     }[] = [
       {label: "Désactiver", color: "secondary", action: (interimaire) => this.desactiverInterimaire(interimaire) },
+      {label: "Avertissement", color: "primary", action: (interimaire) => this.avertissement(interimaire) },
     ];
 
     buttonsAction1: {
