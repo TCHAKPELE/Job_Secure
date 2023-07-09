@@ -114,34 +114,7 @@ class EntrepriseController extends Controller
         );
     }
 
-    //modification mot de passe
-    public function updateEntreprise1(Request $request, $identifiant)
-    {
-        //Rechercher le compte correspondant
 
-        $entreprise = Utilisateur::find($identifiant);
-
-        if (!$entreprise) {
-            return response()->json(['status' => 400, 'message' => 'Entreprise introuvable']);
-        }
-
-        $new_email = $entreprise->identifiant; // L'ancienne valeur de l'email
-        $entreprise->identifiant = $request->identifiant ?? $entreprise->identifiant;
-        $entreprise->mot_de_passe = $request->mot_de_passe ?? $entreprise->mot_de_passe;
-        $entreprise->save();
-
-        // Mettre à jour le champ "identifiant" de l'utilisateur
-        Utilisateur::where('identifiant', $new_email)
-            ->update(['mot_de_passe' => $request->mot_de_passe]);
-
-        return response()->json(
-            [
-                'status' => 200,
-                'message' => 'Entreprise mis à jour avec succès',
-                'data' => $entreprise
-            ]
-        );
-    }
 
     //Suppression d'une Entreprise
     public function deleteEntreprise($id)

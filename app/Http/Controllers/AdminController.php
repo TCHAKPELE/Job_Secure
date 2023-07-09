@@ -131,6 +131,30 @@ class AdminController extends Controller
         }
     }
 
+    //Désactiver compte
+    public function desactiverCompte($email)
+    {
+        $identifiant = $email;
+        // Rechercher l'utilisateur par son email
+        $user = Utilisateur::where('identifiant', $identifiant)->first();
+
+        if (!$user) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Utilisateur introuvable'
+            ]);
+        }
+
+        // Désactiver le compte de l'utilisateur en mettant status_compte à 0
+        $user->status_compte = 0;
+        $user->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Compte désactivé avec succès'
+        ]);
+    }
+
     //suppression d'un profil
     public function deleteUser($identifiant)
     {

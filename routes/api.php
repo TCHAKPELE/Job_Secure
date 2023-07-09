@@ -48,6 +48,7 @@ Route::get("admin/interimaires_non_valides",  [AdminController::class, "interima
 Route::get("admin/entreprises_non_valides",  [AdminController::class, "entreprisesNonValides"]);
 Route::get("admin/interimaires_valides",  [AdminController::class, "interimairesValides"]);
 Route::get("admin/entreprises_valides",  [AdminController::class, "entreprisesValides"]);
+Route::get("admin/desactiver_compte/{email}",  [AdminController::class, "desactiverCompte"]);
 /*------ Admin ---------*/
 
 /* ---- Interimaire ---*/
