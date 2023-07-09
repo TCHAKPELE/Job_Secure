@@ -11,6 +11,7 @@ use App\Http\Controllers\CandidatureController;
 use App\Http\Controllers\FicheDePaiementController;
 use App\Http\Controllers\InterimaireController;
 use App\Http\Controllers\PlainteController;
+use App\Http\Controllers\AvertissementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -154,6 +155,12 @@ Route::post("reponse_plainte/{id}", [PlainteController::class, "repondrePlainte"
 //Liste des plaintes
 Route::get("plaintes", [PlainteController::class, "afficherPlaintes"]);
 /*------ End plaintes -----*/
+
+/*------ avertissement -----*/
+Route::get("avertissement_entreprise/{id}", [AvertissementController::class, "avertissementEntreprise"]);
+Route::get("avertissement_interimaire/{id}", [AvertissementController::class, "avertissementInterimaire"]);
+/*------ avertissement -----*/
+
 
 
 
