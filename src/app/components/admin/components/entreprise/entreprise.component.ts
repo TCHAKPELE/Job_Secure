@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Observable, Subject, takeUntil, tap } from "rxjs";
+import { Observable, Subject, switchMap, takeUntil, tap } from "rxjs";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { MatSort } from "@angular/material/sort";
 import { DatatableComponent } from "src/app/shared/components/datatable/datatable.component";
@@ -48,7 +48,7 @@ export class EntrepriseComponent implements OnInit, OnDestroy {
       color: string;
       action: (params: any) => void;
     }[] = [
-      {label: "Supprimer", color: "secondary", action: (entreprise) => this.deleteEntreprise(entreprise) },
+      {label: " Désactiver", color: "secondary", action: (entreprise) => this.desactiverEntreprise(entreprise) },
     ];
 
     buttonsAction1: {
@@ -123,32 +123,14 @@ export class EntrepriseComponent implements OnInit, OnDestroy {
 
   }
   //fonction pour supprimer un compte entreprise
-  deleteEntreprise(element: EntrepriseModel): void {
+  desactiverEntreprise(element: EntrepriseModel): void {
     this.loadingPost = true;
-    this.adminService.deleteEntreprise(element.id)
+    this.adminService.desactiverCompte(element.email)
     .pipe(
       takeUntil(this.destroy$),
       tap( (data)=>{   
         if(data['status'] == 200){
           this.loadingPost = false;
-          this.datatable.removeElement(element); //Suppresion de l'élément du datatable
-          this.alertService.succesToastr(data['message']);
-          
-        }
-        else{
-          this.loadingPost = false;
-         this.alertService.dangerToastr(data['message']);    
-        }
-      })
-    ).subscribe();
-
-    this.adminService.deleteUser(element.email)
-    .pipe(
-      takeUntil(this.destroy$),
-      tap( (data)=>{   
-        if(data['status'] == 200){
-          this.loadingPost = false;
-          this.datatable.removeElement(element); //Suppresion de l'élément du datatable
           this.alertService.succesToastr(data['message']);
           
         }

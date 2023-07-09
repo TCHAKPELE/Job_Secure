@@ -128,13 +128,10 @@ export class AdminService {
   deleteInterimaire(idInterimaire: number): Observable<any> {
     return this.http.delete<any>(`${this.pathUrl}/interimaire/${idInterimaire}`);
   }
-   //supprimer un compte entreprise
-   deleteEntreprise(idEntreprise: number): Observable<any> {
-    return this.http.delete<any>(`${this.pathUrl}/entreprise/${idEntreprise}`);
-  }
-   //supprimer un compte user
-   deleteUser(identifiant: string): Observable<any> {
-    return this.http.delete<any>(`${this.pathUrl}/admin/${identifiant}`);
+
+  //Desactiver un compte user
+  desactiverCompte(identifiant: string): Observable<any> {
+    return this.http.get<any>(`${this.pathUrl}/admin/desactiver_compte/${identifiant}`);
   }
   //Récupérer compte intérimaire  validé  
   getComptesInterimaireValider() {
