@@ -62,15 +62,21 @@ export class LoginComponent implements OnInit, OnDestroy{
         if (data['status'] == 200) {
 
           this.user = data['user'];
-          //Session storage
-          if (typeof (sessionStorage) !== "undefined") { //Vérifie si le navigateur prend en compte sessionStorage
-            sessionStorage.setItem('user', JSON.stringify(this.user));
+          if(this.user.status_compte == 1){
+            //Session storage
+            if (typeof (sessionStorage) !== "undefined") { //Vérifie si le navigateur prend en compte sessionStorage
+              sessionStorage.setItem('user', JSON.stringify(this.user));
+            }
+
+            this.loginService.addUserAuth(this.user); //Mettre l'utilisateur dans une variable globale
+          
+            
+            this.redirect_user_to_account(this.user.type_utilisateur, this.user.activation_compte); //Redirection
+          }
+          else{
+            this.dangerToastr(data['Votre compte a été désactivé']);
           }
 
-          this.loginService.addUserAuth(this.user); //Mettre l'utilisateur dans une variable globale
-        
-          
-          this.redirect_user_to_account(this.user.type_utilisateur, this.user.activation_compte); //Redirection
 
         }
         else {
@@ -89,7 +95,7 @@ export class LoginComponent implements OnInit, OnDestroy{
 
   //Redirection utilisateur
 
-  private redirect_user_to_account(type_compte: string, activation_compte: number) {
+   redirect_user_to_account(type_compte: string, activation_compte: number) {
     
     switch (type_compte) {
       

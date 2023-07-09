@@ -48,8 +48,7 @@ export class InterimaireComponent implements OnInit, OnDestroy  {
       color: string;
       action: (params: any) => void;
     }[] = [
-      {label: "Supprimer", color: "secondary", action: (interimaire) => this.deleteInterimaire(interimaire) },
-      {label: "Avertissement", color: "primary", action: (entreprise) => this.avertissement(entreprise) },
+      {label: "Désactiver", color: "secondary", action: (interimaire) => this.desactiverInterimaire(interimaire) },
     ];
 
     buttonsAction1: {
@@ -127,32 +126,15 @@ export class InterimaireComponent implements OnInit, OnDestroy  {
 
     }
     //fonction pour supprimer un compte intérimaire
-    deleteInterimaire(element: InterimaireModel): void {
+    desactiverInterimaire(element: InterimaireModel): void {
       this.loadingPost = true;
-      this.adminService.deleteInterimaire(element.id!)
-      .pipe(
-        takeUntil(this.destroy$),
-        tap( (data)=>{   
-          if(data['status'] == 200){
-            this.loadingPost = false;
-            this.datatable.removeElement(element); //Suppresion de l'élément du datatable
-            this.alertService.succesToastr(data['message']);
-            
-          }
-          else{
-            this.loadingPost = false;
-           this.alertService.dangerToastr(data['message']);    
-          }
-        })
-      ).subscribe();
         //suppression de la table utilisateur
-      this.adminService.deleteUser(element.email!)
+      this.adminService.desactiverCompte(element.email)
       .pipe(
         takeUntil(this.destroy$),
         tap( (data)=>{   
           if(data['status'] == 200){
             this.loadingPost = false;
-            this.datatable.removeElement(element); //Suppresion de l'élément du datatable
             this.alertService.succesToastr(data['message']);
             
           }
