@@ -14,7 +14,6 @@ import { environment } from 'src/environments/environment';
 })
 export class LoginComponent implements OnInit, OnDestroy{
   loginForm!: FormGroup;
-  ecoleId = 0;
   destroy$!: Subject<boolean>;
   connexion = "CONNEXION";
   patienter = "PATIENTER...";

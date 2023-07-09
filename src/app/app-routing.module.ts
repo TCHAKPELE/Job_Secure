@@ -11,6 +11,7 @@ import { RegisterEntrepriseComponent } from "./core/components/register-entrepri
 import { SimpleComponent } from "./pages/coming-soon/simple/simple.component";
 import { ValidationEnCoursComponent } from "./core/components/validation-en-cours/validation-en-cours.component";
 import { PasswordChangeComponent } from "./core/components/password-change/password-change.component";
+import { AuthGuard } from "./core/guards/auth.guard";
 const routes: Routes = [
   {
     path :"",
@@ -46,11 +47,13 @@ const routes: Routes = [
     path: "",
     component: ContentLayoutComponent,
     children: content,
+    canActivate: [AuthGuard]
   },
   {
     path: "",
     component: FullLayoutComponent,
     children: full,
+    canActivate: [AuthGuard]
   },
   {
     path: "**",

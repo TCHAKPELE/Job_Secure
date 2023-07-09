@@ -10,9 +10,9 @@
     <div class="edit-profile">
       <div class="row">
         <div class="col-lg-12">
-          <form class="card" [formGroup]="Formulaire">
+          <form class="card" [formGroup]="Formulaire" enctype="multipart/form-data">
             <div class="card-header">
-              <h4 class="card-title mb-0">Votre profile</h4>
+              <h4 class="card-title mb-0">Votre profile ({{interimaire['note_interimaire']}} <mat-icon>star</mat-icon>)</h4>
             </div>
             <div class="card-body">
               <div class="row">
@@ -81,6 +81,19 @@
                     />
                   </div>
                 </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="col-form-label">Ajoutez un cv <span *ngIf="interimaire['cv'] != ''" (click)="voirCvCandidat()" class="text-primary">(Voir cv) </span></label>
+                    <input
+                      class="form-control"
+                      type="file"
+                      (change)="onFileSelected($event)"
+                    />
+                  </div>
+                </div>
+         
               </div>
             </div>
             <div class="card-footer text-end">

@@ -11,4 +11,9 @@ export class PasswordChangeService {
   pathrUrl: string = environment.apiUrl;
   user!: UserModel;
   constructor(private http: HttpClient) { }
+
+  updatePassword(formValue: any){
+    
+    return this.http.put<any>(`${this.pathrUrl}/updatePassword`, formValue);
+  }
 }

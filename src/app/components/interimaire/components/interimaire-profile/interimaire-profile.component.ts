@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject, takeUntil, tap } from 'rxjs';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { InterimaireModel } from 'src/app/shared/models/interimaire.model';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-interimaire-profile',
@@ -14,12 +15,14 @@ import { InterimaireModel } from 'src/app/shared/models/interimaire.model';
 export class InterimaireProfileComponent implements OnInit, OnDestroy {
 
   Formulaire!: FormGroup;
+  selectedFile: File; //Pour ajouter un fichier (Notamment le cv)
   destroy$!: Subject<boolean>;
   defaultText = "ENREGISTRER";//Texte afficher par défaut dans le bouton de soumission
   patienter = "PATIENTER..."; //Afficher en cas de soumission
   stateButton: boolean= false; // Pour vérifier l'état du bouton de soumission
   interimaire!: InterimaireModel[];
   loading$: Observable<boolean>; //Vérifier que les données ont bien été chargé
+  cvPath = `${environment.filePath}/cv/`; //Url du cv
   constructor(
     private formBuilder: FormBuilder,
     private alertService: AlertService,
@@ -36,9 +39,20 @@ export class InterimaireProfileComponent implements OnInit, OnDestroy {
 
   }
 
+  //Récupération du cv de l'intérimaire
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
+    console.log(this.selectedFile);
+    
+  }
+
+  voirCvCandidat(){
+    window.open(this.cvPath +this.interimaire['cv'], '_blank');
+  }
 
   onSubmitForm(){
     this.stateButton= true;
+    const file: File = this.selectedFile;
     const formValue={
       "nom": this.Formulaire.value['nom'],
       "prenom": this.Formulaire.value['prenom'],
@@ -46,6 +60,7 @@ export class InterimaireProfileComponent implements OnInit, OnDestroy {
       "adresse_interimaire": this.Formulaire.value['adresse'],
       "email": this.Formulaire.value['email'],
       "iban": this.Formulaire.value['iban'],
+      "cv" : file ? file : ""
     };
 
     this.interimaireService.updateProfileInfo(formValue).pipe(
@@ -73,16 +88,16 @@ export class InterimaireProfileComponent implements OnInit, OnDestroy {
       tap((data) => {
         
         this.interimaire = data;
-        console.log(this.interimaire['id']);
         this.Formulaire = this.formBuilder.group({
           nom: [this.interimaire['nom'], Validators.required],
           prenom: [this.interimaire['prenom'], Validators.required],
           telephone: [this.interimaire['telephone_interimaire'], Validators.required],
           adresse: [this.interimaire['adresse_interimaire'], Validators.required],
           email: [this.interimaire['email'], Validators.required],
-          iban: [this.interimaire['iban'], Validators.required],
+          iban: [this.interimaire['iban'],""],
          
         });
+
       }
       )
     ).subscribe();

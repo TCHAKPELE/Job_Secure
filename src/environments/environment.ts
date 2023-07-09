@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:8000/api',
+  filePath: 'http://localhost:8000',
   interimaire : "interimaire", 
   entreprise : "entreprise", 
   admin : "admin",

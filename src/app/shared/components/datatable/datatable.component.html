@@ -42,7 +42,7 @@
             <!--Bouton -->
             <span *ngIf="columns[i] == 'buttons'">
                 <td mat-cell *matCellDef="let element">
-                    <button *ngFor="let buttonAction of buttonsAction" [ngClass]="'btn btn-' + buttonAction.color" (click)="buttonAction.action(element)">
+                    <button  *ngFor="let buttonAction of buttonsAction" [ngClass]="'me-1 btn btn-' + buttonAction.color" (click)="buttonAction.action(element)">
                         {{buttonAction.label}}
                     </button>
                   </td>

@@ -196,6 +196,10 @@ export class EntrepriseService {
     return this.http.get<any>(`${this.pathUrl}/mission/${idMission}/${status}`);
   }
 
+  //Noter intérimaire
+  noterInterimaire(formValue): Observable<any>{
+    return this.http.post<any>(`${this.pathUrl}/mission_note`, formValue);
+  }
 
   /*-------- End mission ---------*/
 

@@ -125,7 +125,7 @@ export class EntrepriseComponent implements OnInit, OnDestroy {
   //fonction pour supprimer un compte entreprise
   deleteEntreprise(element: EntrepriseModel): void {
     this.loadingPost = true;
-    this.adminService.deleteEntreprise(element.id!)
+    this.adminService.deleteEntreprise(element.id)
     .pipe(
       takeUntil(this.destroy$),
       tap( (data)=>{   
@@ -142,7 +142,7 @@ export class EntrepriseComponent implements OnInit, OnDestroy {
       })
     ).subscribe();
 
-    this.adminService.deleteUser(element.email!)
+    this.adminService.deleteUser(element.email)
     .pipe(
       takeUntil(this.destroy$),
       tap( (data)=>{   
@@ -156,7 +156,7 @@ export class EntrepriseComponent implements OnInit, OnDestroy {
           this.loadingPost = false;
          this.alertService.dangerToastr(data['message']);    
         }
-      })
+      }),
     ).subscribe();
 
   }

@@ -7,6 +7,7 @@ import { AlertService } from 'src/app/shared/services/alert.service';
 import { MatSort } from '@angular/material/sort';
 import { DatatableComponent } from 'src/app/shared/components/datatable/datatable.component';
 import { CandidatureModel } from 'src/app/shared/models/candidature.model';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-candidature',
@@ -19,15 +20,16 @@ export class CandidatureComponent implements OnInit, OnDestroy{
 
   destroy$!: Subject<boolean>;
 
-
+  cvPath = `${environment.filePath}/cv/`; //Url du cv
   loading$: Observable<boolean>; //Vérifier que les données ont bien été chargé
   candidatures! : CandidatureModel[]; //Liste des candidatures
   loadingPost: boolean= false; // S'active quand on envoie une requete poste nécéssitant l'envoi d'email
   /*---- Datatable -------*/
-  columns: string[] = ['titre_offre','description_offre', 'salaire_offre','duree_offre','nom_interimaire','date_creation', 'buttons']; //Clé d'api
-  displayedColumns: string[]= ['Titre','Description', 'Salaire (€)','Durée (en mois)','Nom candidat', 'Date de création','']; // Colonne à afficher dans la datatable
+  columns: string[] = ['titre_offre','description_offre', 'salaire_offre','duree_offre','nom_interimaire','note_interimaire', 'buttons']; //Clé d'api
+  displayedColumns: string[]= ['Titre','Description', 'Salaire (€)','Durée (en mois)','Candidat', 'Note','']; // Colonne à afficher dans la datatable
 
   buttonsAction: {label: string, color: string, action: (params:any) => void}[]=[
+    {label: "CV", color: "success", action: (candidature) => this.voirCvCandidat(candidature) },
     {label: "Accepter", color: "primary", action: (candidature) => this.confirmCandidature(candidature) },
   ]
 
@@ -50,6 +52,9 @@ export class CandidatureComponent implements OnInit, OnDestroy{
  
   }
 
+  voirCvCandidat(candidature: CandidatureModel){
+    window.open(this.cvPath +candidature.cv_interimaire, '_blank');
+  }
   //Accepter une candidature
   confirmCandidature(candidature: CandidatureModel){
     this.loadingPost = true;

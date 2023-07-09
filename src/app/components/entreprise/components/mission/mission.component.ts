@@ -10,6 +10,7 @@ import { DatatableComponent } from 'src/app/shared/components/datatable/datatabl
 import { MissionModel } from 'src/app/shared/models/mission.model';
 import {MatDialog} from '@angular/material/dialog'; //Boite de dialogue
 import { FicheDialogueComponent } from './dialogues/fiche-dialogue/fiche-dialogue.component';
+import { NoteDialogueComponent } from './dialogues/note-dialogue/note-dialogue.component';
 @Component({
   selector: 'app-mission',
   templateUrl: './mission.component.html',
@@ -34,6 +35,7 @@ export class MissionComponent implements OnInit, OnDestroy {
     {label: "Cloturer", action: (mission) =>  this.cloturerMission(mission)},
     {label: "Suspendre", action: (mission) =>  this.suspendreMission(mission)},
     {label: "Générer fiche de paye", action: (mission) =>  this.openFicheDialog(mission)},
+    {label: "Noter intérimaire", action: (mission) =>  this.openNoteDialog(mission)}
 
   ];
 
@@ -157,6 +159,47 @@ export class MissionComponent implements OnInit, OnDestroy {
     
  
     this.entrepriseService.genererFicheDePaye(formValue).pipe(
+      takeUntil(this.destroy$),
+      tap(
+        (data) =>{
+          if (data["status"] == 200) {
+            this.loadingPost = false;
+            this.alertService.succesToastr(data["message"]);
+
+          } else {
+            this.loadingPost = false;
+            this.alertService.dangerToastr(data["message"]);
+          }
+        },
+        (error) => {
+          this.loadingPost = false;
+          this.alertService.dangerToastr("Impossible d'atteindre le serveur . Veuillez vérifier votre connexion internet, si celà persiste, veuillez contacter le support");
+          console.log(error);
+        }
+      )     
+    ).subscribe();
+  }
+
+  openNoteDialog(element: MissionModel){
+    const dialogRef = this.dialog.open(NoteDialogueComponent, {
+      width: '400px',
+    });
+    //Capture des données issues du formulaire de la boîte de dialog
+    dialogRef.afterClosed().subscribe(result => {
+      //Appel à la foncton de changement d'assignement
+      this.addNoteInterimaire(element, result);
+
+    });  
+  }
+
+  addNoteInterimaire(element: MissionModel, result: any){
+    this.loadingPost = true;
+    const formValue = {
+      "id_mission" : element.id,
+      "note": result['note'] 
+    };
+
+    this.entrepriseService.noterInterimaire(formValue).pipe(
       takeUntil(this.destroy$),
       tap(
         (data) =>{

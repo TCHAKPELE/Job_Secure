@@ -215,7 +215,18 @@ export class InterimaireService {
       }
    
       updateProfileInfo(formValue: any): Observable<InterimaireModel>{
-       return this.http.put<any>(`${this.pathUrl}/interimaire/${this.idCompte}`, formValue)
+        
+        let formData: FormData = new FormData();
+        formData.append("nom", formValue.nom);
+        formData.append("prenom", formValue.prenom);
+        formData.append("telephone_interimaire", formValue.telephone_interimaire);
+        formData.append("adresse_interimaire", formValue.adresse_interimaire);
+        formData.append("email", formValue.email);
+        formData.append("iban", formValue.iban);
+        formValue.cv != ""? formData.append('cv', formValue.cv, formValue.cv.name): formData.append("cv","");
+    
+        
+       return this.http.post<any>(`${this.pathUrl}/interimaire/${this.idCompte}`, formData);
       }
 
       /*---------- End profile ---------*/

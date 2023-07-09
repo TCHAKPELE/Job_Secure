@@ -17,6 +17,7 @@ import { EntrepriseFichePayeResolver } from './resolvers/entreprise-fiche-paye.r
 import { EntrepriseProfileComponent } from './components/entreprise-profile/entreprise-profile.component';
 import { EntrepriseProfileResolver } from './resolvers/entreprise-profile.resolver';
 import { EntreprisePlainteComponent } from './components/entreprise-plainte/entreprise-plainte.component';
+import { NoteDialogueComponent } from './components/mission/dialogues/note-dialogue/note-dialogue.component';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { EntreprisePlainteComponent } from './components/entreprise-plainte/entr
     FicheDialogueComponent,
     FicheDePayeEntrepriseComponent,
     EntrepriseProfileComponent,
-    EntreprisePlainteComponent
+    EntreprisePlainteComponent,
+    NoteDialogueComponent
   ],
   imports: [
     CommonModule,
