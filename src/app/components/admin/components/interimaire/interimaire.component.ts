@@ -49,6 +49,7 @@ export class InterimaireComponent implements OnInit, OnDestroy  {
       action: (params: any) => void;
     }[] = [
       {label: "Supprimer", color: "secondary", action: (interimaire) => this.deleteInterimaire(interimaire) },
+      {label: "Avertissement", color: "primary", action: (entreprise) => this.avertissement(entreprise) },
     ];
 
     buttonsAction1: {
@@ -176,6 +177,28 @@ export class InterimaireComponent implements OnInit, OnDestroy  {
         )
         .subscribe();
     }
+
+    //Envoie d'avertissement
+  avertissement(element: InterimaireModel){
+    this.loadingPost = true;
+    this.adminService.avertissementInterimaire(element.id)
+    .pipe(
+      takeUntil(this.destroy$),
+      tap(
+        (data) => {
+          if (data["status"] == 200) {
+            this.loadingPost = false;
+            this.alertService.succesToastr(data["message"]);
+      
+          } else {
+            this.loadingPost = false;
+            this.alertService.dangerToastr(data["message"]);
+          }
+        }
+      )
+    ).subscribe();
+    
+  }
   
     //Destruction des souscriptions
     ngOnDestroy(): void {

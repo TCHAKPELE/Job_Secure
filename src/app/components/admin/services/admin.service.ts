@@ -326,6 +326,14 @@ export class AdminService {
     }
     /*---------- End Plainte -------------*/
 
+    /*---------- Avertissement -------------*/
+    avertissementEntreprise(id: number){
+      return this.http.get<any>(`${this.pathUrl}/avertissement_entreprise/${id}`);
+    }
 
+    avertissementInterimaire(id: number){
+      return this.http.get<any>(`${this.pathUrl}/avertissement_interimaire/${id}`);
+    }
+    /*---------- End Avertissement -------------*/
 
 }

@@ -23,7 +23,7 @@ export class EntrepriseComponent implements OnInit, OnDestroy {
   loadingPost: boolean= false; // S'active quand on envoie une requete poste nécéssitant l'envoi d'email
   afficherBoutonValiderCompte: boolean = false; //Détermine si on doit afficher le bouton valider compte ou pas
   afficherBoutonSupprimerCompte: boolean = false; //Détermine si on doit afficher le bouton supprimer compte ou pas
-
+  param:string = "";
   /*---- Datatable -------*/
   columns: string[] = [
     "nom_entreprise",
@@ -49,6 +49,7 @@ export class EntrepriseComponent implements OnInit, OnDestroy {
       action: (params: any) => void;
     }[] = [
       {label: "Supprimer", color: "secondary", action: (entreprise) => this.deleteEntreprise(entreprise) },
+      {label: "Avertissement", color: "primary", action: (entreprise) => this.avertissement(entreprise) },
     ];
 
     buttonsAction1: {
@@ -173,6 +174,28 @@ export class EntrepriseComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe();
+  }
+
+  //Envoie d'avertissement
+  avertissement(element: EntrepriseModel){
+    this.loadingPost = true;
+    this.adminService.avertissementEntreprise(element.id)
+    .pipe(
+      takeUntil(this.destroy$),
+      tap(
+        (data) => {
+          if (data["status"] == 200) {
+            this.loadingPost = false;
+            this.alertService.succesToastr(data["message"]);
+      
+          } else {
+            this.loadingPost = false;
+            this.alertService.dangerToastr(data["message"]);
+          }
+        }
+      )
+    ).subscribe();
+    
   }
 
   //Destruction des souscriptions
